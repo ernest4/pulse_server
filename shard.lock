@@ -6,7 +6,7 @@ shards:
 
   kemal:
     github: kemalcr/kemal
-    version: 0.26.1
+    commit: a819d4792bbc63d993d6dd2b15f9af5efb0c2d8c
 
   kilt:
     github: jeromegn/kilt

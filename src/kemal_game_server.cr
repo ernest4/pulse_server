@@ -1,4 +1,3 @@
-require "gzip"
 require "kemal"
 
 server_memory = 0
