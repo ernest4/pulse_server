@@ -1,5 +1,7 @@
 require "kemal"
 
+FORMAT = IO::ByteFormat::LittleEndian
+
 server_memory = 0
 
 # TODO: user redis for game state storage as kemal wont be thread safe once Crystal drops
@@ -51,8 +53,18 @@ ws "/" do |socket|
     puts uint16_slice
 
     puts "Decoding using little endian"
-    puts IO::ByteFormat::LittleEndian.decode(UInt16, message[0..1])
-    puts IO::ByteFormat::LittleEndian.decode(UInt16, message[2..4])
+
+    io2 = IO::Memory.new(message)
+
+    # typ2 = io2.read_bytes(UInt8, FORMAT)
+    # categ2 = io2.read_bytes(UInt8, FORMAT)
+    # usec2 = io2.read_bytes(UInt64, FORMAT)
+
+    num1 = io2.read_bytes(UInt16, FORMAT)
+    num2 = io2.read_bytes(UInt16, FORMAT)
+
+    puts num1
+    puts num2
     
     # TESTING: echo
     socket.send(message) # sending and receiving, all in single bytes...
