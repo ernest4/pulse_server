@@ -1,12 +1,12 @@
-name: kemal_game_server
+name: pulse_server
 version: 0.1.0
 
 authors:
   - Ernestas Monkevicius <ernestas.monkevicius@ucdconnect.ie>
 
 targets:
-  kemal_game_server:
-    main: src/kemal_game_server.cr
+  pulse_server:
+    main: src/server.cr
 
 dependencies:
   kemal:

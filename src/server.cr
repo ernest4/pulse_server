@@ -1,4 +1,6 @@
 require "kemal"
+require "./pulse/map"
+require "./pulse/client"
 
 FORMAT = IO::ByteFormat::LittleEndian
 
@@ -7,18 +9,47 @@ server_memory = 0
 # TODO: user redis for game state storage as kemal wont be thread safe once Crystal drops
 # true parallelism for fibers
 
+# load the map data
+maps = {} of String => Pulse::Map
+
 get "/" do
   server_memory = server_memory + 1
   "Hello World! #{server_memory}"
 end
 
-# TODO: test websocket if it cna receive byte buffers!!!
+get "/play" do
+  "playing..."
+end
 
+get "/testy/:name" do |env|
+  name = env.params.url["name"]
+  render "src/views/testy.ecr"
+end
+
+# TODO: ... set up auth endpoint, SSO Google
+# and store the user info in session that can be accessed in websocket.
+# .. "/..." do
+#   # TODO: ...
+# end
+
+
+# WARNING: if crystal releases parallel update, fibers will access local data async !!!
+# Therefore if using in memory data, do no upgrade crystal version as fibers concurrency will be
+# default !!!
 # messages = [] of String
 # sockets = [] of HTTP::WebSocket
+# clients = [] of Pulse::Client
 
-ws "/" do |socket|
-  # sockets.push socket
+ws "/" do |socket, env|
+  # sockets have access to session...
+  # puts env.session.int?("hello")
+  # puts context.session.strings #returns {}
+  # puts context.response.cookies #correctly returns the cookie
+
+  # TODO: read from session
+  # client = Client.new(:socket => socket, :session_id => session_id)
+  client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex)
+  # clients.push(client)
 
   # Handle incoming message and dispatch it to all connected clients
   socket.on_message do |message|
@@ -84,3 +115,4 @@ Kemal.run
 
 
 # TEST deploying this on heroku as is. Do websockets work or not!!!!????
+# IT does work ...
