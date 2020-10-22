@@ -2,9 +2,11 @@ require "kemal"
 require "./pulse/map"
 require "./pulse/client"
 
-FORMAT = IO::ByteFormat::LittleEndian
+# TODO: set up production and test configs / config files etc...
 
-server_memory = 0
+# TODOO: rollbar !!!
+
+# server_memory = 0
 
 # TODO: user redis for game state storage as kemal wont be thread safe once Crystal drops
 # true parallelism for fibers
@@ -13,14 +15,21 @@ server_memory = 0
 maps = {} of String => Pulse::Map
 
 get "/" do
-  server_memory = server_memory + 1
-  "Hello World! #{server_memory}"
+  # server_memory = server_memory + 1
+  # "Hello World! #{server_memory}"
 end
 
 # TODO: ... set up auth endpoint, SSO Google
 # and store the user info in session that can be accessed in websocket.
 # .. "/..." do
 #   # TODO: ...
+# end
+
+
+
+# get "/logout" do |env|
+#   env.session.destroy
+#   "You have been logged out."
 # end
 
 get "/players" do
@@ -71,7 +80,7 @@ ws "/" do |socket, env|
   # client = Client.new(:socket => socket, :session_id => session_id)
   client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
   client.authenticate!
-  client.enter_room(maps)
+  client.enter_room(maps) # TODO: maybe pass maps as initialization param to client ???
 
   # clients.push(client)
 
@@ -81,9 +90,3 @@ end
 
 
 Kemal.run
-
-
-
-
-# TEST deploying this on heroku as is. Do websockets work or not!!!!????
-# IT does work ...

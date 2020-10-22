@@ -1,75 +1,62 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Client
-    def initialize(socket : HTTP::WebSocket, client_id)
+    def initialize(socket : HTTP::WebSocket, client_id, maps)
       @socket = socket
       @client_id = client_id
+      @maps = maps
+      # @user = ... TODO: load user from DB
+      # TODO: initialize socket (attach callbacks)
     end
 
-    def enter_room(maps)
+
+    def enter_map
       # TODO: ...wip
-      # maps[...wip...].clients.each do |client| # TODO: make a broadcast method on Pulse::Map
-      #   @socket.send(Pulse::Message.build(["Enter", user.name, user.position_x, use.position_y]))
+      # current_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
+      #   @socket.send(Pulse::Message.build(["Enter", @user.name, @user.position_x, @user.position_y]))
       # end
 
-      # maps[...wip...].clients.push(self)
+      # current_map.clients.push(self)
+    end
+
+    def current_map
+      @maps[@user.current_map]
+    end
+
+    def exit_map
+      # TODO: ...
+    end
+
+    # Maybe: 
+    # broadcast_room(scope : String, message : Pulse::Message, include_yourself : false)
+    #  e.g. scopes SCOPE::ROOM => "room", SCOPE::CLAN => "clan", SCOPE::GLOBAL => "global", SCOPE::FACTION => "faction", SCOPE::PARTY => "party"
+    # end
+    def broadcast_map_except_yourself(message : Pulse::Message)
+      # TODO: ...
+      # current_map.clients.each do |client|
+      #   client.socket.send(message) if client.user.name != @user.name
+      # end
+    end
+
+    # TODO: ... wipp
+    private def initialize_socket
+      # TODO: may or may not use this, not as efficient as binary, even for regular chat...
+      # @socket.on_message do |message|
+      # end
+
+      @socket.on_binary do |message|
+        # TODO: wip...
+        parsed_message = Pulse::Message.parse(message)
+        Pulse::MessageReducer.reduce(parsed_message)
+      end
+
+      # TODO: queue async worker to read redis and save player progress too DB?
+      # TODOL for now save straigth to DB here ???
+      @socket.on_close do |_|
+      #   # sockets.delete(socket)
+      #   puts "Closing Socket: #{socket}"
+      end
     end
   end
 end
 
-
-  # # Handle incoming message and dispatch it to all connected clients
-  # socket.on_message do |message|
-  #   # messages.push message
-  #   # sockets.each do |a_socket|
-  #   #   a_socket.send messages.to_json
-  #   # end
-
-    
-  #   puts "non binary"
-  #   puts message # TESTING...
-    
-  #   # TESTING: echo
-  #   socket.send(message)
-  # end
-
-  # socket.on_binary do |message|
-  #   # messages.push message
-  #   # sockets.each do |a_socket|
-  #   #   a_socket.send messages.to_json
-  #   # end
-
-    
-  #   puts "binary"
-  #   puts message # TESTING...
-  #   puts message.class # TESTING...
-
-  #   # Converting to message from Slice(UInt8) to Slice(UInt16)
-  #   uint16_slice = Slice(UInt16).new(message.to_unsafe.as(Pointer(UInt16)), message.size // 2)
-
-  #   puts "converted to uint16 binary"
-  #   puts uint16_slice
-
-  #   puts "Decoding using little endian"
-
-  #   io2 = IO::Memory.new(message)
-
-  #   # typ2 = io2.read_bytes(UInt8, FORMAT)
-  #   # categ2 = io2.read_bytes(UInt8, FORMAT)
-  #   # usec2 = io2.read_bytes(UInt64, FORMAT)
-
-  #   num1 = io2.read_bytes(UInt16, FORMAT)
-  #   num2 = io2.read_bytes(UInt16, FORMAT)
-
-  #   puts num1
-  #   puts num2
-    
-  #   # TESTING: echo
-  #   socket.send(message) # sending and receiving, all in single bytes...
-  # end
-
-  # # Handle disconnection and clean sockets
-  # socket.on_close do |_|
-  #   # sockets.delete(socket)
-  #   puts "Closing Socket: #{socket}"
-  # end
