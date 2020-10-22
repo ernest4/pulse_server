@@ -17,13 +17,29 @@ get "/" do
   "Hello World! #{server_memory}"
 end
 
+get "/players" do
+  "players..."
+end
+
+get "/clans" do
+  "clans..."
+end
+
+get "/store" do
+  "store..."
+end
+
+get "/account" do
+  "account..."
+end
+
 get "/play" do
   "playing..."
 end
 
 get "/testy/:name" do |env|
   name = env.params.url["name"]
-  render "src/views/testy.ecr"
+  render "src/views/testy.ecr", "src/views/layouts/default.ecr"
 end
 
 # TODO: ... set up auth endpoint, SSO Google
