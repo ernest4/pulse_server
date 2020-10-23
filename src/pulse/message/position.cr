@@ -11,11 +11,15 @@ module Pulse
         @position_y = position_y
       end
 
-      # def to_slice
-      #   # TODO: ... wip
-      #   io_memory = IO::Memory.new
+      # TODO: hmm mybe can use yielf here instead ?!?!?
+      def to_slice
+        super
 
-      # end
+        set_bytes(@position_x)
+        set_bytes(@position_y)
+
+        finish_to_slice
+      end
 
       def parse
         # @message_type = get_byte
@@ -23,6 +27,7 @@ module Pulse
 
         @position_x = get_number
         @position_y = get_number
+        # ... = get_string
 
         self # return self
       end

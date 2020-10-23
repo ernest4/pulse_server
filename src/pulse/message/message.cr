@@ -7,8 +7,6 @@ module Pulse
       # TODO: buff (drinking potion, spell etc)
     }
 
-    # getter :message
-
     def initialize(message : Slice(UInt8))
       @message = message
     end
@@ -40,6 +38,27 @@ module Pulse
 
     def io_memory_message
       @io_memory_message ||= IO::Memory.new(@message)
+    end
+
+    def to_slice
+      @new_io_memory_message = IO::Memory.new
+
+      # TODO: hmm mybe can use yielf here instead ?!?!?
+      # new_io_memory_message = IO::Memory.new
+      # yield new_io_memory_message
+      # new_io_memory_message.to_slice
+    end
+
+    def set_bytes(value)
+      @new_io_memory_message.write_bytes(value, IO::ByteFormat::LittleEndian)
+    end
+
+    def set_string(string : String)
+      @new_io_memory_message.write_utf8(string.to_slice)
+    end
+
+    def finish_to_slice
+      @new_io_memory_message.to_slice
     end
   end
 end
