@@ -43,7 +43,7 @@ module Pulse
     def to_slice
       @new_io_memory_message = IO::Memory.new
 
-      # TODO: hmm mybe can use yielf here instead ?!?!?
+      # TODO: hmm maybe can use yield here instead ?!?!?
       # new_io_memory_message = IO::Memory.new
       # yield new_io_memory_message
       # new_io_memory_message.to_slice

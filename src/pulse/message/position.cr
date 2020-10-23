@@ -11,7 +11,7 @@ module Pulse
         @position_y = position_y
       end
 
-      # TODO: hmm mybe can use yielf here instead ?!?!?
+      # TODO: hmm maybe can use yield here instead ?!?!?
       def to_slice
         super
 
@@ -21,6 +21,7 @@ module Pulse
         finish_to_slice
       end
 
+      # TODO: hmm maybe can use yield here instead ?!?!?
       def parse
         # @message_type = get_byte
         get_byte # get the type byte and move the reader pointer on to next value
