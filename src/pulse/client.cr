@@ -13,7 +13,8 @@ module Pulse
     def enter_map
       # TODO: ...wip
       # current_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
-      #   @socket.send(Pulse::Message.build(["Enter", @user.name, @user.position_x, @user.position_y]))
+      #   @socket.send(Pulse::Message.build([Pulse::Message::EVENTS["ENTER"], @user.name, @user.position_x, @user.position_y]))
+      #   @socket.send(Pulse::Message::Enter.new.build(@user))
       # end
 
       # current_map.clients.push(self)
@@ -47,6 +48,7 @@ module Pulse
       @socket.on_binary do |message|
         # TODO: wip...
         parsed_message = Pulse::Message.parse(message)
+        # TODO: push message to Game object to handle everyting maybe?
         Pulse::MessageReducer.reduce(parsed_message)
       end
 
