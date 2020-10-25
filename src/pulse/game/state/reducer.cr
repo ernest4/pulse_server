@@ -12,6 +12,8 @@ module Pulse
           # TODO: switch case the message
           # TODO: validate the message
           # TODO: alter the @game state
+
+          # TESTING echo back
         end
       end
     end
