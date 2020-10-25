@@ -1,7 +1,9 @@
 # TODO: specs !!!
+require "./base"
+
 module Pulse
   module Message
-    class Position < Pulse::Message
+    class Position < Pulse::Message::Base
       property :position_x, :position_y
 
       def initialize(position_x : UInt16, position_y : UInt16, message : Slice(UInt8))

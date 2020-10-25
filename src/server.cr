@@ -1,6 +1,7 @@
 require "kemal"
 require "./pulse/map"
 require "./pulse/client"
+require "./pulse/exceptions/unauthorized"
 
 # TODO: clearly state alpha and then later beta stage of the game!
 
@@ -71,7 +72,8 @@ get "/admin" do
 end
 
 get "/test" do
-  # TODO: ... websocket message testing endpoint
+  # TODO: only accessible in develop !!
+  render "src/views/test.ecr", "src/views/layouts/default.ecr"
 end
 
 get "/testy/:name" do |env|
@@ -95,14 +97,15 @@ ws "/" do |socket, env|
 
   # TODO: read from session
   # client = Client.new(:socket => socket, :session_id => session_id)
-  client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
+  client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex, maps: maps) # random id for testing
   client.authenticate!
-  client.enter_room(maps) # TODO: maybe pass maps as initialization param to client ???
+  client.enter_map
 
   # clients.push(client)
 
 rescue ex : Pulse::Unauthorized
   # TODO: ...
+  raise ex # just reraise for now...
 end
 
 

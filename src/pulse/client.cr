@@ -1,12 +1,21 @@
 # TODO: speeecs ?!?!?
+require "./message/resolver"
+
 module Pulse
   class Client
-    def initialize(socket : HTTP::WebSocket, client_id, maps)
-      @socket = socket
+    @socket : HTTP::WebSocket
+    @client_id : String
+    @maps : Hash(String, Pulse::Map)
+
+    def initialize(socket, client_id, maps)
+      @socket = initialize_socket(socket)
       @client_id = client_id
       @maps = maps
       # @user = ... TODO: load user from DB
-      # TODO: initialize socket (attach callbacks)
+    end
+
+    def authenticate!
+      # TODO: ...
     end
 
 
@@ -32,7 +41,7 @@ module Pulse
     # broadcast_room(scope : String, message : Pulse::Message, include_yourself : false)
     #  e.g. scopes SCOPE::ROOM => "room", SCOPE::CLAN => "clan", SCOPE::GLOBAL => "global", SCOPE::FACTION => "faction", SCOPE::PARTY => "party"
     # end
-    def broadcast_map_except_yourself(message : Pulse::Message)
+    def broadcast_map_except_yourself(message : Pulse::Message::Base)
       # TODO: ...
       # current_map.clients.each do |client|
       #   client.socket.send(message) if client.user.name != @user.name
@@ -40,24 +49,27 @@ module Pulse
     end
 
     # TODO: ... wipp
-    private def initialize_socket
+    def initialize_socket(socket)
       # TODO: may or may not use this, not as efficient as binary, even for regular chat...
-      # @socket.on_message do |message|
+      # socket.on_message do |message|
       # end
 
-      @socket.on_binary do |message|
+      socket.on_binary do |message|
         # TODO: wip...
-        parsed_message = Pulse::Message.parse(message)
+        # parsed_message = Pulse::Message::Base.new(message).parse
+        parsed_message = Pulse::Message::Resolver.resolve(message)
         # TODO: push message to Game object to handle everyting maybe?
-        Pulse::MessageReducer.reduce(parsed_message)
+        # Pulse::MessageReducer.reduce(parsed_message)
       end
 
       # TODO: queue async worker to read redis and save player progress too DB?
       # TODOL for now save straigth to DB here ???
-      @socket.on_close do |_|
+      socket.on_close do |_|
       #   # sockets.delete(socket)
       #   puts "Closing Socket: #{socket}"
       end
+
+      socket
     end
   end
 end
