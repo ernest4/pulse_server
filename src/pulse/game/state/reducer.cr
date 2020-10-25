@@ -9,11 +9,23 @@ module Pulse
         end
   
         def reduce(message)
-          # TODO: switch case the message
+          parsed_message = Pulse::Message::Resolver.resolve(message)
+
           # TODO: validate the message
           # TODO: alter the @game state
 
-          # TESTING echo back
+          
+          case parsed_message.type
+          when Pulse::Message::Enter::TYPE
+            # TESTING echo back
+            puts "[Pulse] Got 'Enter' message. Type: #{parsed_message.type}"
+          when Pulse::Message::Position::TYPE
+            puts "[Pulse] Got 'Position' message. Type: #{parsed_message.type}"
+          # when
+          # TODO: .... the rest
+          else
+            puts "[Pulse] Unrecognized message type #{parsed_message.type}"
+          end
         end
       end
     end

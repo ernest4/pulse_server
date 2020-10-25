@@ -37,12 +37,12 @@ module Pulse
       end
 
       def to_slice
-        @new_io_memory_message = IO::Memory.new
+        # @new_io_memory_message = IO::Memory.new
 
         # TODO: hmm maybe can use yield here instead ?!?!?
-        # new_io_memory_message = IO::Memory.new
-        # yield new_io_memory_message
-        # new_io_memory_message.to_slice
+        new_io_memory_message = IO::Memory.new
+        yield new_io_memory_message
+        new_io_memory_message.to_slice
       end
 
       def set_bytes(value)

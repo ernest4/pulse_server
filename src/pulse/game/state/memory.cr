@@ -13,7 +13,7 @@ module Pulse
         end
   
         def load!
-          # TODO: ... load from files
+          # TODO: ... load from files ?!?
 
           # TESTING ...
           test_map = Pulse::Map.new(width: 6, height: 6)

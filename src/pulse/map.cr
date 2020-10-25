@@ -21,9 +21,9 @@ module Pulse
       @name = "file_loaded_map"
     end
 
-    def load
-      # TODO: ...
-    end
+    # def load
+    #   # TODO: ...
+    # end
 
     def generate_tiles(number_generator, width, height)
       (0..height).map do |row|

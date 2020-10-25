@@ -1,6 +1,14 @@
 # TODO: speeecs ?!?!?
 require "./message/resolver"
 
+# class TestyUser
+#   def initialize
+#   end
+
+#   def current_map
+#   end
+# end
+
 module Pulse
   class Client
     @socket : HTTP::WebSocket
@@ -12,6 +20,9 @@ module Pulse
       @socket = initialize_socket(socket)
       @client_id = client_id
       # @user = ... TODO: load user from DB
+      @user = User.query.find({client_id: client_id})
+
+      # TESTING PLACE HOLDER
     end
 
     def authenticate!
@@ -21,16 +32,20 @@ module Pulse
 
     def enter_map
       # TODO: ...wip
-      # current_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
-      #   @socket.send(Pulse::Message.build([Pulse::Message::EVENTS["ENTER"], @user.name, @user.position_x, @user.position_y]))
-      #   @socket.send(Pulse::Message::Enter.new.build(@user))
-      # end
+      current_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
+        # @socket.send(Pulse::Message.build([Pulse::Message::EVENTS["ENTER"], @user.name, @user.position_x, @user.position_y]))
+        client.socket.send(Pulse::Message::Enter.new(@user).to_slice)
+        # client.socket.send(Pulse::Message::Position.new(@user).to_slice) # TODO: send position stuff separate
+      end
 
       # current_map.clients.push(self)
     end
 
     def current_map
-      @maps[@user.current_map]
+      # @reducer.maps[@user.current_map]
+
+      # TESTING...
+      @reducer.maps.first
     end
 
     def exit_map
@@ -55,16 +70,12 @@ module Pulse
       # end
 
       socket.on_binary do |message|
-        # TODO: wip...
-        # parsed_message = Pulse::Message::Base.new(message).parse
-        parsed_message = Pulse::Message::Resolver.resolve(message)
-        # TODO: push message to Game object to handle everyting maybe?
-        # Pulse::MessageReducer.reduce(parsed_message)
-        @reducer.reduce(parsed_message)
+        @reducer.reduce(message)
       end
 
       # TODO: queue async worker to read redis and save player progress too DB?
-      # TODOL for now save straigth to DB here ???
+      # TODO: for now save straigth to DB here ???
+      # TODO: clean up game state etc.
       socket.on_close do |_|
       #   # sockets.delete(socket)
       #   puts "Closing Socket: #{socket}"

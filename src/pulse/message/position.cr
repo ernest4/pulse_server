@@ -4,6 +4,8 @@ require "./base"
 module Pulse
   module Message
     class Position < Pulse::Message::Base
+      TYPE = 2
+
       property :position_x, :position_y
 
       def initialize(message : Slice(UInt8))
