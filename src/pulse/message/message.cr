@@ -2,9 +2,13 @@
 module Pulse
   class Message
     MESSAGE_TYPE_CLASSES = {
-      1 => Pulse::Message::Position,
-      # TODO: attack...
-      # TODO: buff (drinking potion, spell etc)
+      # 1 => Pulse::Message::Enter,
+      2 => Pulse::Message::Position, # if player sends this, resend this back to player to acknowledge it as validated
+      # TODO: attack... # if player sends this, resend this back to player to acknowledge it as validated
+      # TODO: die...
+      # TODO: drop item... # if player sends this, resend this back to player to acknowledge it as validated
+      # TODO: pick up item... # if player sends this, resend this back to player to acknowledge it as validated
+      # TODO: use item... (drinking potion, cast spell, put on armour, spend gold etc) # if player sends this, resend this back to player to acknowledge it as validated
     }
 
     def initialize(message : Slice(UInt8))

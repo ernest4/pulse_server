@@ -15,6 +15,10 @@ module Pulse
       def to_slice
         super
 
+        # ????
+        # super do |io|
+        # end
+
         set_bytes(@position_x)
         set_bytes(@position_y)
 

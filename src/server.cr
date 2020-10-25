@@ -2,6 +2,14 @@ require "kemal"
 require "./pulse/map"
 require "./pulse/client"
 
+# TODO: clearly state alpha and then later beta stage of the game!
+
+# NOTE: for single-shard world
+# TODO: set up shared Redis between heroku apps. https://devcenter.heroku.com/articles/heroku-redis#sharing-heroku-redis-between-applications
+# TODO: set up shared postgresql between heroku apps. https://devcenter.heroku.com/articles/heroku-postgresql#sharing-heroku-postgres-between-applications
+# Basically the world is split up, by each server running specific section of the world.
+# But DB is shared, so game world is shared and any player can go anywhere.
+
 # TODO: set up production and test configs / config files etc...
 
 # TODOO: rollbar !!!
@@ -10,6 +18,8 @@ require "./pulse/client"
 
 # TODO: user redis for game state storage as kemal wont be thread safe once Crystal drops
 # true parallelism for fibers
+
+# TODO: sidekiq
 
 # load the map data
 maps = {} of String => Pulse::Map
@@ -36,6 +46,7 @@ get "/players" do
   "players..."
 end
 
+# TODO: 'groups' rather than 'clans'?
 get "/clans" do
   "clans..."
 end
@@ -49,12 +60,18 @@ get "/account" do
 end
 
 get "/play" do
+  # TODO: check this server and other server capacities and load balance (redirect) to other server
+  # if needed.
   "playing..."
 end
 
 # TODO: secure against specific creds
 get "/admin" do
   "server admin only..."
+end
+
+get "/test" do
+  # TODO: ... websocket message testing endpoint
 end
 
 get "/testy/:name" do |env|
