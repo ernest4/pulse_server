@@ -70,7 +70,7 @@ module Pulse
       # end
 
       socket.on_binary do |message|
-        @reducer.reduce(message)
+        @reducer.reduce(self, message)
       end
 
       # TODO: queue async worker to read redis and save player progress too DB?

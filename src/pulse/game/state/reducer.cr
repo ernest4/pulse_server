@@ -8,7 +8,7 @@ module Pulse
           @game = game
         end
   
-        def reduce(message)
+        def reduce(client, message)
           parsed_message = Pulse::Message::Resolver.resolve(message)
 
           # TODO: validate the message
@@ -17,10 +17,15 @@ module Pulse
           
           case parsed_message.type
           when Pulse::Message::Enter::TYPE
-            # TESTING echo back
             puts "[Pulse] Got 'Enter' message. Type: #{parsed_message.type}"
+
+            # TESTING: just echo back
+            client.socket.send(parsed_message.to_slice)
           when Pulse::Message::Position::TYPE
             puts "[Pulse] Got 'Position' message. Type: #{parsed_message.type}"
+
+            # TESTING: just echo back
+            client.socket.send(parsed_message.to_slice)
           # when
           # TODO: .... the rest
           else
