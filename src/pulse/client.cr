@@ -1,13 +1,17 @@
 # TODO: speeecs ?!?!?
 require "./message/resolver"
 
-# class TestyUser
-#   def initialize
-#   end
+class TestyUser
+  def initialize
+  end
 
-#   def current_map
-#   end
-# end
+  def current_map
+  end
+
+  def name
+    'TestyUser_name'
+  end
+end
 
 module Pulse
   class Client
@@ -20,7 +24,10 @@ module Pulse
       @socket = initialize_socket(socket)
       @client_id = client_id
       # @user = ... TODO: load user from DB
-      @user = User.query.find({client_id: client_id})
+
+      # @user = User.query.find({client_id: client_id})
+
+      @user = TestyUser.new
 
       # TESTING PLACE HOLDER
     end

@@ -13,25 +13,13 @@ module Pulse
       end
 
       def initialize(user)
-        # super(nil)
-
         @name = user.name
-
-        # @position_x = position_x
-        # @position_y = position_y
       end
 
-      # TODO: hmm maybe can use yield here instead ?!?!?
       def to_slice
-        # super
-
-        # set_bytes(@position_x)
-        # set_bytes(@position_y)
-
-        # finish_to_slice
-
         super.to_slice do |io|
-          # io.set_byte(TYPE)
+          io.set_byte(TYPE)
+          io.set_string("#{@name}")
         end
       end
 

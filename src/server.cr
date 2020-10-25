@@ -5,6 +5,16 @@ require "./pulse/exceptions/unauthorized"
 require "./pulse/game/state/memory"
 require "./pulse/game/state/reducer"
 
+require "clear"
+
+# initialize a pool of database connection:
+# TODO: wip ...
+# Clear::SQL.init("postgres://postgres@localhost/my_database", connection_pool_size: 5)
+
+
+
+
+
 # TODO: clearly state alpha and then later beta stage of the game!
 
 # NOTE: for single-shard world

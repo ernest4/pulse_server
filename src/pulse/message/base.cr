@@ -3,6 +3,28 @@
 module Pulse
   module Message
     class Base
+      class IOMemoryWrapper
+        def initialize
+          @io_memory = IO::Memory.new
+        end
+
+        def set_byte(value)
+          set_bytes(value)
+        end
+
+        def set_number(value)
+          set_bytes(value)
+        end
+
+        def set_bytes(value)
+          @io_memory.write_bytes(value, IO::ByteFormat::LittleEndian)
+        end
+  
+        def set_string(string : String)
+          @io_memory.write_utf8(string.to_slice)
+        end
+      end
+
       def initialize(message : Slice(UInt8))
         @message = message
       end
@@ -37,24 +59,9 @@ module Pulse
       end
 
       def to_slice
-        # @new_io_memory_message = IO::Memory.new
-
-        # TODO: hmm maybe can use yield here instead ?!?!?
-        new_io_memory_message = IO::Memory.new
+        new_io_memory_message = IOMemoryWrapper.new
         yield new_io_memory_message
         new_io_memory_message.to_slice
-      end
-
-      def set_bytes(value)
-        @new_io_memory_message.write_bytes(value, IO::ByteFormat::LittleEndian)
-      end
-
-      def set_string(string : String)
-        @new_io_memory_message.write_utf8(string.to_slice)
-      end
-
-      def finish_to_slice
-        @new_io_memory_message.to_slice
       end
     end
   end
