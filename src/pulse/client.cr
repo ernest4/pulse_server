@@ -5,12 +5,12 @@ module Pulse
   class Client
     @socket : HTTP::WebSocket
     @client_id : String
-    @maps : Hash(String, Pulse::Map)
+    @reducer : Pulse::Game::State::Reducer
 
-    def initialize(socket, client_id, maps)
+    def initialize(socket, client_id, reducer)
+      @reducer = reducer
       @socket = initialize_socket(socket)
       @client_id = client_id
-      @maps = maps
       # @user = ... TODO: load user from DB
     end
 
@@ -60,6 +60,7 @@ module Pulse
         parsed_message = Pulse::Message::Resolver.resolve(message)
         # TODO: push message to Game object to handle everyting maybe?
         # Pulse::MessageReducer.reduce(parsed_message)
+        @reducer.reduce(parsed_message)
       end
 
       # TODO: queue async worker to read redis and save player progress too DB?

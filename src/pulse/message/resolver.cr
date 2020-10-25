@@ -1,5 +1,5 @@
 # TODO: specs !!!
-# require "./position"
+require "./position"
 
 module Pulse
   module Message
@@ -19,8 +19,8 @@ module Pulse
 
       def resolve(message)
         io_memory_message = IO::Memory.new(message)
-        io_memory_message.read_bytes(UInt8, IO::ByteFormat::LittleEndian)
-        MESSAGE_TYPE_CLASSES[class_type].new.parse(message)
+        class_type = io_memory_message.read_bytes(UInt8, IO::ByteFormat::LittleEndian)
+        MESSAGE_TYPE_CLASSES[class_type].new(message: message).parse
       end
     end
   end

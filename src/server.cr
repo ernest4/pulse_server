@@ -2,6 +2,8 @@ require "kemal"
 require "./pulse/map"
 require "./pulse/client"
 require "./pulse/exceptions/unauthorized"
+require "./pulse/game/state/memory"
+require "./pulse/game/state/reducer"
 
 # TODO: clearly state alpha and then later beta stage of the game!
 
@@ -22,8 +24,11 @@ require "./pulse/exceptions/unauthorized"
 
 # TODO: sidekiq
 
-# load the map data
-maps = {} of String => Pulse::Map
+# load the map data. initialize global state etc
+# maps = {} of String => Pulse::Map
+game_state = Pulse::Game::State::Memory.new # TODO: dynamically swap between memory and redis based on env config !! (waiting to get config done ...)
+game_state.load!
+reducer = Pulse::Game::State::Reducer.new(game_state)
 
 get "/" do
   # server_memory = server_memory + 1
@@ -97,12 +102,9 @@ ws "/" do |socket, env|
 
   # TODO: read from session
   # client = Client.new(:socket => socket, :session_id => session_id)
-  client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex, maps: maps) # random id for testing
+  client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex, reducer: reducer) # random id for testing
   client.authenticate!
   client.enter_map
-
-  # clients.push(client)
-
 rescue ex : Pulse::Unauthorized
   # TODO: ...
   raise ex # just reraise for now...

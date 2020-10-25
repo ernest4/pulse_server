@@ -6,8 +6,12 @@ module Pulse
     class Position < Pulse::Message::Base
       property :position_x, :position_y
 
-      def initialize(position_x : UInt16, position_y : UInt16, message : Slice(UInt8))
+      def initialize(message : Slice(UInt8))
         super(message)
+      end
+
+      def initialize(position_x : (UInt16)?, position_y : (UInt16)?)#, message : Slice(UInt8))
+        super(nil)
 
         @position_x = position_x
         @position_y = position_y
