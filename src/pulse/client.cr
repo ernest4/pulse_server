@@ -1,18 +1,6 @@
 # TODO: speeecs ?!?!?
 require "./messages/resolver"
 
-class TestyUser
-  def initialize
-  end
-
-  def current_map
-  end
-
-  def name
-    "TestyUser_name"
-  end
-end
-
 module Pulse
   class Client
     @socket : HTTP::WebSocket
@@ -22,14 +10,8 @@ module Pulse
     def initialize(socket, client_id, reducer)
       @reducer = reducer
       @socket = initialize_socket(socket)
-      @client_id = client_id
-      # @user = ... TODO: load user from DB
-
-      # @user = User.query.find({client_id: client_id})
-
-      @user = TestyUser.new
-
-      # TESTING PLACE HOLDER
+      @client_id = client_id 
+      @user = Pulse::User.new(client_id)
     end
 
     def authenticate!
@@ -48,10 +30,10 @@ module Pulse
     end
 
     def current_map
-      # @reducer.maps[@user.current_map]
+      # @reducer.state.maps[@user.current_map]
 
       # TESTING...
-      @reducer.maps.first
+      @reducer.state.maps.first
     end
 
     def exit_map

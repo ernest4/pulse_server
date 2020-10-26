@@ -8,11 +8,7 @@ module Pulse
 
       # property :name
 
-      def initialize(message : Slice(UInt8))
-        super(message)
-      end
-
-      def initialize(user)
+      def initialize(user : Pulse::User)
         @name = user.name
       end
 

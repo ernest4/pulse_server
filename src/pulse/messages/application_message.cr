@@ -2,6 +2,7 @@
 
 module Pulse
   module Messages
+    # abstract class ApplicationMessage
     class ApplicationMessage
       class IOMemoryWrapper
         def initialize
@@ -25,9 +26,9 @@ module Pulse
         end
       end
 
-      def initialize(message : Slice(UInt8))
-        @message = message
-      end
+      # def initialize(message : Slice(UInt8))
+      #   @message = message
+      # end
 
       # def parse
       #   MESSAGE_TYPE_CLASSES[class_type].new.parse(@message)

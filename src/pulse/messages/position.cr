@@ -8,10 +8,6 @@ module Pulse
 
       property :position_x, :position_y
 
-      def initialize(message : Slice(UInt8))
-        super(message)
-      end
-
       def initialize(position_x : UInt16, position_y : UInt16)
         @position_x = position_x
         @position_y = position_y

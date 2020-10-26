@@ -5,11 +5,11 @@ require "./exceptions/unauthorized"
 require "./state/memory"
 require "./state/reducer"
 
-require "clear"
+# require "clear"
 
-# initialize a pool of database connection:
-# TODO: wip ...
-Clear::SQL.init("postgres://postgres@localhost/my_database", connection_pool_size: 5)
+# # initialize a pool of database connection:
+# # TODO: wip ...
+# Clear::SQL.init("postgres://postgres@localhost/my_database", connection_pool_size: 5)
 
 
 

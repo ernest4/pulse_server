@@ -3,15 +3,15 @@
 module Pulse
   module State
     class Reducer
-      def initialize(game : Pulse::State::ApplicationState)
-        @game = game
+      def initialize(state : Pulse::State::ApplicationState)
+        @state = state
       end
 
       def reduce(client, message)
         parsed_message = Pulse::Messages::Resolver.resolve(message)
 
         # TODO: validate the message
-        # TODO: alter the @game state
+        # TODO: alter the @state state
 
         case parsed_message.type
         when Pulse::Messages::Enter::TYPE
