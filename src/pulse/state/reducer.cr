@@ -1,9 +1,5 @@
 # TODO: speecs!!!
 
-# TODO: implement a message queue that will enqueue messages and send them out
-# at steady 10 - 20 fps a.k.a the 'Pulse' engine.
-# https://crystal-lang.org/api/0.19.1/Deque.html
-
 module Pulse
   module State
     class Reducer
@@ -59,6 +55,9 @@ module Pulse
         end
       end
 
+      # TODO: keep track of how frequent the same messages are coming. The front end shouldn't send
+      # messages faster than certain fps (20?) but players may try to hack and send faster. Just
+      # discard any message more frequent than fps limit?
       def reduce(client, message)
         parsed_message = Pulse::Messages::Resolver.resolve(message)
 
@@ -78,10 +77,22 @@ module Pulse
       def move(client, parsed_message)
         puts "[Pulse] Got 'Position' message. Type: #{parsed_message.class}"
 
-        # TESTING: just echo back for the moment
-        # client.socket.send(parsed_message.to_slice)
-        # when
-        # TODO: .... the rest
+        # TODO: validate or rather send the next valid position
+
+        # wip
+        new_x = 0
+        new_y = 0
+
+        serialized_position_message = Pulse::Messages::Position.new(
+          # x: client.user.last_x, y: client.user.last_y
+          x: new_x, y: new_y
+        ).to_slice
+
+        current_client_map = current_map(client)
+
+        current_client_map.clients.each do |client|
+          client.socket.send(serialized_position_message) # updated position
+        end
       end
     end
   end

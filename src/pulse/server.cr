@@ -41,6 +41,8 @@ game_state.load!
 reducer = Pulse::State::Reducer.new(game_state)
 
 # TESTING >>>>>>>>
+# ACTUALLY THIS MIGHT BE BAD APPROACH. SHOULD JUST UPDATE ASAP, BUT KEEP TRACK OF HOLD IT WAS SINCE
+# LAST UPDATE...
 # count = 0
  
 # spawn do
