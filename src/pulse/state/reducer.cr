@@ -64,3 +64,15 @@ module Pulse
     end
   end
 end
+
+
+    # # Maybe:
+    # # broadcast_room(scope : String, message : Pulse::Message, include_yourself : false)
+    # #  e.g. scopes SCOPE::ROOM => "room", SCOPE::CLAN => "clan", SCOPE::GLOBAL => "global", SCOPE::FACTION => "faction", SCOPE::PARTY => "party"
+    # # end
+    # def broadcast_map_except_yourself(message : Pulse::Messages::ApplicationMessage)
+    #   # TODO: ...
+    #   # current_map.clients.each do |client|
+    #   #   client.socket.send(message) if client.user.name != @user.name
+    #   # end
+    # end
