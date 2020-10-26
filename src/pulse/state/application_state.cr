@@ -5,10 +5,7 @@ module Pulse
     abstract class ApplicationState
       # @maps : Hash(String, Pulse::Map)
 
-      # def initialize
-      #   # TODO: ...
-      #   @maps = {} of String => Pulse::Map
-      # end
+      abstract def maps
 
       # TODO: ... load from files
       abstract def load!

@@ -1,15 +1,17 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Map
-    property :name
+    property :name, :clients
 
     @tiles : Array(Array(Int32))
+    # @clients : Array(Pulse::Client)
 
     def initialize(width, height, seed = 1234)
       seeded_number_generator = Random.new(seed)
 
       @tiles = generate_tiles(seeded_number_generator, width, height)
       @name = generate_name(seeded_number_generator)
+      @clients = [] of Pulse::Client
     end
 
     def initialize(file_path : (String)?)
@@ -19,6 +21,7 @@ module Pulse
       # placeholder
       @tiles = [[1,1], [1,1]]
       @name = "file_loaded_map"
+      @clients = [] of Pulse::Client
     end
 
     # def load

@@ -13,6 +13,7 @@ module Pulse
         # TODO: validate the message
         # TODO: alter the @state state
 
+        # TODO: simplify this. either dynamically choose methods or extract to methods
         case parsed_message.class
         when Pulse::Messages::Enter
           puts "[Pulse] Got 'Enter' message. Type: #{parsed_message.class}"
@@ -42,12 +43,12 @@ module Pulse
         end
       end
 
-      def current_map
+      def current_map(client)
         # @reducer.state.maps[@user.current_map]
         # current_map = client.user.current_map
   
         # TESTING...
-        @state.maps.first
+        @state.maps.values.first
       end
     end
   end

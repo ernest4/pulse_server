@@ -8,7 +8,7 @@ module Pulse
     @client_id : String
     @reducer : Pulse::State::Reducer
 
-    property :socket, :client_id
+    property :socket, :client_id, :user
 
     def initialize(socket, client_id, reducer)
       @reducer = reducer

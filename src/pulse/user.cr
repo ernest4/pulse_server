@@ -10,6 +10,7 @@ end
 # TODO: probably have User::Memory and User::Redis
 module Pulse
   class User
+    @client_id : String
     @name : String
     @current_map : (String)?
 
