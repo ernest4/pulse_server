@@ -4,8 +4,9 @@ require "./application_message"
 module Pulse
   module Messages
     class Enter < Pulse::Messages::ApplicationMessage
-      TYPE = 2
+      TYPE = 2_u8
 
+      # TODO: enforce max name length to 12 chars max
       @name : String
 
       # property :name
@@ -19,26 +20,15 @@ module Pulse
       end
 
       def initialize(user : Pulse::User)
+        # @name = "Γεια σουκόσμ" # works ...
         @name = user.name
       end
 
       def to_slice
-        to_slice(TYPE) do |io| # parent.to_slice(&block) ...
+        to_slice(TYPE) do |io|
           io.set_string("#{@name}")
         end
       end
-
-      # TODO: hmm maybe can use yield here instead ?!?!?
-      # def parse
-      #   # @message_type = get_byte
-      #   get_byte # get the type byte and move the reader pointer on to next value
-
-      #   @position_x = get_number
-      #   @position_y = get_number
-      #   # ... = get_string
-
-      #   self # return self
-      # end
     end
   end
 end

@@ -52,13 +52,14 @@ module Pulse
 
       def parse(message : Slice(UInt8))
         io_memory_message = IOMemoryWrapper.new(message)
+        io_memory_message.get_byte # extracting out the message type...
 
         yield io_memory_message
       end
 
       def to_slice(message_type)
         new_io_memory_message = IOMemoryWrapper.new
-        new_io_memory_message.set_byte(message_type)
+        new_io_memory_message.set_byte(message_type) # inserting the message type...
 
         yield new_io_memory_message
 

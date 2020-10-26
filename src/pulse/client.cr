@@ -12,7 +12,6 @@ module Pulse
 
     def initialize(socket, client_id, reducer)
       @reducer = reducer
-      # @socket = initialize_socket(socket)
       @socket = socket
       @client_id = client_id 
       @user = Pulse::User.new(client_id)

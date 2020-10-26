@@ -1,4 +1,21 @@
 <button id="send_button">Send</button>
+<br />
+<br />
+<div>
+  <span>Maps: <%= game_state.maps.size %></span>
+  <br />
+  <% game_state.maps.each do |map_name, map| %>
+    <br />
+    <div>
+      <span>name: <%= map_name %></span>
+      <br />
+      <span>tiles: <%= map.tiles.to_s %></span>
+      <br />
+      <span>clients: <%= map.clients.size %></span>
+    </div>
+  <% end %>
+</div>
+
 <script>
   const MESSAGE_TYPE = {
     POSITION: 1,
@@ -6,20 +23,30 @@
   }
 
   const ws = new WebSocket(location.origin.replace('http', 'ws'));
-  ws.onmessage = function(msg) {
+  ws.binaryType = 'arraybuffer';
+  ws.onmessage = msg => {
     console.log('msg');
     console.log(msg);
+
+    console.log('msg.data');
+    console.log(msg.data);
+
+    console.log('decoder utf-8');
+    const decoder = new TextDecoder("utf-8");
+    console.log(decoder.decode(msg.data));
   };
-  ws.binaryType = 'arraybuffer';
 
   const sendTest = () => {
-    const buffer = new ArrayBuffer(4);
+    const encoder = new TextEncoder("utf-8");
+    const encoded = encoder.encode("Γεια σουκόσμ");
+
+    const buffer = new ArrayBuffer(1 + encoded.length);
     const view = new DataView(buffer);
 
-    view.setUint16(0, MESSAGE_TYPE.ENTER, true);
+    encoded.forEach((byte, index) => view.setUint8(index + 1, byte));
+
+    view.setUint8(0, MESSAGE_TYPE.ENTER, true);
     // view.setUint16(2, 500, true);
-    console.log('view');
-    console.log(view);
     console.log('buffer');
     console.log(buffer);
 

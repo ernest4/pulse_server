@@ -4,7 +4,7 @@ require "./application_message"
 module Pulse
   module Messages
     class Position < Pulse::Messages::ApplicationMessage
-      TYPE = 1
+      TYPE = 1_u8
 
       property :position_x, :position_y
 
@@ -24,23 +24,11 @@ module Pulse
       end
 
       def to_slice
-        to_slice(TYPE) do |io| # parent.to_slice(&block) ...
+        to_slice(TYPE) do |io|
           io.set_number(@position_x)
           io.set_number(@position_y)
         end
       end
-
-      # # TODO: hmm maybe can use yield here instead ?!?!?
-      # def parse
-      #   # @message_type = get_byte
-      #   get_byte # get the type byte and move the reader pointer on to next value
-
-      #   @position_x = get_number
-      #   @position_y = get_number
-      #   # ... = get_string
-
-      #   self # return self
-      # end
     end
   end
 end

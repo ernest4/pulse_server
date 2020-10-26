@@ -1,7 +1,7 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Map
-    property :name, :clients
+    property :name, :clients, :tiles
 
     @tiles : Array(Array(Int32))
     # @clients : Array(Pulse::Client)
