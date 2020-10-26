@@ -11,12 +11,16 @@ end
 module Pulse
   class User
     @name : String
-    @current_map : String
+    @current_map : (String)?
 
     property :name, :current_map
 
     def initialize(client_id)
       @client_id = client_id
+
+      @name = ""
+      # @current_map = ""
+
       load!
     end
 
@@ -25,7 +29,9 @@ module Pulse
       # user = User.query.find({client_id: @client_id})
 
       # TESTING:
-      @user = OpenStruct.new
+      user = OpenStruct.new
+
+      @name = user.name
     end
   end
 end

@@ -2,12 +2,18 @@
 
 module Pulse
   module Messages
-    # abstract class ApplicationMessage
-    class ApplicationMessage
+    abstract class ApplicationMessage
       class IOMemoryWrapper
         def initialize
           @io_memory = IO::Memory.new
         end
+
+        def initialize(buffer)
+          @io_memory = IO::Memory.new(buffer)
+        end
+
+        # delegate to_slice, to: @io_memory # delegates known methods
+        forward_missing_to @io_memory # delegates any unimplemented methods
 
         def set_byte(value)
           set_bytes(value)
@@ -24,44 +30,38 @@ module Pulse
         def set_string(string : String)
           @io_memory.write_utf8(string.to_slice)
         end
+
+        def get_byte
+          @io_memory.read_bytes(UInt8, IO::ByteFormat::LittleEndian)
+        end
+
+        def get_number
+          @io_memory.read_bytes(UInt16, IO::ByteFormat::LittleEndian)
+        end
+
+        def get_string
+          # TODO: ... pick optimal buffer size ...
+          # or maybe different methods for different string sizes ?!?
+          buffer = uninitialized UInt8[1024]
+          bytes_read = @io_memory.read_utf8(buffer.to_slice)
+          slice = buffer.to_slice[0, bytes_read]
+          # puts slice
+          String.new(slice)
+        end
       end
 
-      # def initialize(message : Slice(UInt8))
-      #   @message = message
-      # end
+      def parse(message : Slice(UInt8))
+        io_memory_message = IOMemoryWrapper.new(message)
 
-      # def parse
-      #   MESSAGE_TYPE_CLASSES[class_type].new.parse(@message)
-      # end
-
-      # def class_type
-      #   get_byte
-      # end
-
-      def get_byte
-        io_memory_message.read_bytes(UInt8, IO::ByteFormat::LittleEndian)
+        yield io_memory_message
       end
 
-      def get_number
-        io_memory_message.read_bytes(UInt16, IO::ByteFormat::LittleEndian)
-      end
-
-      def get_string
-        # TODO: ...
-        # buffer = uninitialized UInt8[1024]
-        # bytes_read = io2.read_utf8(buffer.to_slice)
-        # slice = buffer.to_slice[0, bytes_read]
-        # puts slice
-        # stringy2 = String.new(slice)
-      end
-
-      def io_memory_message
-        @io_memory_message ||= IO::Memory.new(@message)
-      end
-
-      def to_slice
+      def to_slice(message_type)
         new_io_memory_message = IOMemoryWrapper.new
+        new_io_memory_message.set_byte(message_type)
+
         yield new_io_memory_message
+
         new_io_memory_message.to_slice
       end
     end

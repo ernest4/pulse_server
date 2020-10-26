@@ -4,17 +4,26 @@ require "./application_message"
 module Pulse
   module Messages
     class Enter < Pulse::Messages::ApplicationMessage
-      TYPE = 1
+      TYPE = 2
+
+      @name : String
 
       # property :name
+
+      def initialize(message : Slice(UInt8))
+        @name = ""
+
+        parse(message) do |io|
+          @name = io.get_string
+        end
+      end
 
       def initialize(user : Pulse::User)
         @name = user.name
       end
 
       def to_slice
-        to_slice do |io| # parent.to_slice(&block) ...
-          io.set_byte(TYPE)
+        to_slice(TYPE) do |io| # parent.to_slice(&block) ...
           io.set_string("#{@name}")
         end
       end

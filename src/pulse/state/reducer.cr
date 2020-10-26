@@ -13,22 +13,41 @@ module Pulse
         # TODO: validate the message
         # TODO: alter the @state state
 
-        case parsed_message.type
-        when Pulse::Messages::Enter::TYPE
-          puts "[Pulse] Got 'Enter' message. Type: #{parsed_message.type}"
+        case parsed_message.class
+        when Pulse::Messages::Enter
+          puts "[Pulse] Got 'Enter' message. Type: #{parsed_message.class}"
+
+          current_client_map = current_map(client)
+
+          # TODO: ...wip
+          current_client_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
+          # @socket.send(Pulse::Message.build([Pulse::Messages::EVENTS["ENTER"], @user.name, @user.position_x, @user.position_y]))
+            client.socket.send(Pulse::Messages::Enter.new(client.user).to_slice)
+            # client.socket.send(Pulse::Messages::Position.new(@user).to_slice) # TODO: send position stuff separate
+          end
+
+          current_client_map.clients.push(client)
 
           # TESTING: just echo back
           client.socket.send(parsed_message.to_slice)
-        when Pulse::Messages::Position::TYPE
-          puts "[Pulse] Got 'Position' message. Type: #{parsed_message.type}"
+        when Pulse::Messages::Position
+          puts "[Pulse] Got 'Position' message. Type: #{parsed_message.class}"
 
           # TESTING: just echo back
           client.socket.send(parsed_message.to_slice)
           # when
           # TODO: .... the rest
         else
-          puts "[Pulse] Unrecognized message type #{parsed_message.type}"
+          puts "[Pulse] Unrecognized message type #{parsed_message.class}"
         end
+      end
+
+      def current_map
+        # @reducer.state.maps[@user.current_map]
+        # current_map = client.user.current_map
+  
+        # TESTING...
+        @state.maps.first
       end
     end
   end

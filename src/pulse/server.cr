@@ -113,8 +113,9 @@ ws "/" do |socket, env|
   # TODO: read from session
   # client = Client.new(:socket => socket, :session_id => session_id)
   client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex, reducer: reducer) # random id for testing
+  client.initialize_socket
   client.authenticate!
-  client.enter_map
+  # client.enter_map
 rescue ex : Pulse::Unauthorized
   # TODO: ...
   raise ex # just reraise for now...
