@@ -1,6 +1,8 @@
 # TODO: specs !!!
 require "./position"
 require "./enter"
+require "./exit"
+require "./move"
 
 module Pulse
   module Messages
@@ -19,8 +21,7 @@ module Pulse
       # }
 
       MESSAGE_TYPE_CLASSES = {
-        Pulse::Messages::Enter::TYPE    => Pulse::Messages::Enter,
-        Pulse::Messages::Position::TYPE => Pulse::Messages::Position,
+        Pulse::Messages::Move::TYPE => Pulse::Messages::Move,
       }
 
       def resolve(message)

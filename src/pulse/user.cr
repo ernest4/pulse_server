@@ -2,25 +2,36 @@
 
 # TESTING (not really open struct... sign... hard to implement in crystal)
 class OpenStruct
-  def name
-    "Ernest"
+  property :id, :name, :last_x, :last_y
+
+  def initialize
+    @id = 123
+    @name = "Ernestό"
+    @last_x = 3_u16
+    @last_y = 2_u16
   end
 end
 
 # TODO: probably have User::Memory and User::Redis
 module Pulse
   class User
+    @id : Int32
     @client_id : String
     @name : String
     @current_map : (String)?
+    @last_x : UInt16
+    @last_y : UInt16
 
-    property :name, :current_map
+    property :id, :name, :current_map, :last_x, :last_y
 
     def initialize(client_id)
+      @id = -1
       @client_id = client_id
 
       @name = ""
       # @current_map = ""
+      @last_x = 0
+      @last_y = 0
 
       load!
     end
@@ -32,7 +43,10 @@ module Pulse
       # TESTING:
       user = OpenStruct.new
 
+      @id = user.id
       @name = user.name
+      @last_x = user.last_x
+      @last_y = user.last_y
     end
 
     # TODO: wip ....

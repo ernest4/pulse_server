@@ -40,6 +40,19 @@ game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory an
 game_state.load!
 reducer = Pulse::State::Reducer.new(game_state)
 
+# TESTING >>>>>>>>
+# count = 0
+ 
+# spawn do
+#   loop do
+#     sleep 0.05
+#     puts "yay"
+#     puts count = count + 1
+#     puts Time.utc
+#   end
+# end
+# TESTING <<<<<<<
+
 get "/" do
   # server_memory = server_memory + 1
   # "Hello World! #{server_memory}"

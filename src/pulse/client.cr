@@ -43,6 +43,8 @@ module Pulse
         #   # sockets.delete(socket)
         #   puts "Closing Socket: #{socket}"
       end
+
+      @reducer.enter(self)
     end
   end
 end

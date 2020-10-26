@@ -3,8 +3,8 @@ require "./application_message"
 
 module Pulse
   module Messages
-    class Enter < Pulse::Messages::ApplicationMessage
-      TYPE = 3_u8
+    class Exit < Pulse::Messages::ApplicationMessage
+      TYPE = 4_u8
 
       @player_id : Int32
       @name : String # TODO: enforce max name length to 12 chars max

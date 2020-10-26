@@ -35,8 +35,8 @@ module Pulse
           @io_memory.read_bytes(UInt8, IO::ByteFormat::LittleEndian)
         end
 
-        def get_number
-          @io_memory.read_bytes(UInt16, IO::ByteFormat::LittleEndian)
+        def get_number(size = UInt16)
+          @io_memory.read_bytes(size, IO::ByteFormat::LittleEndian)
         end
 
         def get_string
