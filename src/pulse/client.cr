@@ -22,10 +22,12 @@ module Pulse
       # TODO: ...
     end
 
+    # TODO: move to reducer ?
     def exit_map
       # TODO: ...
     end
 
+    # TODO: move to reducer ?
     # Maybe:
     # broadcast_room(scope : String, message : Pulse::Message, include_yourself : false)
     #  e.g. scopes SCOPE::ROOM => "room", SCOPE::CLAN => "clan", SCOPE::GLOBAL => "global", SCOPE::FACTION => "faction", SCOPE::PARTY => "party"

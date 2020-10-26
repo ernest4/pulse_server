@@ -1,7 +1,25 @@
+<button id="send_button">Send</button>
 <script>
-  const wow = '5';
+  const ws = new WebSocket(location.origin.replace('http', 'ws'));
+  ws.onmessage = function(msg) {
+    console.log('msg');
+    console.log(msg);
+  };
+  ws.binaryType = 'arraybuffer';
+
+  const sendTest = () => {
+    const buffer = new ArrayBuffer(4);
+    const view = new DataView(buffer);
+    view.setUint16(0, 2, true);
+    // view.setUint16(2, 500, true);
+    console.log('view');
+    console.log(view);
+    console.log('buffer');
+    console.log(buffer);
+
+    ws.send(buffer);
+  };
 
   const sendButton = document.getElementById('send_button');
-  sendButton.addEventListener('click', () => console.log(wow));
+  sendButton.addEventListener('click', sendTest);
 </script>
-<button id="send_button">Send</button>

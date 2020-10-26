@@ -14,11 +14,13 @@ module Pulse
         # TODO: alter the @state state
 
         # TODO: simplify this. either dynamically choose methods or extract to methods
+        # TODO: strip out puts messages in production, keep for debugging in development
         case parsed_message.class
         when Pulse::Messages::Enter
           puts "[Pulse] Got 'Enter' message. Type: #{parsed_message.class}"
 
           current_client_map = current_map(client)
+          current_client_map.clients.push(client)
 
           # TODO: ...wip
           current_client_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
@@ -27,7 +29,7 @@ module Pulse
             # client.socket.send(Pulse::Messages::Position.new(@user).to_slice) # TODO: send position stuff separate
           end
 
-          current_client_map.clients.push(client)
+          # current_client_map.clients.push(client)
 
           # TESTING: just echo back
           client.socket.send(parsed_message.to_slice)
