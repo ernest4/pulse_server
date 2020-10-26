@@ -34,6 +34,10 @@ module Pulse
 
       @name = user.name
     end
+
+    # TODO: wip ....
+    # def update({})
+    # end
   end
 end
 

@@ -15,8 +15,8 @@ module Pulse
 
         # TODO: simplify this. either dynamically choose methods or extract to methods
         # TODO: strip out puts messages in production, keep for debugging in development
-        case parsed_message.class
-        when Pulse::Messages::Enter
+        case parsed_message.class.to_s
+        when Pulse::Messages::Enter.to_s
           puts "[Pulse] Got 'Enter' message. Type: #{parsed_message.class}"
 
           current_client_map = current_map(client)
@@ -33,7 +33,7 @@ module Pulse
 
           # TESTING: just echo back
           client.socket.send(parsed_message.to_slice)
-        when Pulse::Messages::Position
+        when Pulse::Messages::Position.to_s
           puts "[Pulse] Got 'Position' message. Type: #{parsed_message.class}"
 
           # TESTING: just echo back
@@ -50,7 +50,16 @@ module Pulse
         # current_map = client.user.current_map
   
         # TESTING...
+        map_name = @state.maps.keys.first
+        # client.user.update({current_map: map_name})
+        client.user.current_map = map_name
+        
         @state.maps.values.first
+      end
+
+      def close(client)
+        client.close
+        @state.maps[client.user.current_map].clients.delete(client)
       end
     end
   end

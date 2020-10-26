@@ -22,9 +22,8 @@ module Pulse
       # TODO: ...
     end
 
-    # TODO: move to reducer ?
-    def exit_map
-      # TODO: ...
+    def close
+      # TODO: clean up, save state etc.
     end
 
     # TODO: move to reducer ?
@@ -53,6 +52,7 @@ module Pulse
       # TODO: for now save straigth to DB here ???
       # TODO: clean up game state etc.
       @socket.on_close do |_|
+        @reducer.close(self)
         #   # sockets.delete(socket)
         #   puts "Closing Socket: #{socket}"
       end

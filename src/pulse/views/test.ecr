@@ -1,5 +1,10 @@
 <button id="send_button">Send</button>
 <script>
+  const MESSAGE_TYPE = {
+    POSITION: 1,
+    ENTER: 2,
+  }
+
   const ws = new WebSocket(location.origin.replace('http', 'ws'));
   ws.onmessage = function(msg) {
     console.log('msg');
@@ -10,7 +15,7 @@
   const sendTest = () => {
     const buffer = new ArrayBuffer(4);
     const view = new DataView(buffer);
-    view.setUint16(0, 2, true);
+    view.setUint16(0, MESSAGE_TYPE.ENTER, true);
     // view.setUint16(2, 500, true);
     console.log('view');
     console.log(view);
