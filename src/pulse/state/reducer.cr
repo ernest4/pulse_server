@@ -29,8 +29,8 @@ module Pulse
           current_client_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
           # @socket.send(Pulse::Message.build([Pulse::Messages::EVENTS["ENTER"], @user.name, @user.position_x, @user.position_y]))
 
-            client.socket.send(Pulse::Messages::Enter.new(client.user).to_slice)
-            # client.socket.send(parsed_message.to_slice)
+            # client.socket.send(Pulse::Messages::Enter.new(client.user).to_slice)
+            client.socket.send(parsed_message.to_slice)
 
             # client.socket.send(Pulse::Messages::Position.new(@user).to_slice) # TODO: send position stuff separate
           end
