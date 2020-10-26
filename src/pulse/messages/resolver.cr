@@ -3,14 +3,14 @@ require "./position"
 require "./enter"
 
 module Pulse
-  module Message
+  module Messages
     module Resolver
       extend self
 
       # MESSAGE_TYPE_CLASSES = {
       #   # 0 => Classy
-      #   # 1 => Pulse::Message::Enter,
-      #   2 => Pulse::Message::Position, # if player sends this, resend this back to player to acknowledge it as validated
+      #   # 1 => Pulse::Messages::Enter,
+      #   2 => Pulse::Messages::Position, # if player sends this, resend this back to player to acknowledge it as validated
       #   # TODO: attack... # if player sends this, resend this back to player to acknowledge it as validated
       #   # TODO: die...
       #   # TODO: drop item... # if player sends this, resend this back to player to acknowledge it as validated
@@ -19,8 +19,8 @@ module Pulse
       # }
 
       MESSAGE_TYPE_CLASSES = {
-        Pulse::Message::Enter::TYPE => Pulse::Message::Enter,
-        Pulse::Message::Position::TYPE => Pulse::Message::Position,
+        Pulse::Messages::Enter::TYPE    => Pulse::Messages::Enter,
+        Pulse::Messages::Position::TYPE => Pulse::Messages::Position,
       }
 
       def resolve(message)

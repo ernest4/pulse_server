@@ -1,5 +1,5 @@
 # TODO: speeecs ?!?!?
-require "./message/resolver"
+require "./messages/resolver"
 
 class TestyUser
   def initialize
@@ -9,7 +9,7 @@ class TestyUser
   end
 
   def name
-    'TestyUser_name'
+    "TestyUser_name"
   end
 end
 
@@ -17,7 +17,7 @@ module Pulse
   class Client
     @socket : HTTP::WebSocket
     @client_id : String
-    @reducer : Pulse::Game::State::Reducer
+    @reducer : Pulse::State::Reducer
 
     def initialize(socket, client_id, reducer)
       @reducer = reducer
@@ -36,13 +36,12 @@ module Pulse
       # TODO: ...
     end
 
-
     def enter_map
       # TODO: ...wip
       current_map.clients.each do |client| # TODO: make a broadcast method on Pulse::Map
-        # @socket.send(Pulse::Message.build([Pulse::Message::EVENTS["ENTER"], @user.name, @user.position_x, @user.position_y]))
-        client.socket.send(Pulse::Message::Enter.new(@user).to_slice)
-        # client.socket.send(Pulse::Message::Position.new(@user).to_slice) # TODO: send position stuff separate
+      # @socket.send(Pulse::Message.build([Pulse::Messages::EVENTS["ENTER"], @user.name, @user.position_x, @user.position_y]))
+        client.socket.send(Pulse::Messages::Enter.new(@user).to_slice)
+        # client.socket.send(Pulse::Messages::Position.new(@user).to_slice) # TODO: send position stuff separate
       end
 
       # current_map.clients.push(self)
@@ -59,11 +58,11 @@ module Pulse
       # TODO: ...
     end
 
-    # Maybe: 
+    # Maybe:
     # broadcast_room(scope : String, message : Pulse::Message, include_yourself : false)
     #  e.g. scopes SCOPE::ROOM => "room", SCOPE::CLAN => "clan", SCOPE::GLOBAL => "global", SCOPE::FACTION => "faction", SCOPE::PARTY => "party"
     # end
-    def broadcast_map_except_yourself(message : Pulse::Message::Base)
+    def broadcast_map_except_yourself(message : Pulse::Messages::ApplicationMessage)
       # TODO: ...
       # current_map.clients.each do |client|
       #   client.socket.send(message) if client.user.name != @user.name
@@ -84,12 +83,11 @@ module Pulse
       # TODO: for now save straigth to DB here ???
       # TODO: clean up game state etc.
       socket.on_close do |_|
-      #   # sockets.delete(socket)
-      #   puts "Closing Socket: #{socket}"
+        #   # sockets.delete(socket)
+        #   puts "Closing Socket: #{socket}"
       end
 
       socket
     end
   end
 end
-

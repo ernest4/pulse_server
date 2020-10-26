@@ -1,15 +1,15 @@
 require "kemal"
-require "./pulse/map"
-require "./pulse/client"
-require "./pulse/exceptions/unauthorized"
-require "./pulse/game/state/memory"
-require "./pulse/game/state/reducer"
+require "./map"
+require "./client"
+require "./exceptions/unauthorized"
+require "./state/memory"
+require "./state/reducer"
 
 require "clear"
 
 # initialize a pool of database connection:
 # TODO: wip ...
-# Clear::SQL.init("postgres://postgres@localhost/my_database", connection_pool_size: 5)
+Clear::SQL.init("postgres://postgres@localhost/my_database", connection_pool_size: 5)
 
 
 
@@ -36,9 +36,9 @@ require "clear"
 
 # load the map data. initialize global state etc
 # maps = {} of String => Pulse::Map
-game_state = Pulse::Game::State::Memory.new # TODO: dynamically swap between memory and redis based on env config !! (waiting to get config done ...)
+game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory and redis based on env config !! (waiting to get config done ...)
 game_state.load!
-reducer = Pulse::Game::State::Reducer.new(game_state)
+reducer = Pulse::State::Reducer.new(game_state)
 
 get "/" do
   # server_memory = server_memory + 1
@@ -88,12 +88,12 @@ end
 
 get "/test" do
   # TODO: only accessible in develop !!
-  render "src/views/test.ecr", "src/views/layouts/default.ecr"
+  render "src/pulse/views/test.ecr", "src/pulse/views/layouts/default.ecr"
 end
 
 get "/testy/:name" do |env|
   name = env.params.url["name"]
-  render "src/views/testy.ecr", "src/views/layouts/default.ecr"
+  render "src/pulse/views/testy.ecr", "src/pulse/views/layouts/default.ecr"
 end
 
 

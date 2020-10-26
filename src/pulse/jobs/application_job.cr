@@ -1,0 +1,2 @@
+# class ApplicationJob < # ... something ?
+# end

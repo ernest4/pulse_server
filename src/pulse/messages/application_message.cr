@@ -1,8 +1,8 @@
 # TODO: specs !!!
 
 module Pulse
-  module Message
-    class Base
+  module Messages
+    class ApplicationMessage
       class IOMemoryWrapper
         def initialize
           @io_memory = IO::Memory.new
@@ -19,7 +19,7 @@ module Pulse
         def set_bytes(value)
           @io_memory.write_bytes(value, IO::ByteFormat::LittleEndian)
         end
-  
+
         def set_string(string : String)
           @io_memory.write_utf8(string.to_slice)
         end
@@ -67,7 +67,6 @@ module Pulse
   end
 end
 
-
 # ----------------------- this encoding works with any string...
 # FORMAT = IO::ByteFormat::LittleEndian
 # # encoding
@@ -76,7 +75,6 @@ end
 # categ = 4_u16 # 2 bytes
 # stringy = "hiΓεια σ123ου κόσμε你".to_slice
 # stringy.size
-
 
 # # io = IO::Memory.new(10)  # Specifying the capacity is optional
 # io = IO::Memory.new

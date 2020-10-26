@@ -6,7 +6,7 @@ authors:
 
 targets:
   server:
-    main: src/server.cr
+    main: src/pulse/server.cr
 
 dependencies:
   kemal:

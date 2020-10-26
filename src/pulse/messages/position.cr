@@ -1,29 +1,31 @@
 # TODO: specs !!!
-require "./base"
+require "./application_message"
 
 module Pulse
-  module Message
-    class Enter < Pulse::Message::Base
-      TYPE = 1
-      
-      # property :name
+  module Messages
+    class Position < Pulse::Messages::ApplicationMessage
+      TYPE = 2
+
+      property :position_x, :position_y
 
       def initialize(message : Slice(UInt8))
         super(message)
       end
 
-      def initialize(user)
-        @name = user.name
+      def initialize(position_x : UInt16, position_y : UInt16)
+        @position_x = position_x
+        @position_y = position_y
       end
 
       def to_slice
-        super.to_slice do |io|
+        to_slice do |io| # parent.to_slice(&block) ...
           io.set_byte(TYPE)
-          io.set_string("#{@name}")
+          io.set_number(@position_x)
+          io.set_number(@position_y)
         end
       end
 
-      # TODO: hmm maybe can use yield here instead ?!?!?
+      # # TODO: hmm maybe can use yield here instead ?!?!?
       # def parse
       #   # @message_type = get_byte
       #   get_byte # get the type byte and move the reader pointer on to next value
