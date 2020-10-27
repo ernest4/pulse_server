@@ -119,6 +119,10 @@ end
 # sockets = [] of HTTP::WebSocket
 # clients = [] of Pulse::Client
 
+
+# TODO: need to implement automatic Ping of client sockets to check if alive and clean them up out
+# of memory if the connection dead...
+
 ws "/" do |socket, env|
   # sockets have access to session...
   # puts env.session.int?("hello")
