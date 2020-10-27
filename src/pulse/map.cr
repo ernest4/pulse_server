@@ -1,6 +1,9 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Map
+    TILE_SIZE = 32 # 32 px
+    MAX_WORLD_SIZE = TILE_SIZE * 60
+
     property :name, :clients, :tiles
 
     @tiles : Array(Array(Int32))
@@ -47,46 +50,52 @@ module Pulse
     end
 
     def move(client, direction)
-      # TODO: ...
-      # 1. read direction
-      # 2. check map tiles if can move there
-      # 3. return new position (which might be same as old position if can't move...)
-
       speed = client.user.speed
       last_x = client.user.last_x
       last_y = client.user.last_y
 
+      new_position = {:x => last_x, :y => last_y}
+
       case direction
       when Pulse::Messages::Move::LEFT
-        {:x => last_x - speed, :y => last_y}
+        new_position = {:x => last_x - speed, :y => last_y}
       when Pulse::Messages::Move::LEFT_TOP
-        {:x => last_x - speed, :y => last_y - speed}
+        new_position = {:x => last_x - speed, :y => last_y - speed}
       when Pulse::Messages::Move::TOP
-        {:x => last_x, :y => last_y - speed}
+        new_position = {:x => last_x, :y => last_y - speed}
       when Pulse::Messages::Move::RIGHT_TOP
-        {:x => last_x + speed, :y => last_y - speed}
+        new_position = {:x => last_x + speed, :y => last_y - speed}
       when Pulse::Messages::Move::RIGHT
-        {:x => last_x + speed, :y => last_y}
+        new_position = {:x => last_x + speed, :y => last_y}
       when Pulse::Messages::Move::RIGHT_BOTTOM
-        {:x => last_x + speed, :y => last_y + speed}
+        new_position = {:x => last_x + speed, :y => last_y + speed}
       when Pulse::Messages::Move::BOTTOM
-        {:x => last_x, :y => last_y + speed}
+        new_position = {:x => last_x, :y => last_y + speed}
       when Pulse::Messages::Move::LEFT_BOTTOM
-        {:x => last_x - speed, :y => last_y + speed}
+        new_position = {:x => last_x - speed, :y => last_y + speed}
       else
-        puts "[Pulse] Unrecognized move direction #{parsed_message.direction}"
+        puts "[Pulse] Unrecognized move direction #{direction}"
       end
+
+      new_position = clip_position_to_world_bounds(new_position)
 
       last_position = {:x => last_x, :y => last_y}
       can_move_to?(new_position) ? new_position : last_position
     end
 
+    private def clip_position_to_world_bounds(position)
+      {:x => position[:x].clamp(0, MAX_WORLD_SIZE), :y => position[:y].clamp(0, MAX_WORLD_SIZE)}
+    end
+
     private def can_move_to?(position)
-      # TODO: this will need to be bit more specific on which tile does (x,y) sit on
-      tile = @tiles[position[:y]][position[:x]]
+      tile_y = position[:y] // TILE_SIZE
+      tile_x = position[:x] // TILE_SIZE
+
+      tile = @tiles[tile_y][tile_x]
 
       # TODO: use proper tile type numbers later...
-      tile == 0 || tile == 1 || tile == 2 || tile == 3 || tile == 4
+      # tile == 0 || tile == 1 || tile == 2 || tile == 3 || tile == 4
+      tile != 5
     end
   end
 end

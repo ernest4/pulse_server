@@ -56,7 +56,7 @@ module Pulse
       {:x => @last_x, :y => @last_y}
     end
 
-    def position(new_position : Hash(Symbol => Int32))
+    def position=(new_position)
       @last_x = new_position[:x]
       @last_y = new_position[:y]
     end

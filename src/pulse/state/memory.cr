@@ -6,11 +6,16 @@ module Pulse
     class Memory < Pulse::State::ApplicationState
       # @maps : Hash(String, Pulse::Map)
 
-      property :maps
+      # property :maps : Hash(String, Pulse::Map)
+      # setter :maps
 
       def initialize
         # TODO: ...
         @maps = {} of String => Pulse::Map
+      end
+
+      def maps : Hash(String, Pulse::Map)
+        @maps
       end
 
       def load!

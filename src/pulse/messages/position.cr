@@ -7,11 +7,19 @@ module Pulse
       TYPE = 2_u8
       MIN_UPDATE_RATE = 50 # ms, 20 fps
 
+      @x : UInt16
+      @y : UInt16
+
       property :x, :y
 
-      def initialize(x : UInt16, y : UInt16)
-        @x = x
-        @y = y
+      def initialize(x, y)
+        @x = x.to_u16
+        @y = y.to_u16
+      end
+
+      def initialize(position)
+        @x = position[:x].to_u16
+        @y = position[:y].to_u16
       end
 
       def to_slice
