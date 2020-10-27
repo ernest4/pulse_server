@@ -88,7 +88,7 @@
   // sendEnterButton.addEventListener('click', sendEnterTest);
 
   const sendMove = ({direction}) => {
-    const buffer = new ArrayBuffer(3);
+    const buffer = new ArrayBuffer(2);
     const view = new DataView(buffer);
 
     view.setUint8(0, MESSAGE_TYPE.MOVE, true);
