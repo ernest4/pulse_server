@@ -14,7 +14,7 @@ module Pulse
       @socket = socket
       @client_id = client_id 
       @user = Pulse::User.new(client_id)
-      @last_received_time = {} of UInt8 => Time
+      @last_received_time = {} of UInt8 => Time::Span
     end
 
     def authenticate!

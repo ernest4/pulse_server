@@ -26,16 +26,14 @@
   const ws = new WebSocket(location.origin.replace('http', 'ws'));
   ws.binaryType = 'arraybuffer';
   ws.onmessage = msg => {
-    console.log('msg');
-    console.log(msg);
+    console.warn(msg);
 
     console.log('msg.data');
     console.log(msg.data);
 
-    console.log('message type');
     const view = new DataView(msg.data);
     const message_type = view.getUint8(0, true)
-    console.log(message_type);
+    console.log(`message type: ${message_type}`);
 
     switch(message_type) {
       case 0:
@@ -58,7 +56,7 @@
         console.log('decoder utf-8');
 
         const decoder = new TextDecoder("utf-8");
-        const textSlice = msg.data.slice(6 , msg.data.length);
+        const textSlice = msg.data.slice(5 , msg.data.length);
         console.log(decoder.decode(textSlice));
         break;
       case MESSAGE_TYPE.EXIT:
@@ -96,7 +94,7 @@
     view.setUint8(0, MESSAGE_TYPE.MOVE, true);
     view.setUint8(1, direction, true);
 
-    console.log('move buffer');
+    console.warn('move buffer');
     console.log(buffer);
 
     ws.send(buffer);

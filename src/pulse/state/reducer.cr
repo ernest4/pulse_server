@@ -80,9 +80,10 @@ module Pulse
       def move(client, parsed_message)
         puts "[Pulse] Got 'Position' message. Type: #{parsed_message.class}"
 
-        last_received_time = client.last_received_time[Pulse::Messages::Position::TYPE]
-        current_received_time = Time.utc
-        delta_time = (last_received_time - current_received_time).milliseconds
+        last_received_time = client.last_received_time[Pulse::Messages::Position::TYPE]? || Time::Span.new # Time::Span.new => time since epoch...
+        # Time.monotonic should be used for time comparisons instead of Time.utc https://crystal-lang.org/api/0.35.1/Time.html#measuring-time
+        current_received_time = Time.monotonic # => Time::Span
+        delta_time = (current_received_time - last_received_time).total_milliseconds.to_i
         # Discard spammy messages
         return if delta_time < Pulse::Messages::Position::MIN_UPDATE_RATE
 
