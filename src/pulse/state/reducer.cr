@@ -16,19 +16,9 @@ module Pulse
 
         current_client_map.clients.push(client)
 
-        # serialized_enter_message = Pulse::Messages::Enter.new(client.user).to_slice
-        # serialized_position_message = Pulse::Messages::Position.new(
-        #   x: client.user.last_x, y: client.user.last_y
-        # ).to_slice
-
-        # current_client_map.clients.each do |client|
-        #   client.socket.send(serialized_enter_message) # notify room of new player entrance
-        #   client.socket.send(serialized_position_message) # initial position
-        # end
-
         messages = [
           Pulse::Messages::Enter.new(client.user),
-          Pulse::Messages::Position.new(x: client.user.last_x, y: client.user.last_y)
+          Pulse::Messages::Position.new(client.user.position)
         ]
 
         broadcast_map(current_client_map, messages)
@@ -54,12 +44,6 @@ module Pulse
         # @state.maps[client.user.current_map].clients.delete(client)
 
         current_client_map.clients.delete(client)
-
-        # serialized_exit_message = Pulse::Messages::Exit.new(client.user).to_slice
-
-        # current_client_map.clients.each do |client|
-        #   client.socket.send(serialized_exit_message) # notify room of player exiting
-        # end
 
         broadcast_map(current_client_map, [Pulse::Messages::Exit.new(client.user)])
       end
@@ -107,12 +91,6 @@ module Pulse
 
         client.user.position = new_position
         # client.user.save    ... ? maybe worker will do this periodically instead?
-
-        # serialized_position_message = Pulse::Messages::Position.new(new_position).to_slice
-        
-        # current_client_map.clients.each do |client|
-        #   client.socket.send(serialized_position_message) # updated position
-        # end
 
         broadcast_map(current_client_map, [Pulse::Messages::Position.new(new_position)])
       end
