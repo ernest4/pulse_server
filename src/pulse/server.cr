@@ -25,9 +25,7 @@ require "./state/reducer"
 
 # TODO: set up production and test configs / config files etc...
 
-# TODOO: rollbar !!!
-
-# server_memory = 0
+# TODO: rollbar !!!
 
 # TODO: user redis for game state storage as kemal wont be thread safe once Crystal drops
 # true parallelism for fibers
@@ -56,8 +54,7 @@ reducer = Pulse::State::Reducer.new(game_state)
 # TESTING <<<<<<<
 
 get "/" do
-  # server_memory = server_memory + 1
-  # "Hello World! #{server_memory}"
+  render "src/pulse/views/home.ecr", "src/pulse/views/layouts/default.ecr"
 end
 
 # TODO: ... set up auth endpoint, SSO Google
@@ -75,6 +72,12 @@ end
 
 get "/players" do
   "players..."
+end
+
+post "/players" do |env|
+  # TODO: create player record here in postgres with username and password
+  # name = env.params.body["name"].as(String)
+  env.params.body["username"] + env.params.body["password"]
 end
 
 # TODO: 'groups' rather than 'clans'?

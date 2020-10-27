@@ -18,6 +18,9 @@ module Pulse
 
         messages = [
           Pulse::Messages::Enter.new(client.user),
+          # TODO: before sending out position, validate that it's still walkable. Since user last
+          # position might be blocked now, then need to find next closest free position (or spawn
+          # point) instead and send that. Don't forget to save the new player position in that case!
           Pulse::Messages::Position.new(client.user.position)
         ]
 
