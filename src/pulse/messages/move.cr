@@ -31,6 +31,11 @@ module Pulse
           # TODO: ... more - jump key? shift (run) key, ctrl (crouch) key?
         end
       end
+
+      def to_slice
+        # STUB
+        Slice(UInt8).new(0)
+      end
     end
   end
 end

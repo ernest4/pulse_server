@@ -57,7 +57,7 @@ module Pulse
         yield io_memory_message
       end
 
-      def to_slice(message_type)
+      def to_message_slice(message_type)
         new_io_memory_message = IOMemoryWrapper.new
         new_io_memory_message.set_byte(message_type) # inserting the message type...
 
@@ -65,6 +65,8 @@ module Pulse
 
         new_io_memory_message.to_slice
       end
+
+      abstract def to_slice
     end
   end
 end

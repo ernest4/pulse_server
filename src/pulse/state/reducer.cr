@@ -16,15 +16,22 @@ module Pulse
 
         current_client_map.clients.push(client)
 
-        serialized_enter_message = Pulse::Messages::Enter.new(client.user).to_slice
-        serialized_position_message = Pulse::Messages::Position.new(
-          x: client.user.last_x, y: client.user.last_y
-        ).to_slice
+        # serialized_enter_message = Pulse::Messages::Enter.new(client.user).to_slice
+        # serialized_position_message = Pulse::Messages::Position.new(
+        #   x: client.user.last_x, y: client.user.last_y
+        # ).to_slice
 
-        current_client_map.clients.each do |client|
-          client.socket.send(serialized_enter_message) # notify room of new player entrance
-          client.socket.send(serialized_position_message) # initial position
-        end
+        # current_client_map.clients.each do |client|
+        #   client.socket.send(serialized_enter_message) # notify room of new player entrance
+        #   client.socket.send(serialized_position_message) # initial position
+        # end
+
+        messages = [
+          Pulse::Messages::Enter.new(client.user),
+          Pulse::Messages::Position.new(x: client.user.last_x, y: client.user.last_y)
+        ]
+
+        broadcast_map(current_client_map, messages)
       end
 
       def current_map(client)
@@ -48,11 +55,13 @@ module Pulse
 
         current_client_map.clients.delete(client)
 
-        serialized_exit_message = Pulse::Messages::Exit.new(client.user).to_slice
+        # serialized_exit_message = Pulse::Messages::Exit.new(client.user).to_slice
 
-        current_client_map.clients.each do |client|
-          client.socket.send(serialized_exit_message) # notify room of player exiting
-        end
+        # current_client_map.clients.each do |client|
+        #   client.socket.send(serialized_exit_message) # notify room of player exiting
+        # end
+
+        broadcast_map(current_client_map, [Pulse::Messages::Exit.new(client.user)])
       end
 
       # TODO: keep track of how frequent the same messages are coming. The front end shouldn't send
@@ -78,7 +87,7 @@ module Pulse
       end
 
       def move(client, parsed_message)
-        puts "[Pulse] Got 'Position' message. Type: #{parsed_message.class}"
+        puts "[Pulse] Got message. Type: #{parsed_message.class}"
 
         last_received_time = client.last_received_time[Pulse::Messages::Position::TYPE]? || Time::Span.new # Time::Span.new => time since epoch...
         # Time.monotonic should be used for time comparisons instead of Time.utc https://crystal-lang.org/api/0.35.1/Time.html#measuring-time
@@ -98,10 +107,34 @@ module Pulse
 
         client.user.position = new_position
         # client.user.save    ... ? maybe worker will do this periodically instead?
-        serialized_position_message = Pulse::Messages::Position.new(new_position).to_slice
+
+        # serialized_position_message = Pulse::Messages::Position.new(new_position).to_slice
         
-        current_client_map.clients.each do |client|
-          client.socket.send(serialized_position_message) # updated position
+        # current_client_map.clients.each do |client|
+        #   client.socket.send(serialized_position_message) # updated position
+        # end
+
+        broadcast_map(current_client_map, [Pulse::Messages::Position.new(new_position)])
+      end
+
+      def broadcast
+        # TODO: to everyone in every map (everyone in the game)
+        # loop over maps and call broadcast_map() on each...
+      end
+
+      def broadcast_map(map : Pulse::Map, messages : Array(Pulse::Messages::ApplicationMessage))
+        serialized_messages = messages.map(&.to_slice)
+
+        map.clients.each do |client|
+          serialized_messages.each do |serialized_message|
+            client.socket.send(serialized_message)
+
+          rescue ex : IO::Error
+            # TODO: close client that's 'Exception: Closed stream (IO::Error)'
+            # puts ex
+            # raise ex
+            close(client)
+          end
         end
       end
     end

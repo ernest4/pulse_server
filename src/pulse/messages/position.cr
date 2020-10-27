@@ -23,7 +23,7 @@ module Pulse
       end
 
       def to_slice
-        to_slice(TYPE) do |io|
+        to_message_slice(TYPE) do |io|
           io.set_number(@x)
           io.set_number(@y)
         end
