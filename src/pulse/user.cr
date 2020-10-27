@@ -2,13 +2,14 @@
 
 # TESTING (not really open struct... sign... hard to implement in crystal)
 class OpenStruct
-  property :id, :name, :last_x, :last_y
+  property :id, :name, :last_x, :last_y, :speed
 
   def initialize
     @id = 123
     @name = "Ernestό"
-    @last_x = 3_u16
-    @last_y = 2_u16
+    @last_x = 3
+    @last_y = 2
+    @speed = 32
   end
 end
 
@@ -19,10 +20,11 @@ module Pulse
     @client_id : String
     @name : String = ""
     @current_map : (String)?
-    @last_x : UInt16 = 0
-    @last_y : UInt16 = 0
+    @last_x : Int32 = 0
+    @last_y : Int32 = 0
+    @speed : Int32 = 32 # 32 pixels per second
 
-    property :id, :name, :current_map, :last_x, :last_y
+    property :id, :name, :current_map, :last_x, :last_y, :speed
 
     def initialize(client_id)
       # @id = -1
@@ -47,10 +49,24 @@ module Pulse
       @name = user.name
       @last_x = user.last_x
       @last_y = user.last_y
+      @speed = user.speed
+    end
+
+    def position
+      {:x => @last_x, :y => @last_y}
+    end
+
+    def position(new_position : Hash(Symbol => Int32))
+      @last_x = new_position[:x]
+      @last_y = new_position[:y]
     end
 
     # TODO: wip ....
     # def update({})
+    # end
+    # OR
+    # def save
+    # TODO: serialize local values and save to Redis / DB / w.e.
     # end
   end
 end

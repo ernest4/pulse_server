@@ -6,13 +6,15 @@ module Pulse
   class Client
     @socket : HTTP::WebSocket
     @client_id : String
+    # @last_received_time : Hash(String, Time)
 
-    property :socket, :client_id, :user
+    property :socket, :client_id, :user, :last_received_time
 
     def initialize(socket, client_id)
       @socket = socket
       @client_id = client_id 
       @user = Pulse::User.new(client_id)
+      @last_received_time = {} of UInt8 => Time
     end
 
     def authenticate!

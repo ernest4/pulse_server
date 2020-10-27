@@ -69,6 +69,9 @@ module Pulse
         case parsed_message.class.to_s
         when Pulse::Messages::Move.to_s
           move(client, parsed_message)
+        # TODO: rest ...
+        # when Pulse::Messages::....to_s
+        #   ...(client, parsed_message)
         else
           puts "[Pulse] Unrecognized message type #{parsed_message.class}"
         end
@@ -77,57 +80,28 @@ module Pulse
       def move(client, parsed_message)
         puts "[Pulse] Got 'Position' message. Type: #{parsed_message.class}"
 
-        last_received_time = client.last_received_time[Pulse::Messages::Position.to_s]
+        last_received_time = client.last_received_time[Pulse::Messages::Position::TYPE]
         current_received_time = Time.utc
         delta_time = (last_received_time - current_received_time).milliseconds
         # Discard spammy messages
         return if delta_time < Pulse::Messages::Position::MIN_UPDATE_RATE
 
-        client.last_received_time[Pulse::Messages::Position.to_s] = current_received_time
+        client.last_received_time[Pulse::Messages::Position::TYPE] = current_received_time
 
         # TODO: validate or rather send the next valid position
         # wip access game map and check if can move and update pos accordingly !!!
         # TODO: use delta time in the calculation ?? (or maybe not?)
         current_client_map = current_map(client)
+        new_position = current_client_map.move(client, parsed_message.direction)
+        return if new_position == client.user.position # map determined can't change position ...
 
-        new_position = get_new_position(parsed_message)
-
+        client.user.position = new_position
+        # client.user.save    ... ? maybe worker will do this periodically instead?
         serialized_position_message = Pulse::Messages::Position.new(new_position).to_slice
-
-
+        
         current_client_map.clients.each do |client|
           client.socket.send(serialized_position_message) # updated position
         end
-      end
-
-      def get_new_position(parsed_message)
-        # TODO: ...
-        # 1. read direction
-        # 2. check map tiles if can move there
-        # 3. return new position (which might be same as old position if can't move...)
-
-        case parsed_message.direction
-        when Pulse::Messages::Position::LEFT
-          # TODO: ...
-        when Pulse::Messages::Position::LEFT_TOP
-          # TODO: ...
-        when Pulse::Messages::Position::TOP
-          # TODO: ...
-        when Pulse::Messages::Position::RIGHT_TOP
-          # TODO: ...
-        when Pulse::Messages::Position::RIGHT
-          # TODO: ...
-        when Pulse::Messages::Position::RIGHT_BOTTOM
-          # TODO: ...
-        when Pulse::Messages::Position::BOTTOM
-          # TODO: ...
-        when Pulse::Messages::Position::LEFT_BOTTOM
-          # TODO: ...
-        else
-          puts "[Pulse] Unrecognized move direction #{parsed_message.direction}"
-        end
-
-        {:x => new_x, :y => new_y}
       end
     end
   end
