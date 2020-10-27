@@ -77,22 +77,57 @@ module Pulse
       def move(client, parsed_message)
         puts "[Pulse] Got 'Position' message. Type: #{parsed_message.class}"
 
+        last_received_time = client.last_received_time[Pulse::Messages::Position.to_s]
+        current_received_time = Time.utc
+        delta_time = (last_received_time - current_received_time).milliseconds
+        # Discard spammy messages
+        return if delta_time < Pulse::Messages::Position::MIN_UPDATE_RATE
+
+        client.last_received_time[Pulse::Messages::Position.to_s] = current_received_time
+
         # TODO: validate or rather send the next valid position
-
-        # wip
-        new_x = 0
-        new_y = 0
-
-        serialized_position_message = Pulse::Messages::Position.new(
-          # x: client.user.last_x, y: client.user.last_y
-          x: new_x, y: new_y
-        ).to_slice
-
+        # wip access game map and check if can move and update pos accordingly !!!
+        # TODO: use delta time in the calculation ?? (or maybe not?)
         current_client_map = current_map(client)
+
+        new_position = get_new_position(parsed_message)
+
+        serialized_position_message = Pulse::Messages::Position.new(new_position).to_slice
+
 
         current_client_map.clients.each do |client|
           client.socket.send(serialized_position_message) # updated position
         end
+      end
+
+      def get_new_position(parsed_message)
+        # TODO: ...
+        # 1. read direction
+        # 2. check map tiles if can move there
+        # 3. return new position (which might be same as old position if can't move...)
+
+        case parsed_message.direction
+        when Pulse::Messages::Position::LEFT
+          # TODO: ...
+        when Pulse::Messages::Position::LEFT_TOP
+          # TODO: ...
+        when Pulse::Messages::Position::TOP
+          # TODO: ...
+        when Pulse::Messages::Position::RIGHT_TOP
+          # TODO: ...
+        when Pulse::Messages::Position::RIGHT
+          # TODO: ...
+        when Pulse::Messages::Position::RIGHT_BOTTOM
+          # TODO: ...
+        when Pulse::Messages::Position::BOTTOM
+          # TODO: ...
+        when Pulse::Messages::Position::LEFT_BOTTOM
+          # TODO: ...
+        else
+          puts "[Pulse] Unrecognized move direction #{parsed_message.direction}"
+        end
+
+        {:x => new_x, :y => new_y}
       end
     end
   end

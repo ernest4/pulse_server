@@ -15,23 +15,23 @@ end
 # TODO: probably have User::Memory and User::Redis
 module Pulse
   class User
-    @id : Int32
+    @id : Int32 = -1
     @client_id : String
-    @name : String
+    @name : String = ""
     @current_map : (String)?
-    @last_x : UInt16
-    @last_y : UInt16
+    @last_x : UInt16 = 0
+    @last_y : UInt16 = 0
 
     property :id, :name, :current_map, :last_x, :last_y
 
     def initialize(client_id)
-      @id = -1
+      # @id = -1
       @client_id = client_id
 
-      @name = ""
+      # @name = ""
       # @current_map = ""
-      @last_x = 0
-      @last_y = 0
+      # @last_x = 0
+      # @last_y = 0
 
       load!
     end

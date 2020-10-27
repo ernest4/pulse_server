@@ -6,12 +6,10 @@ module Pulse
   class Client
     @socket : HTTP::WebSocket
     @client_id : String
-    @reducer : Pulse::State::Reducer
 
     property :socket, :client_id, :user
 
-    def initialize(socket, client_id, reducer)
-      @reducer = reducer
+    def initialize(socket, client_id)
       @socket = socket
       @client_id = client_id 
       @user = Pulse::User.new(client_id)
@@ -26,25 +24,25 @@ module Pulse
     end
 
     # TODO: ... wipp
-    def initialize_socket
+    def initialize_socket(reducer)
       # TODO: may or may not use this, not as efficient as binary, even for regular chat...
       # socket.on_message do |message|
       # end
 
       @socket.on_binary do |message|
-        @reducer.reduce(self, message)
+        reducer.reduce(self, message)
       end
 
       # TODO: queue async worker to read redis and save player progress too DB?
       # TODO: for now save straigth to DB here ???
       # TODO: clean up game state etc.
       @socket.on_close do |_|
-        @reducer.close(self)
+        reducer.close(self)
         #   # sockets.delete(socket)
         #   puts "Closing Socket: #{socket}"
       end
 
-      @reducer.enter(self)
+      reducer.enter(self)
     end
   end
 end

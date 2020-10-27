@@ -8,14 +8,15 @@ module Pulse
 
       # 8 directions:
       # no_value => 0
-      # left => 1
-      # left_top => 2
-      # top => 3
-      # right_top => 4
-      # right => 5
-      # right_bottom => 6
-      # bottom => 7
-      # left_bottom => 8
+      LEFT = 1
+      LEFT_TOP = 2
+      TOP = 3
+      RIGHT_TOP = 4
+      RIGHT = 5
+      RIGHT_BOTTOM = 6
+      BOTTOM = 7
+      LEFT_BOTTOM = 8
+
       @direction : UInt8
 
       # TODO: keys lookup table
