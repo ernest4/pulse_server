@@ -64,7 +64,7 @@ macro pulse_render(view, layout = nil)
 end
 
 get "/" do
-  render "src/pulse/views/home.ecr", "src/pulse/views/layouts/default.ecr"
+  pulse_render "home", "default"
 end
 
 # TODO: ... set up auth endpoint, SSO Google
@@ -89,7 +89,7 @@ get "/players/new" do
 end
 
 get "/players/sign-in" do
-  render "src/pulse/views/players/sign_in.ecr", "src/pulse/views/layouts/default.ecr"
+  pulse_render "players/sign_in", "default"
 end
 
 post "/players" do |env|
@@ -124,12 +124,12 @@ end
 
 get "/test" do
   # TODO: only accessible in develop !!
-  render "src/pulse/views/test.ecr", "src/pulse/views/layouts/default.ecr"
+  pulse_render "test", "default"
 end
 
 get "/testy/:name" do |env|
   name = env.params.url["name"]
-  render "src/pulse/views/testy.ecr", "src/pulse/views/layouts/default.ecr"
+  pulse_render "testy", "default"
 end
 
 
