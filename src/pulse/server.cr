@@ -1,6 +1,6 @@
 require "kemal"
-require "kemal-session-postgres"
-require "kemal-csrf"
+require "kemal-session"
+# require "kemal-csrf"
 require "./map"
 require "./client"
 require "./exceptions/unauthorized"
@@ -24,8 +24,11 @@ require "./state/reducer"
 # connect to postgres, update url with your connection info (or perhaps use an ENV var)
 # connection = DB.open "postgres://youruser:yourpassword@localhost/yourdb"
 
-Session.config do |config|
-  config.engine = Session::PostgresEngine.new(connection)
+Kemal::Session.config do |config|
+  # config.engine = Session::PostgresEngine.new(connection)
+  config.cookie_name = "session_id"
+  config.secret = ENV["SECRET"]
+  config.gc_interval = 2.minutes # 2 minutes
 end
 
 
@@ -100,11 +103,11 @@ get "/players" do
   "players..."
 end
 
-get "/players/new" do
+get "/players/new" do |env|
   pulse_render "players/new", "default"
 end
 
-get "/players/sign-in" do
+get "/players/sign-in" do |env|
   pulse_render "players/sign_in", "default"
 end
 

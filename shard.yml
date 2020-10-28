@@ -15,15 +15,25 @@ dependencies:
   clear:
     github: anykeyh/clear
     branch: master
-  kemal-session-postgres:
-    github: mang/kemal-session-postgres
-  kemal-csrf:
-    github: kemalcr/kemal-csrf
-    version: ~> 0.6
+  kemal-session:
+    github: kemalcr/kemal-session
+    version: ~> 0.12.1
+  # Can't install sessions at the moment... all clash on kemal-session version...
+  # kemal-session-postgres:
+  #   github: mang/kemal-session-postgres
+  # kemal-session-redis:
+  #   github: crisward/kemal-session-redis
+    # version: ~> 0.5.0
     # branch: master
-
-    # NEED to install kemal at 0.6.0 !!
 
 crystal: 0.35.1
 
-license: MIT
+license: UNLICENSED
+
+
+
+
+
+# TODO:
+  # 1: check and freeze the dependency version of all current and future packages
+  # 2: implement your own basic CSRF !!!
