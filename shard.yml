@@ -17,9 +17,12 @@ dependencies:
     branch: master
   kemal-session-postgres:
     github: mang/kemal-session-postgres
-    branch: master
   kemal-csrf:
     github: kemalcr/kemal-csrf
+    version: ~> 0.6
+    # branch: master
+
+    # NEED to install kemal at 0.6.0 !!
 
 crystal: 0.35.1
 
