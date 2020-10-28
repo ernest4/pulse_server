@@ -53,6 +53,16 @@ reducer = Pulse::State::Reducer.new(game_state)
 # end
 # TESTING <<<<<<<
 
+macro pulse_render(view, layout = nil)
+  {% base_view_path = "src/pulse/views" %}
+
+  {% if layout == nil %}
+    render "#{{{base_view_path}}}/#{{{view}}}.ecr"
+  {% else %}
+    render "#{{{base_view_path}}}/#{{{view}}}.ecr", "#{{{base_view_path}}}/layouts/#{{{layout}}}.ecr"
+  {% end %}
+end
+
 get "/" do
   render "src/pulse/views/home.ecr", "src/pulse/views/layouts/default.ecr"
 end
@@ -74,10 +84,18 @@ get "/players" do
   "players..."
 end
 
+get "/players/new" do
+  pulse_render "players/new", "default"
+end
+
+get "/players/sign-in" do
+  render "src/pulse/views/players/sign_in.ecr", "src/pulse/views/layouts/default.ecr"
+end
+
 post "/players" do |env|
   # TODO: create player record here in postgres with username and password
   # name = env.params.body["name"].as(String)
-  env.params.body["username"] + env.params.body["password"]
+  env.params.body["username"] + env.params.body["password"] + env.params.body["password_confirmation"]
 end
 
 # TODO: 'groups' rather than 'clans'?
