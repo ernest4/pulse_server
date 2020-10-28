@@ -1,9 +1,19 @@
 require "kemal"
+require "kemal-session-postgres"
+require "kemal-csrf"
 require "./map"
 require "./client"
 require "./exceptions/unauthorized"
 require "./state/memory"
 require "./state/reducer"
+
+
+# TODO:
+# 1 add PG DB setup / connection
+# 2 add kemal PG session set up
+# 3 add csrf set up (uses session)
+
+# add_handler CSRF.new
 
 # require "clear"
 
@@ -11,7 +21,12 @@ require "./state/reducer"
 # # TODO: wip ...
 # Clear::SQL.init("postgres://postgres@localhost/my_database", connection_pool_size: 5)
 
+# connect to postgres, update url with your connection info (or perhaps use an ENV var)
+# connection = DB.open "postgres://youruser:yourpassword@localhost/yourdb"
 
+Session.config do |config|
+  config.engine = Session::PostgresEngine.new(connection)
+end
 
 
 
@@ -78,6 +93,7 @@ end
 # get "/logout" do |env|
 #   env.session.destroy
 #   "You have been logged out."
+#   env.redirect "/" # redirect to home page
 # end
 
 get "/players" do
@@ -95,7 +111,16 @@ end
 post "/players" do |env|
   # TODO: create player record here in postgres with username and password
   # name = env.params.body["name"].as(String)
-  env.params.body["username"] + env.params.body["password"] + env.params.body["password_confirmation"]
+
+  puts env.request.path
+  
+  if env.request.path == "/players/new"
+    env.params.body["username"] + env.params.body["password"] + env.params.body["password_confirmation"]
+  elsif env.request.path == "/players/sign-in"
+    env.params.body["username"] + env.params.body["password"]
+  else
+    "not allowed !"
+  end
 end
 
 # TODO: 'groups' rather than 'clans'?
@@ -136,9 +161,6 @@ end
 # WARNING: if crystal releases parallel update, fibers will access local data async !!!
 # Therefore if using in memory data, do no upgrade crystal version as fibers concurrency will be
 # default !!!
-# messages = [] of String
-# sockets = [] of HTTP::WebSocket
-# clients = [] of Pulse::Client
 
 
 # TODO: need to implement automatic Ping of client sockets to check if alive and clean them up out
