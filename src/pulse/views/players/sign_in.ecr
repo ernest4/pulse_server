@@ -1,7 +1,7 @@
 <span>Welcome back to Sinite (Space Finite)</span>
 <br/>
 <br/>
-<form action="/players" method="post">
+<form action="/players/sign-in" method="post">
   <input type="hidden" name="authenticity_token" value='<%= env.session.string("csrf") %>'>
   <label for="username">username:</label>
   <input type="text" name="username" maxlength="12" required>

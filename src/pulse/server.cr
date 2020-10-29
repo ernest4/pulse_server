@@ -24,6 +24,7 @@ add_handler CSRF.new
 # connect to postgres, update url with your connection info (or perhaps use an ENV var)
 # connection = DB.open "postgres://youruser:yourpassword@localhost/yourdb"
 
+# TODO: see if you can switch from default memory engine to postgres later...
 Kemal::Session.config do |config|
   # config.engine = Session::PostgresEngine.new(connection)
   config.cookie_name = "session_id"
@@ -107,23 +108,19 @@ get "/players/new" do |env|
   pulse_render "players/new", "default"
 end
 
+post "/players/new" do |env|
+  # TODO: create player record here in postgres with username and password
+  # name = env.params.body["name"].as(String)
+  
+  env.params.body["username"] + env.params.body["password"] + env.params.body["password_confirmation"]
+end
+
 get "/players/sign-in" do |env|
   pulse_render "players/sign_in", "default"
 end
 
-post "/players" do |env|
-  # TODO: create player record here in postgres with username and password
-  # name = env.params.body["name"].as(String)
-
-  puts env.request.path
-  
-  if env.request.path == "/players/new"
-    env.params.body["username"] + env.params.body["password"] + env.params.body["password_confirmation"]
-  elsif env.request.path == "/players/sign-in"
-    env.params.body["username"] + env.params.body["password"]
-  else
-    "not allowed !"
-  end
+post "/players/sign-in" do |env|
+  env.params.body["username"] + env.params.body["password"]
 end
 
 # TODO: 'groups' rather than 'clans'?
