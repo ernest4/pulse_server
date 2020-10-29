@@ -1,6 +1,7 @@
 require "kemal"
 require "kemal-session"
 require "kemal-csrf"
+require "clear"
 require "./map"
 require "./client"
 require "./exceptions/unauthorized"
@@ -11,11 +12,9 @@ require "./state/reducer"
 # TODO:
 # 1 add PG DB setup / connection
 # 2 add kemal PG session set up
-# 3 add csrf set up (uses session)
 
 add_handler CSRF.new
 
-# require "clear"
 
 # # initialize a pool of database connection:
 # # TODO: wip ...
@@ -101,7 +100,9 @@ end
 # end
 
 get "/players" do
-  "players..."
+  # "players..."
+  users = User.query.all
+  pulse_render "players/index", "default"
 end
 
 get "/players/new" do |env|
@@ -111,8 +112,24 @@ end
 post "/players/new" do |env|
   # TODO: create player record here in postgres with username and password
   # name = env.params.body["name"].as(String)
+
+  # u = User.new
+  # u.email = "test@example.com"
+  # u.save!
+
+  user = User.new(
+    name: env.params.body["username"],
+    password: env.params.body["password"],
+    password_confirmation: env.params.body["password_confirmation"]
+  )
+  user.save!
+
+  # redirect to homepage where user can select character to create & enter the game
   
-  env.params.body["username"] + env.params.body["password"] + env.params.body["password_confirmation"]
+  # TODO: rescue failed to create exception and redirect to the /players/new form
+# rescue ex : Pulse::Unauthorized
+#   # TODO: ...
+#   raise ex # just reraise for now...
 end
 
 get "/players/sign-in" do |env|
