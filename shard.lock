@@ -28,6 +28,10 @@ shards:
     github: kemalcr/kemal
     commit: a819d4792bbc63d993d6dd2b15f9af5efb0c2d8c
 
+  kemal-csrf:
+    github: ernest4/kemal-csrf
+    commit: 69cbe61a37181471a3c0fb7d0d7c1067fb308e97
+
   kemal-session:
     github: kemalcr/kemal-session
     version: 0.12.1

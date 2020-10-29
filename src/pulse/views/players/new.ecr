@@ -2,7 +2,7 @@
 <br/>
 <br/>
 <form action="/players" method="post">
-  <input type="hidden" name="_csrf" value='<%= env.session.string("csrf") %>'>
+  <input type="hidden" name="authenticity_token" value='<%= env.session.string("csrf") %>'>
   <label for="username">username:</label>
   <input type="text" placeholder="12 characters max" name="username" maxlength="12" required>
   <br>

@@ -1,6 +1,6 @@
 require "kemal"
 require "kemal-session"
-# require "kemal-csrf"
+require "kemal-csrf"
 require "./map"
 require "./client"
 require "./exceptions/unauthorized"
@@ -13,7 +13,7 @@ require "./state/reducer"
 # 2 add kemal PG session set up
 # 3 add csrf set up (uses session)
 
-# add_handler CSRF.new
+add_handler CSRF.new
 
 # require "clear"
 
