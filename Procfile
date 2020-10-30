@@ -1,1 +1,1 @@
-release: crystal sam.cr db:migrate
+release: bin/sam db:create

@@ -5,7 +5,7 @@ authors:
   - Ernestas Monkevicius <ernestas.monkevicius@ucdconnect.ie>
 
 targets:
-  pulse/server:
+  server:
     main: src/server.cr
 
 dependencies:
@@ -41,8 +41,8 @@ dependencies:
     version: ~> 0.12.1
   # kemal-session-postgres:
   #   github: mang/kemal-session-postgres
-    # version: ~> 0.1.0
-    # branch: master
+  # version: ~> 0.1.0
+  # branch: master
   # Still couldnt get redis session to install...
   # kemal-session-redis:
   #   github: crisward/kemal-session-redis
