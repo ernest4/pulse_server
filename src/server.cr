@@ -92,8 +92,12 @@ end
 #   env.redirect "/" # redirect to home page
 # end
 
+# TODO: implement password reset via email. Reference the sample app for all of the username and
+# password auth stuff https://github.com/imdrasil/kemal_and_jennifer_sample_app
+
 get "/players" do
   # "players..."
+  # TODO: stop creating users here
   User.create({:name => "testy #{Random.new.rand.to_s[..5]}", :current_map => "randy_1"}) # if there is validation error will get Jennifer::BadQuery exception
   users = User.all
   # users = [] of String
