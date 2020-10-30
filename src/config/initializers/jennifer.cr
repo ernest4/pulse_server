@@ -4,8 +4,11 @@ require "colorize"
 # require "logger"
 require "log"
 
-Jennifer::Config.read("./src/config/database.yml", Pulse::Config::ENVIRONMENT)
-Jennifer::Config.from_uri(ENV["DATABASE_URL"]) if ENV.has_key?("DATABASE_URL")
+if ENV.has_key?("DATABASE_URL")
+  Jennifer::Config.from_uri(ENV["DATABASE_URL"])
+else
+  Jennifer::Config.read("./src/config/database.yml", Pulse::Config::ENVIRONMENT)
+end
 
 Jennifer::Config.configure do |conf|
   # conf.logger = Logger.new(STDOUT)
