@@ -12,20 +12,32 @@ dependencies:
   kemal:
     github: kemalcr/kemal
     branch: master
-  clear:
-    github: anykeyh/clear
+  # clear:
+  #   github: anykeyh/clear
+  #   branch: master
+  #   # branch: v0.9
+  db:
+    github: crystal-lang/crystal-db
+    version: "~> 0.10.0"
+  jennifer:
+    github: imdrasil/jennifer.cr
+    # version: "~> 0.9.0"
     branch: master
+  sam:
+    github: imdrasil/sam.cr
+    version: ~> 0.4.0
   kemal-session:
     github: kemalcr/kemal-session
     version: ~> 0.12.1
-    # version: ~> 0.12.1
-  # Can't install sessions at the moment... all clash on kemal-session version...
   # kemal-session-postgres:
   #   github: mang/kemal-session-postgres
+    # version: ~> 0.1.0
+    # branch: master
+  # Still couldnt get redis session to install...
   # kemal-session-redis:
   #   github: crisward/kemal-session-redis
-    # version: ~> 0.5.0
-    # branch: master
+  #   # version: ~> 0.5.0
+  #   branch: master
   # kemal-csrf:
   #   github: kemalcr/kemal-csrf
   #   version: ~> 0.6
@@ -37,11 +49,3 @@ dependencies:
 crystal: 0.35.1
 
 license: UNLICENSED
-
-
-
-
-
-# TODO:
-  # 1: check and freeze the dependency version of all current and future packages
-  # 2: implement your own basic CSRF !!!

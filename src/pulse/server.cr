@@ -1,7 +1,9 @@
+require "./config/config"
+
 require "kemal"
 require "kemal-session"
 require "kemal-csrf"
-require "clear"
+# require "clear"
 require "./map"
 require "./client"
 require "./exceptions/unauthorized"
@@ -18,7 +20,8 @@ add_handler CSRF.new
 
 # # initialize a pool of database connection:
 # # TODO: wip ...
-# Clear::SQL.init("postgres://postgres@localhost/my_database", connection_pool_size: 5)
+postgres_connection_string = ENV["DATABASE_URL"]? || "postgres://postgres@localhost/pulse_server_development"
+# Clear::SQL.init(postgres_connection_string, connection_pool_size: 5)
 
 # connect to postgres, update url with your connection info (or perhaps use an ENV var)
 # connection = DB.open "postgres://youruser:yourpassword@localhost/yourdb"
@@ -101,7 +104,8 @@ end
 
 get "/players" do
   # "players..."
-  users = User.query.all
+  # users = User.query.all
+  users = [] of String
   pulse_render "players/index", "default"
 end
 
@@ -117,12 +121,12 @@ post "/players/new" do |env|
   # u.email = "test@example.com"
   # u.save!
 
-  user = User.new(
-    name: env.params.body["username"],
-    password: env.params.body["password"],
-    password_confirmation: env.params.body["password_confirmation"]
-  )
-  user.save!
+  # user = User.new(
+  #   name: env.params.body["username"],
+  #   password: env.params.body["password"],
+  #   password_confirmation: env.params.body["password_confirmation"]
+  # )
+  # user.save!
 
   # redirect to homepage where user can select character to create & enter the game
   
