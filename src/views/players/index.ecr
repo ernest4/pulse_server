@@ -1,7 +1,11 @@
 <span>all users listed here wip....</span>
 <br/>
 <br/>
+<span>User count: <%= users.count %><span/>
 <% users.each do |user| %>
   <div><%= user.name %></div>
+  <br/>
+  <div><%= user.current_map %></div>
+  <br/>
   <br/>
 <% end %>

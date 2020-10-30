@@ -6,6 +6,7 @@ class User < Jennifer::Model::Base
   mapping(
     id: {type: Int32, primary: true},
     name: String,
+    current_map: {type: String, default: "hub_0"},
     # gender: {type: String, default: "male", null: true},
     # age: {type: Int32, default: 10},
     # description: {type: String, null: true},

@@ -62,7 +62,8 @@ CREATE TABLE public.users (
     id integer NOT NULL,
     name character varying(12),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    current_map character varying(254)
 );
 
 
@@ -118,6 +119,13 @@ ALTER TABLE ONLY public.migration_versions
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users_name_idx; Type: INDEX; Schema: public; Owner: em
+--
+
+CREATE UNIQUE INDEX users_name_idx ON public.users USING btree (name);
 
 
 --

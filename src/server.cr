@@ -94,7 +94,7 @@ end
 
 get "/players" do
   # "players..."
-  User.create({:name => "testy #{Random.new.rand.to_s[..5]}"}) # if there is validation error will get Jennifer::BadQuery exception
+  User.create({:name => "testy #{Random.new.rand.to_s[..5]}", :current_map => "randy_1"}) # if there is validation error will get Jennifer::BadQuery exception
   users = User.all
   # users = [] of String
   pulse_render "players/index", "default"
