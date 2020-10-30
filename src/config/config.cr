@@ -4,5 +4,5 @@ module Pulse
   end
 end
 
-# load the initializers automatically
+# auto load the initializers
 require "./initializers/*" 

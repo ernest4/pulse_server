@@ -40,6 +40,10 @@ shards:
     git: https://github.com/jeromegn/kilt.git
     version: 0.4.0
 
+  pg:
+    git: https://github.com/will/crystal-pg.git
+    version: 0.22.1
+
   radix:
     git: https://github.com/luislavena/radix.git
     version: 0.3.9
@@ -47,4 +51,8 @@ shards:
   sam:
     git: https://github.com/imdrasil/sam.cr.git
     version: 0.4.0
+
+  spec-kemal:
+    git: https://github.com/kemalcr/spec-kemal.git
+    version: 0.5.0
 

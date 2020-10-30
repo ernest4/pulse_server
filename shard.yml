@@ -1,4 +1,4 @@
-name: pulse/server
+name: server
 version: 0.1.0
 
 authors:
@@ -6,9 +6,13 @@ authors:
 
 targets:
   pulse/server:
-    main: src/pulse/server.cr
+    main: src/server.cr
 
 dependencies:
+  spec-kemal:
+    github: kemalcr/spec-kemal
+    # branch: master
+    version: "~> 0.5.0"
   kemal:
     github: kemalcr/kemal
     branch: master
@@ -16,6 +20,9 @@ dependencies:
   #   github: anykeyh/clear
   #   branch: master
   #   # branch: v0.9
+  pg:
+    github: will/crystal-pg
+    version: "~> 0.22.1"
   db:
     github: crystal-lang/crystal-db
     version: "~> 0.10.0"

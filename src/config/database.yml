@@ -19,10 +19,8 @@
 #   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 defaults : &defaults
-  # password: somepassword
-  # user: root
-  # host: localhost
-  migration_files_path: src/pulse/db/migrations # this is the default location for all migrations
+  user: em
+  migration_files_path: src/db/migrations # this is the default location for all migrations
   adapter: postgres
   encoding: unicode # might not work with jennifer?
   pool: 5 # might not work with jennifer?

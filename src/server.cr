@@ -10,7 +10,7 @@ add_handler CSRF.new
 
 # # initialize a pool of database connection:
 # # TODO: wip ...
-postgres_connection_string = ENV["DATABASE_URL"]? || "postgres://postgres@localhost/pulse_server_development"
+# postgres_connection_string = ENV["DATABASE_URL"]? || "postgres://postgres@localhost/pulse_server_development"
 # Clear::SQL.init(postgres_connection_string, connection_pool_size: 5)
 
 # connect to postgres, update url with your connection info (or perhaps use an ENV var)
@@ -65,7 +65,7 @@ reducer = Pulse::State::Reducer.new(game_state)
 # TESTING <<<<<<<
 
 macro pulse_render(view, layout = nil)
-  {% base_view_path = "src/pulse/views" %}
+  {% base_view_path = "src/views" %}
 
   {% if layout == nil %}
     render "#{{{base_view_path}}}/#{{{view}}}.ecr"
@@ -94,8 +94,9 @@ end
 
 get "/players" do
   # "players..."
-  # users = User.query.all
-  users = [] of String
+  # User.create({})
+  users = User.all
+  # users = [] of String
   pulse_render "players/index", "default"
 end
 
