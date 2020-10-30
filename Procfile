@@ -1,0 +1,1 @@
+release: crystal sam.cr db:migrate
