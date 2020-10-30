@@ -1,1 +1,1 @@
-release: bin/sam db:migrate
+release: mkdir db && bin/sam db:migrate
