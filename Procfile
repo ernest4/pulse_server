@@ -1,1 +1,1 @@
-release: bin/sam db:create
+release: bin/sam db:migrate
