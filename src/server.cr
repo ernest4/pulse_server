@@ -195,5 +195,10 @@ rescue ex : Pulse::Unauthorized
   raise ex # just reraise for now...
 end
 
+Kemal.config do |config|
+  # if you disable logging, can get x2 to x3 times speed boost. Mostly overkill as heroku can only
+  # handle 10k concurrent requests and kemal should by default might do as much...
+  # config.logging = false
+end
 
 Kemal.run

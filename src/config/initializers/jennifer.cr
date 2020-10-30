@@ -10,15 +10,16 @@ else
   Jennifer::Config.read("./src/config/database.yml", Pulse::Config::ENVIRONMENT)
 end
 
-Jennifer::Config.configure do |conf|
-  # conf.logger = Logger.new(STDOUT)
+Jennifer::Config.configure do |config|
+  config.pool_size = ENV.has_key?("KEMAL_MAX_THREADS") ? ENV["KEMAL_MAX_THREADS"].to_i : 5
+  # config.logger = Logger.new(STDOUT)
   
-  # conf.logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
+  # config.logger.formatter = Logger::Formatter.new do |severity, datetime, progname, message, io|
   #   io << datetime.colorize(:cyan) << ": \n" << message.colorize(:light_magenta)
   # end
-  # conf.logger.level = Logger::DEBUG
+  # config.logger.level = Logger::DEBUG
   
-  # conf.logger.level = Pulse::Config::ENVIRONMENT == "development" ? :debug : :error
-  # conf.logger = Log.for("db", :debug)
-  conf.logger = Log.for("db", :info)
+  # config.logger.level = Pulse::Config::ENVIRONMENT == "development" ? :debug : :error
+  # config.logger = Log.for("db", :debug)
+  config.logger = Log.for("db", :info)
 end
