@@ -9,6 +9,9 @@ targets:
     main: src/server.cr
 
 dependencies:
+  spectator:
+    gitlab: arctic-fox/spectator
+    version: ~> 0.9.27
   spec-kemal:
     github: kemalcr/spec-kemal
     # branch: master
