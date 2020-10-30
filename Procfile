@@ -1,1 +1,0 @@
-release: bin/sam db:migrate
