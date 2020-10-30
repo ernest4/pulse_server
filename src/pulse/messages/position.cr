@@ -1,5 +1,4 @@
 # TODO: specs !!!
-require "./application_message"
 
 module Pulse
   module Messages

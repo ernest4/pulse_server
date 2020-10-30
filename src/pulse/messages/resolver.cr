@@ -1,8 +1,4 @@
 # TODO: specs !!!
-require "./position"
-require "./enter"
-require "./exit"
-require "./move"
 
 module Pulse
   module Messages

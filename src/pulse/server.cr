@@ -1,14 +1,4 @@
-require "./config/config"
-
-require "kemal"
-require "kemal-session"
-require "kemal-csrf"
-# require "clear"
-require "./map"
-require "./client"
-require "./exceptions/unauthorized"
-require "./state/memory"
-require "./state/reducer"
+require "./config/boot" # Bootstrap the app
 
 
 # TODO:

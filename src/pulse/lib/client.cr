@@ -1,6 +1,4 @@
 # TODO: speeecs ?!?!?
-require "./messages/resolver"
-require "./user"
 
 module Pulse
   class Client

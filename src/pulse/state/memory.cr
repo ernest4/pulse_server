@@ -1,5 +1,4 @@
 # TODO: speecs!!!
-require "./application_state"
 
 module Pulse
   module State
