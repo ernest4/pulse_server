@@ -2,24 +2,14 @@ require "./config/boot" # Bootstrap the app
 
 
 # TODO:
-# 1 add PG DB setup / connection
-# 2 add kemal PG session set up
+# 2 add kemal PG session set up ??
 
 add_handler CSRF.new
-
-
-# # initialize a pool of database connection:
-# # TODO: wip ...
-# postgres_connection_string = ENV["DATABASE_URL"]? || "postgres://postgres@localhost/pulse_server_development"
-# Clear::SQL.init(postgres_connection_string, connection_pool_size: 5)
-
-# connect to postgres, update url with your connection info (or perhaps use an ENV var)
-# connection = DB.open "postgres://youruser:yourpassword@localhost/yourdb"
 
 # TODO: see if you can switch from default memory engine to postgres later...
 Kemal::Session.config do |config|
   # config.engine = Session::PostgresEngine.new(connection)
-  config.cookie_name = "session_id"
+  config.cookie_name = "pulse_session"
   config.secret = ENV["SECRET"]
   config.gc_interval = 2.minutes # 2 minutes
   config.secure = Pulse::Config.production?
@@ -78,12 +68,18 @@ end
 get "/" do |env|
   # TESTING session
   env.session.string("testy_session_stringy", "wowser123")
+  env.session.string("testy_session_stringy1", "wowser123")
+  env.session.string("testy_session_stringy2", "wowser123")
+  env.session.string("testy_session_stringy3", "wowser123")
 
   pulse_render "home", "default"
 end
 
 get "/session_test" do |env|
-  env.session.string?("testy_session_stringy")
+  env.session.string("testy_session_stringy") + 
+  env.session.string("testy_session_stringy1") +
+  env.session.string("testy_session_stringy2") +
+  env.session.string("testy_session_stringy3")
 end
 
 # AUTH >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
