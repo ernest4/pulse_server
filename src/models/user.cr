@@ -8,7 +8,7 @@ class User < Jennifer::Model::Base
   mapping(
     id: {type: Int32, primary: true},
     uid: String,
-    email: String,
+    email: String?,
     # current_map: {type: String, default: "hub_0"}, # TODO: put this on character !!!
 
     # gender: {type: String, default: "male", null: true},
