@@ -1,5 +1,6 @@
 require "./config"
 
+require "json"
 require "kemal"
 require "kemal-session"
 require "kemal-csrf"

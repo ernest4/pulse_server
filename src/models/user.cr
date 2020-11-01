@@ -2,7 +2,7 @@
 
 class User < Jennifer::Model::Base
   with_timestamps
-
+  
   mapping(
     id: {type: Int32, primary: true},
     name: String,

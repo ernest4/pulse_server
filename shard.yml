@@ -59,6 +59,9 @@ dependencies:
     github: ernest4/kemal-csrf
     commit: 69cbe61a37181471a3c0fb7d0d7c1067fb308e97
     # version: ~> 0.6
+  multi_auth:
+    github: msa7/multi_auth
+    version: ~> 1.1.1
 
 crystal: 0.35.1
 

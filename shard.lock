@@ -40,6 +40,10 @@ shards:
     git: https://github.com/jeromegn/kilt.git
     version: 0.4.0
 
+  multi_auth:
+    git: https://github.com/msa7/multi_auth.git
+    version: 1.1.1
+
   pg:
     git: https://github.com/will/crystal-pg.git
     version: 0.22.1

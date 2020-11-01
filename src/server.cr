@@ -78,19 +78,43 @@ get "/" do
   pulse_render "home", "default"
 end
 
+# AUTH >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+get "/multi_auth/:provider" do |env|
+  env.redirect(multi_auth(env).authorize_uri("openid email profile"))
+end
+
+get "/multi_auth/:provider/callback" do |env|
+  user = multi_auth(env).user(env.params.query)
+  # p user.email
+  # user
+
+  # puts [1, 2, 3].to_json            
+  # puts "#{{:x => 1, :y => 2}.to_json}"
+  # user.raw_json
+  # user.uid
+
+  # TODO: find or create a user by this info and redirect to home page...
+
+  # {:email => user.email, :uid => user.uid}.to_json
+end
+
 # TODO: ... set up auth endpoint, SSO Google
 # and store the user info in session that can be accessed in websocket.
 # .. "/..." do
 #   # TODO: ...
 # end
 
-
+# get "login/callback" do |env|
+#   # TODO: google auth callback
+# end
 
 # get "/logout" do |env|
 #   env.session.destroy
 #   "You have been logged out."
 #   env.redirect "/" # redirect to home page
 # end
+# AUTH <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 # TODO: implement password reset via email. Reference the sample app for all of the username and
 # password auth stuff https://github.com/imdrasil/kemal_and_jennifer_sample_app
