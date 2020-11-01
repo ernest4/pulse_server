@@ -22,6 +22,7 @@ Kemal::Session.config do |config|
   config.cookie_name = "session_id"
   config.secret = ENV["SECRET"]
   config.gc_interval = 2.minutes # 2 minutes
+  config.secure = Pulse::Config.production?
 end
 
 
@@ -74,8 +75,15 @@ macro pulse_render(view, layout = nil)
   {% end %}
 end
 
-get "/" do
+get "/" do |env|
+  # TESTING session
+  env.session.string("testy_session_stringy", "wowser123")
+
   pulse_render "home", "default"
+end
+
+get "/session_test" do |env|
+  env.session.string?("testy_session_stringy")
 end
 
 # AUTH >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
