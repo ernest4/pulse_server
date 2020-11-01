@@ -82,14 +82,17 @@ get "/session_test" do |env|
   env.session.string("testy_session_stringy3")
 end
 
+# TODO: SPECS !!! # TODO: SPECS !!! # TODO: SPECS !!!
 # AUTH >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+# TODO: SPECS !!!
 get "/multi_auth/:provider" do |env|
   env.redirect(multi_auth(env).authorize_uri("openid email profile"))
 end
 
+# TODO: SPECS !!!
 get "/multi_auth/:provider/callback" do |env|
-  user = multi_auth(env).user(env.params.query)
+  social_auth_user = multi_auth(env).user(env.params.query)
   # p user.email
   # user
 
@@ -101,76 +104,78 @@ get "/multi_auth/:provider/callback" do |env|
   # TODO: find or create a user by this info and redirect to home page...
 
   # {:email => user.email, :uid => user.uid}.to_json
+
+  # {:email => user.email, :uid => user.uid}
+
+  user = User.where { uid == social_auth_user.uid}.first
+  User.create({:uid => social_auth_user.uid, :email => social_auth_user.email}) unless user
+
+  env.session.string("uid", social_auth_user.uid)
+
+  env.redirect("/")
 end
 
-# TODO: ... set up auth endpoint, SSO Google
-# and store the user info in session that can be accessed in websocket.
-# .. "/..." do
-#   # TODO: ...
-# end
+# TODO: SPECS !!!
+get "/logout" do |env|
+  env.session.destroy
 
-# get "login/callback" do |env|
-#   # TODO: google auth callback
-# end
-
-# get "/logout" do |env|
-#   env.session.destroy
-#   "You have been logged out."
-#   env.redirect "/" # redirect to home page
-# end
+  env.redirect "/" 
+end
 # AUTH <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-# TODO: implement password reset via email. Reference the sample app for all of the username and
-# password auth stuff https://github.com/imdrasil/kemal_and_jennifer_sample_app
 
 get "/players" do
   # "players..."
   # TODO: stop creating users here
-  User.create({:name => "testy #{Random.new.rand.to_s[..5]}", :current_map => "randy_1"}) # if there is validation error will get Jennifer::BadQuery exception
-  User.create({:name => "testy #{Random.new.rand.to_s[..5]}"}) # sets default :current_map => "hub_0"
+  # User.create({:name => "testy #{Random.new.rand.to_s[..5]}", :current_map => "randy_1"}) # if there is validation error will get Jennifer::BadQuery exception
+  # User.create({:name => "testy #{Random.new.rand.to_s[..5]}"}) # sets default :current_map => "hub_0"
 
   # name not unique test
   # User.create({:name => "testy"})
   # User.create({:name => "testy"}) # throws Jennifer::BadQuery => Exception: duplicate key value violates unique constraint "users_name_idx".
+
+  # TODO: this needs to be streamed as page is scrolled...
+
   users = User.all
   # users = [] of String
   pulse_render "players/index", "default"
 end
 
-get "/players/new" do |env|
-  pulse_render "players/new", "default"
-end
+# TODO: characters CRUD >>>>>>>>>>>>>>>>>
+# get "/players/new" do |env|
+#   pulse_render "players/new", "default"
+# end
 
-post "/players/new" do |env|
-  # TODO: create player record here in postgres with username and password
-  # name = env.params.body["name"].as(String)
+# post "/players/new" do |env|
+#   # TODO: create player record here in postgres with username and password
+#   # name = env.params.body["name"].as(String)
 
-  # u = User.new
-  # u.email = "test@example.com"
-  # u.save!
+#   # u = User.new
+#   # u.email = "test@example.com"
+#   # u.save!
 
-  # user = User.new(
-  #   name: env.params.body["username"],
-  #   password: env.params.body["password"],
-  #   password_confirmation: env.params.body["password_confirmation"]
-  # )
-  # user.save!
+#   # user = User.new(
+#   #   name: env.params.body["username"],
+#   #   password: env.params.body["password"],
+#   #   password_confirmation: env.params.body["password_confirmation"]
+#   # )
+#   # user.save!
 
-  # redirect to homepage where user can select character to create & enter the game
+#   # redirect to homepage where user can select character to create & enter the game
   
-  # TODO: rescue failed to create exception and redirect to the /players/new form
-# rescue ex : Pulse::Unauthorized
-#   # TODO: ...
-#   raise ex # just reraise for now...
-end
+#   # TODO: rescue failed to create exception and redirect to the /players/new form
+# # rescue ex : Pulse::Unauthorized
+# #   # TODO: ...
+# #   raise ex # just reraise for now...
+# end
 
-get "/players/sign-in" do |env|
-  pulse_render "players/sign_in", "default"
-end
+# get "/players/sign-in" do |env|
+#   pulse_render "players/sign_in", "default"
+# end
 
-post "/players/sign-in" do |env|
-  env.params.body["username"] + env.params.body["password"]
-end
+# post "/players/sign-in" do |env|
+#   env.params.body["username"] + env.params.body["password"]
+# end
+# TODO: characters CRUD <<<<<<<<<<<<<<<<
 
 # TODO: 'groups' rather than 'clans'?
 get "/clans" do
@@ -181,8 +186,12 @@ get "/store" do
   "store..."
 end
 
-get "/account" do
-  "account..."
+get "/account" do |env|
+  env.redirect("/multi_auth/google") unless env.session.string("uid")
+
+  user = User.where { _uid == env.session.string("uid") }.first
+
+  pulse_render "account", "default"
 end
 
 get "/play" do
@@ -222,8 +231,8 @@ ws "/" do |socket, env|
   # puts context.response.cookies #correctly returns the cookie
 
   # TODO: read from session
-  # client = Client.new(:socket => socket, :session_id => session_id)
-  client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
+  client = Pulse::Client.new(socket: socket, client_id: env.session.string("uid"))
+  # client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
   client.initialize_socket(reducer)
   client.authenticate!
   # client.enter_map

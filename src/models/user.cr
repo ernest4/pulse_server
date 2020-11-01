@@ -3,18 +3,24 @@
 class User < Jennifer::Model::Base
   with_timestamps
   
+  # TODO: has_many characters
+
   mapping(
     id: {type: Int32, primary: true},
-    # uid: {type: String, primary: true},
-    name: String,
-    current_map: {type: String, default: "hub_0"},
+    uid: String,
+    email: String,
+    # current_map: {type: String, default: "hub_0"}, # TODO: put this on character !!!
+
     # gender: {type: String, default: "male", null: true},
     # age: {type: Int32, default: 10},
     # description: {type: String, null: true},
     # TODO: password...
+
     created_at: {type: Time, null: true},
     updated_at: {type: Time, null: true}
   )
+
+  has_many :characters, Character
 
   # has_many :addresses, Address
   # has_many :facebook_profiles, FacebookProfile
@@ -35,17 +41,5 @@ class User < Jennifer::Model::Base
   #   if @description && @description.not_nil!.size > 10
   #     errors.add(:description, "Too large description")
   #   end
-  # end
-
-  # CLEAR
-
-  # column id : Int64, primary: true, presence: false #id will be set using pg serial !
-
-  # column name : String
-
-  # column encrypted_password : Crypto::Bcrypt::Password
-
-  # def password=(x)
-  #   self.encrypted_password = Crypto::Bcrypt::Password.create(password)
   # end
 end
