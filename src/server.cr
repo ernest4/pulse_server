@@ -99,6 +99,11 @@ get "/players" do
   # "players..."
   # TODO: stop creating users here
   User.create({:name => "testy #{Random.new.rand.to_s[..5]}", :current_map => "randy_1"}) # if there is validation error will get Jennifer::BadQuery exception
+  User.create({:name => "testy #{Random.new.rand.to_s[..5]}"}) # sets default :current_map => "hub_0"
+
+  # name not unique test
+  # User.create({:name => "testy"})
+  # User.create({:name => "testy"}) # throws Jennifer::BadQuery => Exception: duplicate key value violates unique constraint "users_name_idx".
   users = User.all
   # users = [] of String
   pulse_render "players/index", "default"
