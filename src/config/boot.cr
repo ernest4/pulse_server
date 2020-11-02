@@ -5,10 +5,23 @@ require "kemal"
 require "kemal-session"
 require "kemal-csrf"
 
-require "../exceptions/**"
-require "../jobs/**"
-require "../lib/**"
-require "../messages/**"
+require "../models/application_model"
 require "../models/**"
-require "../state/**"
+
 require "../views/**"
+
+require "../exceptions/**"
+
+require "../jobs/application_job"
+require "../jobs/**"
+
+require "../lib/**"
+
+require "../messages/application_message"
+require "../messages/**"
+
+require "../state/application_state"
+require "../state/**"
+
+require "../controllers/application_controller"
+require "../controllers/**"

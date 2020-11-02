@@ -1,6 +1,6 @@
 # TODO: specs??
 
-class User < Jennifer::Model::Base
+class User < ApplicationRecord
   with_timestamps
   
   # TODO: has_many characters

@@ -12,7 +12,7 @@
 # has_one inventory
 # has_one bank_account (in game, with credit scores and loans etc)
 
-class Character < Jennifer::Model::Base
+class Character < ApplicationRecord
   with_timestamps
 
   mapping(
