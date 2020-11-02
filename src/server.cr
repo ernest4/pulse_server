@@ -93,9 +93,6 @@ end
 # TODO: SPECS !!!
 get "/multi_auth/:provider/callback" do |env|
   social_auth_user = multi_auth(env).user(env.params.query)
-  # p user.email
-
-  # {:email => user.email, :uid => user.uid}.to_json
 
   user = User.where { _uid == social_auth_user.uid}.first
   User.create({:uid => social_auth_user.uid, :email => social_auth_user.email}) unless user
