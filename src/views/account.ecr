@@ -1,8 +1,7 @@
 yay you're logged in!
-<span><%= user.email %></span>
-<br />
-<br />
-<span><%= user.current_map %></span>
-<br />
-<br />
+<% if user %>
+  <span><%= user.email %></span>
+  <br />
+  <br />
+<% end %>
 <a href="/logout">Log Out</a>

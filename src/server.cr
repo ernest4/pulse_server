@@ -94,20 +94,10 @@ end
 get "/multi_auth/:provider/callback" do |env|
   social_auth_user = multi_auth(env).user(env.params.query)
   # p user.email
-  # user
-
-  # puts [1, 2, 3].to_json            
-  # puts "#{{:x => 1, :y => 2}.to_json}"
-  # user.raw_json
-  # user.uid
-
-  # TODO: find or create a user by this info and redirect to home page...
 
   # {:email => user.email, :uid => user.uid}.to_json
 
-  # {:email => user.email, :uid => user.uid}
-
-  user = User.where { uid == social_auth_user.uid}.first
+  user = User.where { _uid == social_auth_user.uid}.first
   User.create({:uid => social_auth_user.uid, :email => social_auth_user.email}) unless user
 
   env.session.string("uid", social_auth_user.uid)
@@ -135,7 +125,7 @@ get "/players" do
 
   # TODO: this needs to be streamed as page is scrolled...
 
-  users = User.all
+  characters = Character.all
   # users = [] of String
   pulse_render "players/index", "default"
 end
@@ -187,7 +177,7 @@ get "/store" do
 end
 
 get "/account" do |env|
-  env.redirect("/multi_auth/google") unless env.session.string("uid")
+  next env.redirect("/multi_auth/google") unless env.session.string?("uid")
 
   user = User.where { _uid == env.session.string("uid") }.first
 

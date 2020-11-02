@@ -27,3 +27,6 @@ class Character < Jennifer::Model::Base
 
   validates_length :name, maximum: 12
 end
+
+
+# u = User.all.relation(:characters).last; u.characters if u
