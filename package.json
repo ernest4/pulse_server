@@ -1,0 +1,15 @@
+{
+  "name": "pulse_server",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/ernest4/pulse_server.git",
+  "author": "Ernestas Monkevicius <ernestas.monkevicius@ucdconnect.ie>",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "build": "webpack --config config/webpack/development.js",
+    "watch": "webpack -w --config config/webpack/development.js",
+    "release": "webpack -p --config config/webpack/production.js",
+    "test": "echo \"No test specified\" && exit 1"
+  }
+}
