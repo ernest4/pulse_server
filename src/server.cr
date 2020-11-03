@@ -5,7 +5,12 @@ require "./config/boot" # Bootstrap the app
 
 add_handler CSRF.new
 
-# TODO: see if you can switch from default memory engine to postgres later...
+# TODO: switch away from memory store !!!
+# Example of why it's bad in NODE.js and most likely other ENVs
+# Warning The default server-side session storage, MemoryStore, is purposely not designed for a
+# production environment. It will leak memory under most conditions, does not scale past a single
+# process, and is meant for debugging and developing.
+# Try get redis session working or postgres...
 Kemal::Session.config do |config|
   # config.engine = Session::PostgresEngine.new(connection)
   config.cookie_name = "pulse_session"

@@ -12,7 +12,20 @@ TODO: Write usage instructions here
 
 ## Development
 
-TODO: Write development instructions here
+On deploy, Kemal will serve front end and back end. When developing it's more convenient to server
+front end separately to take advantage of hot reloading.
+
+To serve react front end:
+
+```
+yarn start
+```
+
+To serve kemal API (NOTE: will need restarts to compile changes...):
+
+```
+crystal run src/server.cr
+```
 
 ## Contributors
 

@@ -4,3 +4,23 @@
 /.shards/
 *.dwarf
 .vscode
+
+.cache/
+coverage/
+dist/*
+build/*
+!dist/index.html
+node_modules/
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Let the deploy compile...
+/public/frontend
