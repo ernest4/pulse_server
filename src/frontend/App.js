@@ -1,5 +1,6 @@
-import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import React, { Component, useState } from "react";
+
+import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import Game from "./Game";
 import UI from "./UI";
 
@@ -18,7 +19,9 @@ const NavBar = () => (
       <Link to="/app/">Home</Link>
     </div>
     <div>
-      <Link className="bg-blue-500" to="/app/players">Players</Link>
+      <Link className="bg-blue-500" to="/app/players">
+        Players
+      </Link>
     </div>
     <div>
       <Link to="/app/groups">Groups</Link>
@@ -52,6 +55,17 @@ const Body = () => (
 );
 
 // TODO: add <AuthRoute /> that checks if user is logged in to access certain content !!!
+
+const AuthRoute = ({ component }) => {
+  // Need to check auth status every time...can't store this!
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // TODO: fetch the multi-auth/status to get auth status...
+
+  if (isAuthenticated) return <Component />;
+
+  return <Redirect to={{ pathname: "/login" }} />;
+};
 
 // class ProtectedRoute extends React.Component {
 //   render() {

@@ -13,7 +13,9 @@
     "watch:css": "postcss src/frontend/css/tailwind.css -o src/frontend/css/main.css"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "immer": "^6.0.2",
+    "lodash.debounce": "^4.0.8",
     "phaser": "^3.22.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
