@@ -11,5 +11,11 @@ module Pulse
         render "#{{{base_view_path}}}/#{{{view}}}.ecr", "#{{{base_view_path}}}/layouts/#{{{layout}}}.ecr"
       {% end %}
     end
+
+    macro render_json(hash)
+      env.response.content_type = "application/json"
+
+      {{hash}}.to_json
+    end
   end
 end
