@@ -104,4 +104,17 @@ Kemal.config do |config|
   # config.logging = false
 end
 
+# This just doesnt seem to work with post endpoint??
+# before_all do |env|
+#   if Pulse::Config.development?
+#     env.response.headers["Access-Control-Allow-Credentials"] = false
+#     env.response.headers["Access-Control-Allow-Origin"] = "*"
+#     env.response.headers["Access-Control-Allow-Methods"] = "GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH"
+#     env.response.headers["Access-Control-Allow-Headers"] = "Connection,X-Powered-By,Content-Type,Content-Length,Set-Cookie,Set-Cookie"
+#     env.response.headers["Access-Control-Expose-Headers"] = "Connection, X-Powered-By, Content-Type, Content-Length, Set-Cookie, Set-Cookie"
+#   end
+
+#   puts "cors all set"
+# end
+
 Kemal.run

@@ -27,6 +27,7 @@
     "reduce-reducers": "^1.0.4",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
+    "regenerator-runtime": "^0.13.7",
     "tailwindcss": "^1.9.6",
     "uuid": "^8.0.0",
     "ws": "^7.2.5"

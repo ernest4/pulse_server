@@ -34,7 +34,7 @@ module Pulse
         render_json({:authenticated => !env.session.string?("uid").nil?})
       end
 
-      get "/#{NAMESPACE}/csrf_token" do |env|
+      get "/#{NAMESPACE}/csrf-token" do |env|
         render_json({:csrfToken => env.session.string?("csrf")})
       end
     end

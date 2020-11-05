@@ -1,7 +1,8 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import Game from "./Game";
+import useAxios from "./hooks/useAxios";
 import UI from "./UI";
 
 const App = () => (
@@ -41,7 +42,7 @@ const Body = () => (
     <Route path="/app/players" component={() => <div>Players</div>} />
     <Route path="/app/groups" component={() => <div>Groups</div>} />
     {/* These will be AuthRoutes */}
-    <Route
+    <AuthRoute
       path="/app/play"
       component={() => (
         <div>
@@ -50,21 +51,49 @@ const Body = () => (
         </div>
       )}
     />
-    <Route path="/app/account" component={() => <div>Account</div>} />
+    <AuthRoute path="/app/account" component={() => <div>Account</div>} />
   </Switch>
 );
 
 // TODO: add <AuthRoute /> that checks if user is logged in to access certain content !!!
 
-const AuthRoute = ({ component }) => {
+const AuthRoute = ({ component: Component }) => {
   // Need to check auth status every time...can't store this!
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const { data, request, error } = useAxios({ url: "/multi-auth/status" }); // TESTING: ...
   // TODO: fetch the multi-auth/status to get auth status...
+
+  // TODO: this code does not currently work...need too fix race condition...
+
+  useEffect(() => {
+    request();
+  }, [request]);
+
+  useEffect(() => {
+    console.log(data);
+    setIsAuthenticated(data?.authenticated);
+  }, [data]);
 
   if (isAuthenticated) return <Component />;
 
-  return <Redirect to={{ pathname: "/login" }} />;
+  // return <Redirect to={{ pathname: "/multi-auth/google" }} />;
+
+  const location =
+    process.env.NODE_ENV !== "production" ? "http://localhost:3000" : window.location.origin;
+
+  window.location = `${location}/multi-auth/google`;
+
+  // return (
+  //   <Route
+  //     exact
+  //     path="/"
+  //     render={() => {
+  //       window.location = "https://redirectsite.com";
+  //       return null;
+  //     }}
+  //   />
+  // );
 };
 
 // class ProtectedRoute extends React.Component {

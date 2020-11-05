@@ -3,7 +3,9 @@ import axios from "axios";
 import _debounce from "lodash.debounce";
 import useIsMountedRef from "./useIsMountedRef";
 import useDebugLog from "./useDebugLog";
-import { camelize } from "../utils/Props";
+// import { camelize } from "../utils/Props";
+
+const urlPrefix = process.env.NODE_ENV !== "production" ? "http://localhost:3000" : "";
 
 const useAxios = ({
   url: initialUrl,
@@ -24,9 +26,28 @@ const useAxios = ({
 
   useEffect(() => {
     // TODO: read this from redux ??
-    // Each page should fetch its own csrf token from back end...
-    setCsrfToken(window.document.querySelector("meta[name=csrf-token]").content);
-  }, []);
+    // Each page should fetch its own csrf token from back end....
+    // setCsrfToken(window.document.querySelector("meta[name=csrf-token]").content);
+
+    if (!isMountedRef) return;
+    if (!log) return;
+
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await axios({ url: `${urlPrefix}/multi-auth/csrf-token`, method: "get" });
+
+        if (isMountedRef.current) {
+          console.warn("got csrf token", response.data);
+
+          setCsrfToken(response.data.csrfToken);
+        }
+      } catch (e) {
+        console.error("failed", e);
+      }
+    };
+
+    fetchCsrfToken();
+  }, [isMountedRef, log]);
 
   const [requestParams, setRequestParams] = useState();
 
@@ -63,7 +84,7 @@ const useAxios = ({
         if (contentType) headers = { ...headers, contentType };
 
         const response = await axios({
-          url,
+          url: `${urlPrefix}${url}`,
           method,
           // responseType: "json", // json is default
           ...requestParams,
@@ -71,7 +92,7 @@ const useAxios = ({
         });
 
         if (isMountedRef.current) {
-          if (onResultsFormat) response.data = onResultsFormat(response.data);
+          // if (onResultsFormat) response.data = onResultsFormat(response.data);
 
           dispatch({ type: "SUCCESS", payload: response });
           log.success("got response", response);
@@ -87,6 +108,7 @@ const useAxios = ({
   }, [csrfToken, isMountedRef, log, method, requestParams, url, onResultsFormat]);
 
   // TODO: fetch can take in optional params, either get url or post body params
+  // state => { loading, error, data, status };
   return { ...state, request: fetch };
 };
 
@@ -111,4 +133,4 @@ const dataFetchReducer = (state, { type, payload }) => {
   }
 };
 
-export const onResultsCamelize = results => results.map(result => camelize(result));
+// export const onResultsCamelize = results => results.map(result => camelize(result));
