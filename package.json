@@ -7,10 +7,13 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "build": "yarn watch:css && webpack --mode production --env production",
-    "start": "yarn watch:css && webpack serve --hot --mode development --env development",
+    "build": "yarn watch:css && yarn build_app && yarn build_game",
+    "start": "yarn watch:css && yarn build_app && yarn build_dev_game",
     "test": "jest",
-    "watch:css": "postcss src/frontend/css/tailwind.css -o src/frontend/css/main.css"
+    "watch:css": "postcss src/javascript/css/tailwind.css -o src/javascript/css/main.css",
+    "build_app" : "webpack --config webpack.config.app.js --mode production --env production",
+    "build_game": "webpack --config webpack.config.game.js --mode production --env production",
+    "build_dev_game": "webpack --config webpack.config.game.js serve --hot --mode development --env development"
   },
   "dependencies": {
     "axios": "^0.21.0",
@@ -21,7 +24,6 @@
     "react-dom": "^17.0.1",
     "react-hot-loader": "^4.13.0",
     "react-redux": "^7.2.0",
-    "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
     "react-spring": "^8.0.27",
     "reduce-reducers": "^1.0.4",

@@ -42,27 +42,6 @@ game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory an
 game_state.load!
 reducer = Pulse::State::Reducer.new(game_state)
 
-# TESTING >>>>>>>>
-# ACTUALLY THIS MIGHT BE BAD APPROACH. SHOULD JUST UPDATE ASAP, BUT KEEP TRACK OF HOLD IT WAS SINCE
-# LAST UPDATE...
-# count = 0
-
-# spawn do
-#   loop do
-#     sleep 0.05
-#     puts "yay"
-#     puts count = count + 1
-#     puts Time.utc
-#   end
-# end
-# TESTING <<<<<<<
-
-get "/play" do
-  # TODO: check this server and other server capacities and load balance (redirect) to other server
-  # if needed.
-  "playing..."
-end
-
 get "/test" do
   # TODO: only accessible in develop !!
   Pulse::ApplicationController.pulse_render "test", "default"
