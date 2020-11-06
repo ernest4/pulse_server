@@ -22252,6 +22252,11 @@ body {
 
 * {
   color: #eaeaea;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: "Orbitron", sans-serif;
+  letter-spacing: 2px;
 }
 
 @media (min-width: 640px) {

@@ -1,8 +1,8 @@
 <% if env.session.string?("uid") %>
   <span>Select Character</span>
 <% else %>
-  <div data-controller="toggle">
-    <button data-action="click->toggle#toggle" data-target="toggle.target" data-toggle-class="hidden">Play</button>
+  <div data-controller="toggle" class="flex justify-center">
+    <button data-action="click->toggle#toggle" data-target="toggle.target" data-toggle-class="hidden" class="text-2xl rounded border-4 p-2 px-16">Play</button>
     <a data-target="toggle.target" data-toggle-class="hidden" href="/multi-auth/google" class="hidden">Sign in with Google</a>
   </div>
 <% end %>
