@@ -63,6 +63,10 @@ module Pulse
       #   env.params.body["username"] + env.params.body["password"]
       # end
       # TODO: characters CRUD <<<<<<<<<<<<<<<<
+
+      get "/new" do |env|
+        pulse_render "characters/new", "default"
+      end
     end
   end
 end

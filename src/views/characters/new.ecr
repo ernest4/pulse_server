@@ -2,7 +2,7 @@
 <br/>
 <br/>
 <form action="/characters" method="post">
-  <input type="hidden" name="authenticity_token" value='<%= env.session.string("csrf") %>'>
+  <%= Pulse::Views::Helpers::CSRF.csrf_input_tag(env) %>
   <label for="username">Name</label>
   <input type="text" name="username" maxlength="12" required>
   <input type="submit" value="Create">

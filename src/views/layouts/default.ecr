@@ -2,8 +2,8 @@
   <head>
       <title>Multiplayer Application</title>
       <meta charset="UTF-8">
-      <%= Pulse::Views.stylesheet_pack_tag "main" %>
-      <%= Pulse::Views.javascript_pack_tag "main" %>
+      <%= Pulse::Views::Helpers::Webpack.stylesheet_pack_tag "main" %>
+      <%= Pulse::Views::Helpers::Webpack.javascript_pack_tag "main" %>
   </head>
   <body>
     <%= content %>
