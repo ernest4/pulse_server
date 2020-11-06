@@ -23,4 +23,5 @@ ehthumbs.db
 Thumbs.db
 
 # Let the deploy compile...
-/public/frontend
+public/app/*
+public/game/*

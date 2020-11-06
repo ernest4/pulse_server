@@ -6,6 +6,9 @@
       <%= Pulse::Views::Helpers::Webpack.javascript_pack_tag "main" %>
   </head>
   <body>
-    <%= content %>
+    <div class="container mx-auto px-4 sm:px-2">
+      <%= render "src/views/header/default.ecr" %>
+      <%= content %>
+    </div>
   </body>
 </html>

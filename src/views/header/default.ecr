@@ -1,0 +1,11 @@
+<% nav_link_css = "text-secondary border-transparent hover:border-primary rounded p-1 border-2"  %>
+
+<nav class="py-4 flex justify-between">
+  <span>
+    <% [["/", "Home"], ["/characters", "Players"], ["/groups", "Groups"], ["/universe", "Universe"]].each do |link| %>
+      <% href, name = link %>
+      <a href="<%= href %>" class="<%= nav_link_css %>"><%= name %></a>
+    <% end %>
+  </span>
+  <a href="/account" class="<%= nav_link_css %>">Account</a>
+</nav>
