@@ -11,7 +11,7 @@
     "start": "yarn build_css && yarn build_app && yarn build_dev_game",
     "test": "jest",
     "build_css": "postcss src/javascript/css/tailwind.css -o src/javascript/css/main.css",
-    "build_app" : "webpack --config webpack.config.app.js --mode production --env production",
+    "build_app": "webpack --config webpack.config.app.js --mode production --env production",
     "build_game": "webpack --config webpack.config.game.js --mode production --env production",
     "build_dev_game": "webpack --config webpack.config.game.js serve --hot --mode development --env development"
   },
@@ -30,6 +30,7 @@
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
     "regenerator-runtime": "^0.13.7",
+    "stimulus": "^1.1.1",
     "tailwindcss": "^1.9.6",
     "uuid": "^8.0.0",
     "ws": "^7.2.5"

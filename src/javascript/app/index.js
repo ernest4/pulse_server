@@ -1,7 +1,5 @@
 import "../css/main.css";
 
-const testy = 5;
-
 // TODO: ... load stimulus...
 
 // COPY PASTA FROM RAILS BELOW
@@ -24,8 +22,8 @@ const testy = 5;
 
 // import '../css/application.css'
 // import intersectionObserver from "intersection-observer";
-// import { Application } from "stimulus";
-// import { definitionsFromContext } from "stimulus/webpack-helpers";
+import { Application } from "stimulus";
+import { definitionsFromContext } from "stimulus/webpack-helpers";
 // import "tippy.js/dist/tippy.css";
 // import "tippy.js/themes/light.css";
 // import "motion"
@@ -35,9 +33,9 @@ const testy = 5;
 // import axios from "axios";
 // window.axios = axios;
 
-// const application = Application.start();
-// const context = require.context("./javascripts/controllers", true, /\.js$/);
-// application.load(definitionsFromContext(context));
+const application = Application.start();
+const context = require.context("./controllers", true, /\.js$/);
+application.load(definitionsFromContext(context));
 
 // document.addEventListener("turbolinks:before-cache", () => {
 //   application.controllers.forEach(({ teardown }) =>
