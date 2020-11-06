@@ -1,8 +1,9 @@
 <html>
   <head>
-    <title>Multiplayer Application</title>
-     <meta charset="UTF-8">
-     <!-- TODO: include the webpacked JS and CSS. Will need some logic to automatically include the hashed files... -->
+      <title>Multiplayer Application</title>
+      <meta charset="UTF-8">
+      <%= Pulse::Views.stylesheet_pack_tag "main" %>
+      <%= Pulse::Views.javascript_pack_tag "main" %>
   </head>
   <body>
     <%= content %>
