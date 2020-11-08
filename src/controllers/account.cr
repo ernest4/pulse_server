@@ -5,7 +5,7 @@ module Pulse
     class Account < Pulse::ApplicationController
       # TODO: SPECS !!!
       get "/account" do |env|
-        next env.redirect("/multi-auth/google") unless env.session.string?("uid")
+        authenticate_and_redirect
       
         user = ::User.where { _uid == env.session.string("uid") }.first
       

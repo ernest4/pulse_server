@@ -1,5 +1,11 @@
 <% if env.session.string?("uid") %>
-  <span>Select Character</span>
+  <span>Give your character a name:</span>
+  <form action="/characters" method="post">
+    <%= Pulse::Views::Helpers::CSRF.csrf_input_tag(env) %>
+    <label for="name">Name</label>
+    <input type="text" name="name" maxlength="12" required class="rounded text-gray-900 p-1">
+    <input type="submit" value="Create" class="bg-opacity-50 bg-secondary p-1 rounded hover:bg-opacity-100 cursor-pointer hover:text-black">
+  </form>
 <% else %>
   <div data-controller="toggle" class="flex justify-center">
     <button data-action="click->toggle#toggle" data-target="toggle.target" data-toggle-class="hidden" class="text-2xl rounded border-4 p-2 px-16">Play</button>

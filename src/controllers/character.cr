@@ -28,12 +28,11 @@ module Pulse
       # end
 
       # TODO: characters CRUD >>>>>>>>>>>>>>>>>
-      # get "/players/new" do |env|
+      # get "/#{NAMESPACE}/new" do |env|
       #   pulse_render "players/new", "default"
       # end
 
-      # post "/players/new" do |env|
-      #   # TODO: create player record here in postgres with username and password
+      # ....
       #   # name = env.params.body["name"].as(String)
 
       #   # u = User.new
@@ -49,24 +48,35 @@ module Pulse
 
       #   # redirect to homepage where user can select character to create & enter the game
 
-      #   # TODO: rescue failed to create exception and redirect to the /players/new form
-      # # rescue ex : Pulse::Unauthorized
-      # #   # TODO: ...
-      # #   raise ex # just reraise for now...
-      # end
+      #   # TODO: rescue failed to create exception and redirect to the /#{NAMESPACE}/new form
+      post "/#{NAMESPACE}" do |env|
+        authenticate_and_redirect
+        # authenticate!
 
-      # get "/players/sign-in" do |env|
+        name = env.params.body["name"].as(String)
+
+        user = ::User.where { _uid == env.session.string("uid") }.first!
+        ::Character.create!({:name => name, :user_id => user.id})
+
+      # rescue ex : Pulse::Unauthorized
+        env.redirect("/play")
+      rescue ex : Jennifer::BadQuery
+      # #   # TODO: ... return json error response
+      # #   raise ex # just reraise for now...
+      end
+
+      # get "/#{NAMESPACE}/sign-in" do |env|
       #   pulse_render "players/sign_in", "default"
       # end
 
-      # post "/players/sign-in" do |env|
+      # post "/#{NAMESPACE}/sign-in" do |env|
       #   env.params.body["username"] + env.params.body["password"]
       # end
       # TODO: characters CRUD <<<<<<<<<<<<<<<<
 
-      get "/new" do |env|
-        pulse_render "characters/new", "default"
-      end
+      # get "/#{NAMESPACE}/new" do |env|
+      #   pulse_render "characters/new", "default"
+      # end
     end
   end
 end

@@ -17,5 +17,17 @@ module Pulse
 
       {{hash}}.to_json
     end
+
+    # def self.authenticate!(env)
+    #   raise Pulse::Unauthorized.new if env.session.string?("uid").nil?
+    # end
+
+    # def self.authenticate_and_redirect(env)
+    #   env.redirect("/multi-auth/google") unless env.session.string?("uid")
+    # end
+
+    macro authenticate_and_redirect
+      next env.redirect("/multi-auth/google") unless env.session.string?("uid")
+    end
   end
 end
