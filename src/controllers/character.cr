@@ -59,10 +59,11 @@ module Pulse
         ::Character.create!({:name => name, :user_id => user.id})
 
       # rescue ex : Pulse::Unauthorized
-        env.redirect("/play")
+        # env.redirect("/play")
+        render_json({:success => true, :template => "...wip..."})
       rescue ex : Jennifer::BadQuery
       # #   # TODO: ... return json error response
-      # #   raise ex # just reraise for now...
+        render_json({:success => false, :message => ex.message})
       end
 
       # get "/#{NAMESPACE}/sign-in" do |env|

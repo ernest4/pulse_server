@@ -1,6 +1,6 @@
 <% if env.session.string?("uid") %>
   <span>Give your character a name:</span>
-  <form action="/characters" method="post">
+  <form action="/characters" method="post" data-controller="async">
     <%= Pulse::Views::Helpers::CSRF.csrf_input_tag(env) %>
     <label for="name">Name</label>
     <input type="text" name="name" maxlength="12" required class="rounded text-gray-900 p-1">
