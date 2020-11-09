@@ -1,4 +1,6 @@
 import "../css/main.css";
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 
 // TODO: ... load stimulus...
 
