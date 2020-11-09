@@ -1,11 +1,20 @@
 <% if env.session.string?("uid") %>
-  <span>Give your character a name:</span>
-  <form action="/characters" method="post" data-controller="async">
-    <%= Pulse::Views::Helpers::CSRF.csrf_input_tag(env) %>
-    <label for="name">Name</label>
-    <input type="text" name="name" maxlength="12" required class="rounded text-gray-900 p-1">
-    <input type="submit" value="Create" class="bg-opacity-50 bg-secondary p-1 rounded hover:bg-opacity-100 cursor-pointer hover:text-black">
-  </form>
+  <% if characters.not_nil!.empty? %>
+    <span>Give your character a name:</span>
+    <form action="/characters" method="post" data-controller="async">
+      <%= Pulse::Views::Helpers::CSRF.csrf_input_tag(env) %>
+      <label for="name">Name</label>
+      <input type="text" name="name" maxlength="12" required class="rounded text-gray-900 p-1">
+      <input type="submit" value="Create" class="bg-opacity-50 bg-secondary p-1 rounded hover:bg-opacity-100 cursor-pointer hover:text-black">
+    </form>
+  <% else %>
+    <% characters.not_nil!.each do |character| %>
+      <span>Character name:</span>
+      <span><%= character.name %></span>
+      <!-- TODO: delete button with confirmation dialogue... -->
+      <a href="/play" class="text-2xl rounded border-4 p-2 px-16 text-secondary hover:border-primary">Enter the universe</a>
+    <% end %>
+  <% end %>
 <% else %>
   <div data-controller="toggle" class="flex justify-center">
     <button data-action="click->toggle#toggle" data-target="toggle.target" data-toggle-class="hidden" class="text-2xl rounded border-4 p-2 px-16">Play</button>

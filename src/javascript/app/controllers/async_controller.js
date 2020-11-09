@@ -49,6 +49,12 @@ export default class extends Controller {
 
       console.log(response);
       console.log(response.data);
+
+      if (response.data?.redirect) {
+        window.location.href = `${window.location.origin}${response.data?.redirect}`;
+        return;
+      }
+
       this.insertResponse(form, response.data);
     } catch (e) {
       console.log(e);

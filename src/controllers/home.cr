@@ -6,6 +6,12 @@ module Pulse
       # NAMESPACE = "store"
 
       get "/" do |env|
+        if env.session.string?("uid")
+          characters = ::User.where { _uid == env.session.string("uid") }.first!.characters
+        end
+
+        puts characters
+
         pulse_render "home", "default"
       end
 

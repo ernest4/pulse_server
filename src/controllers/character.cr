@@ -56,14 +56,25 @@ module Pulse
         name = env.params.body["name"].as(String)
 
         user = ::User.where { _uid == env.session.string("uid") }.first!
-        ::Character.create!({:name => name, :user_id => user.id})
+        # ::Character.create!({:name => name, :user_id => user.id})
+        character = ::Character.new({:name => name, :user_id => user.id})
+        character.save!
 
       # rescue ex : Pulse::Unauthorized
         # env.redirect("/play")
-        render_json({:success => true, :template => "...wip..."})
+        # render_json({:success => true, :template => character_create_success_template})
+
+        # env.redirect("/play")
+
+        render_json({:success => true, :redirect => "/play"})
       rescue ex : Jennifer::BadQuery
-      # #   # TODO: ... return json error response
-        render_json({:success => false, :message => ex.message})
+        # TODO: print error to rollbar
+        # TODO: fix the issues of errors not showing up...
+
+        next render_json({:success => false, :message => ex.message}) if character.nil?
+
+        # template = get_template_from_error(ex.message)
+        render_json({:success => false, :template => character_create_failed_template(character.errors)})
       end
 
       # get "/#{NAMESPACE}/sign-in" do |env|
@@ -78,6 +89,32 @@ module Pulse
       # get "/#{NAMESPACE}/new" do |env|
       #   pulse_render "characters/new", "default"
       # end
+
+      def self.get_template_from_error(message)
+        if message.contains?("duplicate key value violates unique constraint")
+          return character_create_failed_template
+        end
+
+        "character creation failed due to unrecognized error"
+      end
+
+      def self.character_create_success_template
+        <<-HTML
+          <div>
+            <span class="text-green-500">Success</span>
+            <a href="/play" class="text-2xl rounded border-4 p-2 px-16 text-secondary hover:border-primary">Enter the universe</a>
+          </div>
+        HTML
+      end
+
+      def self.character_create_failed_template(errors)
+        <<-HTML
+          <div>
+            <span class="text-red-500">Error</span>
+            <span>#{errors.full_messages.join(", ")}</span>
+          </div>
+        HTML
+      end
     end
   end
 end
