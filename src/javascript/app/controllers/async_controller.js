@@ -1,18 +1,36 @@
 import { Controller } from "stimulus";
 // import axios from "axios";
 
-
 // TODO: intercept the submits of the form and make async
 // TODO: capture response and paste it
 
 export default class extends Controller {
-  static targets = ["target"];
+  // static targets = ["target"];
 
   initialize = () => {};
 
-  connect = () => {};
+  connect = () => {
+    // debugger;
+    console.log("async connected");
+    console.log(this.element);
+    this.element.addEventListener("submit", this.handleSubmit);
+  };
 
-  disconnect = () => {};
+  disconnect = () => {
+    this.element.removeEventListener("submit", this.handleSubmit);
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+
+    const form = event.target;
+
+    // debugger
+    // console.log(event);
+    // console.log(event.target.value);
+
+    // https://pqina.nl/blog/async-form-posts-with-a-couple-lines-of-vanilla-javascript/
+  };
 
   // toggle = () => {
   //   this.targetTargets.forEach(toggleTarget => {
@@ -35,6 +53,5 @@ export default class extends Controller {
   //   }
   // };
 }
-
 
 // TODO: paste in <div data-target="async.response"></div> ....
