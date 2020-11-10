@@ -21,7 +21,8 @@ module Pulse
         # TODO: ... load from files ?!?
 
         # TESTING ...
-        test_map = Pulse::Map.new(width: 6, height: 6)
+        # test_map = Pulse::Map.new(width: 6, height: 6)
+        test_map = Pulse::Map.new
         @maps[test_map.name] = test_map
       end
     end

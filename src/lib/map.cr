@@ -1,15 +1,19 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Map
-    TILE_SIZE = 32 # 32 px
-    MAX_WORLD_SIZE = TILE_SIZE * 60
+    TILE_SIZE_IN_PX = 32 # 32 px
+    MAX_WORLD_SIZE_IN_TILES = 60
+    MAX_WORLD_SIZE_IN_PX = TILE_SIZE_IN_PX * MAX_WORLD_SIZE_IN_TILES # square worlds
 
-    property :name, :clients, :tiles
+    property :name, :clients, :tiles, :width, :height
 
     @tiles : Array(Array(Int32))
     # @clients : Array(Pulse::Client)
 
     def initialize(width, height, seed = 1234)
+      @width = width
+      @height = height
+
       seeded_number_generator = Random.new(seed)
 
       @tiles = generate_tiles(seeded_number_generator, width, height)
@@ -23,8 +27,24 @@ module Pulse
 
       # placeholder
       @tiles = [[1,1], [1,1]]
+      @width = 2
+      @height = 2
       @name = "file_loaded_map"
       @clients = [] of Pulse::Client
+    end
+
+    # For testing
+    def initialize
+      @tiles = [[1,1,1,1,1,1],
+                [1,2,1,1,2,1],
+                [1,1,5,5,1,1],
+                [1,2,1,5,3,1],
+                [1,1,1,1,1,1],
+                [1,1,1,1,1,1]]
+      @name = "hub_0" # TODO: default for any new character
+      @clients = [] of Pulse::Client
+      @width = 6
+      @height = 6
     end
 
     # def load
@@ -84,12 +104,12 @@ module Pulse
     end
 
     private def clip_position_to_world_bounds(position)
-      {:x => position[:x].clamp(0, MAX_WORLD_SIZE), :y => position[:y].clamp(0, MAX_WORLD_SIZE)}
+      {:x => position[:x].clamp(0, width * TILE_SIZE_IN_PX), :y => position[:y].clamp(0, height * TILE_SIZE_IN_PX)}
     end
 
     private def can_move_to?(position)
-      tile_y = position[:y] // TILE_SIZE
-      tile_x = position[:x] // TILE_SIZE
+      tile_y = position[:y] // TILE_SIZE_IN_PX
+      tile_x = position[:x] // TILE_SIZE_IN_PX
 
       tile = @tiles[tile_y][tile_x]
 

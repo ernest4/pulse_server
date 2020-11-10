@@ -16,6 +16,10 @@ module Pulse
 
         current_client_map.clients.push(client)
 
+        # TODO: send the map data to client. Chunk / stream piece by piece if slow to bulk send
+        # whole map?
+        client.socket.send(Pulse::Messages::Map::Init.new(current_client_map).to_slice)
+
         messages = [
           Pulse::Messages::Enter.new(client.character),
           # TODO: before sending out position, validate that it's still walkable. Since user last
@@ -27,16 +31,15 @@ module Pulse
         broadcast_map(current_client_map, messages)
       end
 
-      def current_map(client)
-        # @reducer.state.maps[@user.current_map]
-        # current_map = client.character.current_map
-  
+      def current_map(client)  
         # TESTING...
-        map_name = @state.maps.keys.first
-        # client.character.update({current_map: map_name})
-        client.character.current_map = map_name
+        # map_name = @state.maps.keys.first
+        # # client.character.update({current_map: map_name})
+        # client.character.current_map = map_name
         
-        @state.maps.values.first
+        # @state.maps.values.first
+
+        @state.maps[client.character.current_map]
       end
 
       def close(client)
