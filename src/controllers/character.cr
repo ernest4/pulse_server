@@ -71,10 +71,11 @@ module Pulse
         # TODO: print error to rollbar
         # TODO: fix the issues of errors not showing up...
 
-        next render_json({:success => false, :message => ex.message}) if character.nil?
+        # next render_json({:success => false, :message => ex.message}) if character.nil?
 
         # template = get_template_from_error(ex.message)
-        render_json({:success => false, :template => character_create_failed_template(character.errors)})
+        # render_json({:success => false, :template => character_create_failed_template(character.errors.full_messages.join(", "))})
+        render_json({:success => false, :template => character_create_failed_template(ex.message)})
       end
 
       # get "/#{NAMESPACE}/sign-in" do |env|
@@ -107,11 +108,11 @@ module Pulse
         HTML
       end
 
-      def self.character_create_failed_template(errors)
+      def self.character_create_failed_template(message)
         <<-HTML
           <div>
             <span class="text-red-500">Error</span>
-            <span>#{errors.full_messages.join(", ")}</span>
+            <span>#{message}</span>
           </div>
         HTML
       end

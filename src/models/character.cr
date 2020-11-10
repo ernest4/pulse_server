@@ -19,6 +19,7 @@ class Character < ApplicationRecord
     id: {type: Int32, primary: true},
     name: String,
     current_map: {type: String, default: "hub_0"},
+    user_id: Int32,
     created_at: {type: Time, null: true},
     updated_at: {type: Time, null: true}
   )
