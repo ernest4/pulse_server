@@ -1,11 +1,13 @@
 <span>all users listed here wip....</span>
-<br/>
-<br/>
-<span>Player count: <%= characters.count %><span/>
-<% characters.each do |character| %>
-  <div><%= character.name %></div>
-  <br/>
-  <div><%= character.current_map %></div>
-  <br/>
-  <br/>
+<div class="pt-2"></div>
+<span>Player count: <%= characters.count %></span>
+<div class="pt-2"></div>
+<!-- TODO: order characters by some stat, lvl? xp? infamy? -->
+<% characters.to_a.each_with_index do |character, index| %>
+  <span>
+    <span><%= character.name %></span>
+    <span class="pr-2"></span>
+    <span><%= character.current_map %></span>
+  </span>
+  <div class="pt-2"></div>
 <% end %>
