@@ -11,31 +11,29 @@ import initCameraControls from "../camera";
 export default class Example extends Scene {
   constructor() {
     super();
-    this.tileScale = 100;
+    this.tileScale = 100; // TODO: whats this again??
   }
 
   preload() {
     // debugger
-    this.load.image("turtle", "assets/images/turtle_T.jpg");
-    this.load.image("shark", "assets/images/shark_T.png");
-    this.load.image("grass", "assets/images/grass_T.png");
-    // this.load.json("testy", "assets/areas/testy.json");
-    this.load.json("testy2", "assets/areas/testy2.json");
-    // this.load.image("sky", "assets/sky.png");
-    // this.load.image("ground", "assets/platform.png");
-    // this.load.image("star", "assets/star.png");
-    // this.load.image("bomb", "assets/bomb.png");
-    // this.load.spritesheet("dude", "assets/dude.png", { frameWidth: 32, frameHeight: 48 });
-
-    this.load.image("bump_map_test", [
-      "assets/images/shark_T.png",
-      "assets/images/bump_map_example.png",
-    ]);
-
-    this.load.image("bump_map_test_pixel", [
-      "assets/images/shark_T.png",
-      "assets/images/bump_map_example_pixel.png",
-    ]);
+    // this.load.image("turtle", "assets/images/turtle_T.jpg");
+    // this.load.image("shark", "assets/images/shark_T.png");
+    // this.load.image("grass", "assets/images/grass_T.png");
+    // // this.load.json("testy", "assets/areas/testy.json");
+    // this.load.json("testy2", "assets/areas/testy2.json");
+    // // this.load.image("sky", "assets/sky.png");
+    // // this.load.image("ground", "assets/platform.png");
+    // // this.load.image("star", "assets/star.png");
+    // // this.load.image("bomb", "assets/bomb.png");
+    // // this.load.spritesheet("dude", "assets/dude.png", { frameWidth: 32, frameHeight: 48 });
+    // this.load.image("bump_map_test", [
+    //   "assets/images/shark_T.png",
+    //   "assets/images/bump_map_example.png",
+    // ]);
+    // this.load.image("bump_map_test_pixel", [
+    //   "assets/images/shark_T.png",
+    //   "assets/images/bump_map_example_pixel.png",
+    // ]);
   }
 
   create() {
@@ -50,8 +48,8 @@ export default class Example extends Scene {
     });
 
     // const { tiles } = this.cache.json.get("testy");
-    const { tiles } = this.cache.json.get("testy2");
-    console.log(tiles); // testing level loading
+    // const { tiles } = this.cache.json.get("testy2");
+    // console.log(tiles); // testing level loading
 
     // const tileMap = new TileMap();
 
@@ -59,11 +57,11 @@ export default class Example extends Scene {
 
     this.input.mouse.disableContextMenu(); // disable default right click
 
-    tiles.forEach((row, y) => {
-      row.forEach((column, x) => {
-        const entity = initEntity({ scene: this, x, y, key: column });
-      });
-    });
+    // tiles.forEach((row, y) => {
+    //   row.forEach((column, x) => {
+    //     const entity = initEntity({ scene: this, x, y, key: column });
+    //   });
+    // });
 
     // ws.close();
     // It may be helpful to examine the socket's bufferedAmount attribute before attempting to close
@@ -90,18 +88,24 @@ export default class Example extends Scene {
     // const light = this.lights.addLight(600, 400, 800).setIntensity(2);
     // this.lights.enable().setAmbientColor(0x888888);
 
-    this.add.sprite(600, 400, "bump_map_test_pixel").setDisplaySize(100, 100).setPipeline("Light2D");
-    const light = this.lights.addLight(600, 400, 800, 0x00ff00).setIntensity(1);
-    this.lights.enable().setAmbientColor(0x000000);
+    // this.add
+    //   .sprite(600, 400, "bump_map_test_pixel")
+    //   .setDisplaySize(100, 100)
+    //   .setPipeline("Light2D");
+    // const light = this.lights.addLight(600, 400, 800, 0x00ff00).setIntensity(1);
+    // this.lights.enable().setAmbientColor(0x000000);
 
-    this.input.on("pointermove", pointer => {
-      light.x = pointer.x;
-      light.y = pointer.y;
-    });
+    // this.input.on("pointermove", pointer => {
+    //   light.x = pointer.x;
+    //   light.y = pointer.y;
+    // });
 
-    initCameraControls(this);
+    // TODO: init controls for character. Camera will be locket to character
+    // initCameraControls(this);
   }
 
+  // TODO: send character position to server if there is new position, once every 20th of a second
+  // at most.
   update(time, deltaTime) {
     // read redux store and make decision off that?? for enemy ui (for single player deffo, mulitplayer, enemy ui will come from server)??
     // User does actions in game, builds up messages to send to server. likewise server pushes messages async
@@ -124,51 +128,51 @@ export default class Example extends Scene {
   }
 }
 
-const checkSocketHealth = ({ socket, deltaTime }) => {
-  // log(`socketOpen: ${gameState.socketOpen}`);
-  log(`socketOpen: ${socket.socketReadState}`);
-};
+// const checkSocketHealth = ({ socket, deltaTime }) => {
+//   // log(`socketOpen: ${gameState.socketOpen}`);
+//   log(`socketOpen: ${socket.socketReadState}`);
+// };
 
-const applyServerMessageQueueToGameState = gameState => {
-  const messages = gameState.serverMessageQueue;
+// const applyServerMessageQueueToGameState = gameState => {
+//   const messages = gameState.serverMessageQueue;
 
-  messages.forEach(message => {
-    // TODO: ... apply the message to produce draft game state
-  });
+//   messages.forEach(message => {
+//     // TODO: ... apply the message to produce draft game state
+//   });
 
-  // TODO: ...implement
-  // const newGameState = updateGameState(currentGameState, messages);
-  // updateGameState(currentGameState, messages);
+//   // TODO: ...implement
+//   // const newGameState = updateGameState(currentGameState, messages);
+//   // updateGameState(currentGameState, messages);
 
-  return gameState;
-};
+//   return gameState;
+// };
 
-const transitionGameState = ({ currentGameState, newGameState, scene }) => {
-  // TODO: ... implement. This needs too perform all the animations, tweens, smooth transitions from
-  // current game state to new game state.
-  let _keep;
+// const transitionGameState = ({ currentGameState, newGameState, scene }) => {
+//   // TODO: ... implement. This needs too perform all the animations, tweens, smooth transitions from
+//   // current game state to new game state.
+//   let _keep;
 
-  return newGameState; // just a mock for now...instant transition
-};
+//   return newGameState; // just a mock for now...instant transition
+// };
 
-const broadcastClientMessageQueueToServer = ({ socket, messages }) => {
-  const validClientMessages = validateClientMessages(messages);
-  // store.dispatch(gameActions.setClientMessageQueue([])); // flush client messages
+// const broadcastClientMessageQueueToServer = ({ socket, messages }) => {
+//   const validClientMessages = validateClientMessages(messages);
+//   // store.dispatch(gameActions.setClientMessageQueue([])); // flush client messages
 
-  // broadcast validClientMessages.....
-  //
+//   // broadcast validClientMessages.....
+//   //
 
-  validClientMessages.forEach(message => {
-    socket.send(message);
-  });
-};
+//   validClientMessages.forEach(message => {
+//     socket.send(message);
+//   });
+// };
 
-const validateClientMessages = messages => {
-  let _keep;
-  // TODO: implement
+// const validateClientMessages = messages => {
+//   let _keep;
+//   // TODO: implement
 
-  return messages;
-};
+//   return messages;
+// };
 
 // const yieldTiles = ({ tiles, callback }) =>
 //   tiles.forEach((row, x) => row.forEach((column, y) => callback({ x, y, column })));

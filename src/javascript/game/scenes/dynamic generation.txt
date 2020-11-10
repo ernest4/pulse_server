@@ -6,10 +6,10 @@ to create an art asset once and manipulate it's texture data to create different
 or really, make any textures you like.
 
 e.g. possible use: read in animation texture, sample all the pixels, create a color change and apply
-too all frames. e.g. color character clothing any color you like, in game dynamically (user customization)
+to all frames. e.g. color character clothing any color you like, in game dynamically (user customization)
 and all the animations should update with the new color - only one sprite sheet necessary!
 
-might specifically create sprites with a 'mask' color that the game engine can look for and recognise
+might specifically create sprites with a 'mask' color that the game engine can look for and recognize
 as 'variable' color that can have any shade applied?
 
 var config = {

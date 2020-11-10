@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Phaser from "phaser";
 import Example from "./scenes/Example";
