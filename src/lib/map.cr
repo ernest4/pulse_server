@@ -50,9 +50,9 @@ module Pulse
     end
 
     def move(client, direction)
-      speed = client.user.speed
-      last_x = client.user.last_x
-      last_y = client.user.last_y
+      speed = client.character.speed
+      last_x = client.character.last_x
+      last_y = client.character.last_y
 
       new_position = {:x => last_x, :y => last_y}
 

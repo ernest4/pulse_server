@@ -8,7 +8,7 @@ module Pulse
       end
 
       def enter(client)
-        puts "[Pulse] Client has entered: id = #{client.user.id}, name = #{client.user.name}"
+        puts "[Pulse] Client has entered: user_id = #{client.user.id}, character_id = #{client.character.id}, name = #{client.character.name}"
 
         current_client_map = current_map(client)
 
@@ -17,11 +17,11 @@ module Pulse
         current_client_map.clients.push(client)
 
         messages = [
-          Pulse::Messages::Enter.new(client.user),
+          Pulse::Messages::Enter.new(client.character),
           # TODO: before sending out position, validate that it's still walkable. Since user last
           # position might be blocked now, then need to find next closest free position (or spawn
           # point) instead and send that. Don't forget to save the new player position in that case!
-          Pulse::Messages::Position.new(client.user.position)
+          Pulse::Messages::Position.new(client.character.position)
         ]
 
         broadcast_map(current_client_map, messages)
@@ -29,12 +29,12 @@ module Pulse
 
       def current_map(client)
         # @reducer.state.maps[@user.current_map]
-        # current_map = client.user.current_map
+        # current_map = client.character.current_map
   
         # TESTING...
         map_name = @state.maps.keys.first
-        # client.user.update({current_map: map_name})
-        client.user.current_map = map_name
+        # client.character.update({current_map: map_name})
+        client.character.current_map = map_name
         
         @state.maps.values.first
       end
@@ -44,11 +44,11 @@ module Pulse
 
         current_client_map = current_map(client)
 
-        # @state.maps[client.user.current_map].clients.delete(client)
+        # @state.maps[client.character.current_map].clients.delete(client)
 
         current_client_map.clients.delete(client)
 
-        broadcast_map(current_client_map, [Pulse::Messages::Exit.new(client.user)])
+        broadcast_map(current_client_map, [Pulse::Messages::Exit.new(client.character)])
       end
 
       # TODO: keep track of how frequent the same messages are coming. The front end shouldn't send
@@ -92,10 +92,10 @@ module Pulse
         # TODO: use delta time in the calculation ?? (or maybe not?)
         current_client_map = current_map(client)
         new_position = current_client_map.move(client, parsed_message.direction)
-        return if new_position == client.user.position # map determined can't change position ...
+        return if new_position == client.character.position # map determined can't change position ...
 
-        client.user.position = new_position
-        # client.user.save    ... ? maybe worker will do this periodically instead?
+        client.character.position = new_position
+        # client.character.save    ... ? maybe worker will do this periodically instead?
 
         broadcast_map(current_client_map, [Pulse::Messages::Position.new(new_position)])
       end
@@ -132,6 +132,6 @@ end
     # def broadcast_map_except_yourself(message : Pulse::Messages::ApplicationMessage)
     #   # TODO: ...
     #   # current_map.clients.each do |client|
-    #   #   client.socket.send(message) if client.user.name != @user.name
+    #   #   client.socket.send(message) if client.character.name != @user.name
     #   # end
     # end

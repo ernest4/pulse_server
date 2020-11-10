@@ -30,6 +30,8 @@ end
 # TODO: set up production and test configs / config files etc...
 
 # TODO: rollbar !!!
+# TODO: need to implement globally caching exceptions since the existing crystal shard might not do
+# it. Simply try to put a try catch block at highest level...
 
 # TODO: user redis for game state storage as kemal wont be thread safe once Crystal drops
 # true parallelism for fibers
@@ -68,8 +70,8 @@ ws "/" do |socket, env|
   # TODO: read from session
   client = Pulse::Client.new(socket: socket, client_id: env.session.string("uid"))
   # client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
+  # client.authenticate!
   client.initialize_socket(reducer)
-  client.authenticate!
   # client.enter_map
 
 rescue ex : Pulse::Unauthorized

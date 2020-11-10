@@ -16,6 +16,8 @@ module Pulse
 
       # TODO: check if user is authorized, if not redirect to log in page (home page)?
       get "/play" do |env|
+        authenticate_and_redirect
+
         send_file env, "./public/game/index.html"
       end
     end

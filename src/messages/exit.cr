@@ -8,7 +8,7 @@ module Pulse
       @player_id : Int32
       @name : String # TODO: enforce max name length to 12 chars max
 
-      def initialize(user : Pulse::User)
+      def initialize(user : Pulse::Character)
         @player_id = user.id
         @name = user.name
       end

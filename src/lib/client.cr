@@ -3,21 +3,26 @@
 module Pulse
   class Client
     @socket : HTTP::WebSocket
-    @client_id : String
+    # @client_id : String
+    @user : ::User
+    @character : Pulse::Character
     # @last_received_time : Hash(String, Time)
 
-    property :socket, :client_id, :user, :last_received_time
+    property :socket, :client_id, :user, :character, :last_received_time
 
     def initialize(socket, client_id)
       @socket = socket
-      @client_id = client_id 
-      @user = Pulse::User.new(client_id)
+      # @client_id = client_id # TODO: not needed as instance var??
+      @user = ::User.where { _uid == client_id }.first! # ... probably good to have a ref to user??
+      @character = Pulse::Character.new(@user.characters.first.id.not_nil!)
       @last_received_time = {} of UInt8 => Time::Span
     end
 
-    def authenticate!
-      # TODO: ...
-    end
+    # TODO: is this needed?
+    # probably not...
+    # def authenticate!
+    #   # TODO: ...
+    # end
 
     def close
       # TODO: clean up, save state etc.

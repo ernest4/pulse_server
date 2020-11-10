@@ -30,7 +30,10 @@ CREATE TABLE public.characters (
     current_map character varying(254),
     user_id integer,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    last_x integer,
+    last_y integer,
+    speed integer
 );
 
 

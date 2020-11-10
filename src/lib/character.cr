@@ -15,59 +15,69 @@ end
 
 # TODO: probably have User::Memory and User::Redis
 module Pulse
-  class User
+  class Character
+    # TODO: the default values here should come from the model somehow...
     @id : Int32 = -1
-    @client_id : String
+    # # @client_id : String
     @name : String = ""
     @current_map : (String)?
     @last_x : Int32 = 0
     @last_y : Int32 = 0
     @speed : Int32 = 32 # 32 pixels per second
+    @character : ::Character
 
     property :id, :name, :current_map, :last_x, :last_y, :speed
 
-    def initialize(client_id)
-      # @id = -1
-      @client_id = client_id
+    delegate id, name, current_map, last_x, last_y, speed, to: @character # delegates known methods
 
-      # @name = ""
-      # @current_map = ""
-      # @last_x = 0
-      # @last_y = 0
+    # def initialize(client_id : String)
+    #   # @id = -1
+    #   @client_id = client_id
 
-      load!
+    #   # @name = ""
+    #   # @current_map = ""
+    #   # @last_x = 0
+    #   # @last_y = 0
+
+    #   load!
+    # end
+
+    def initialize(id : Int32)
+      @character = ::Character.find!(id)
+      # load!(id)
     end
 
-    def load!
-      # TODO: load from DB
-      # user = User.query.find({client_id: @client_id})
+    # def load!(id)
+    #   # TESTING:
+    #   # user = OpenStruct.new
 
-      # TESTING:
-      user = OpenStruct.new
+    #   # @id = user.id
+    #   # @name = user.name
+    #   # @last_x = user.last_x
+    #   # @last_y = user.last_y
+    #   # @speed = user.speed
 
-      @id = user.id
-      @name = user.name
-      @last_x = user.last_x
-      @last_y = user.last_y
-      @speed = user.speed
-    end
+    #   # TODO: load from DB
+    #   @character = ::Character.find(id)
+    # end
 
     def position
-      {:x => @last_x, :y => @last_y}
+      {:x => last_x, :y => last_y}
     end
 
     def position=(new_position)
-      @last_x = new_position[:x]
-      @last_y = new_position[:y]
+      last_x = new_position[:x]
+      last_y = new_position[:y]
     end
 
     # TODO: wip ....
     # def update({})
     # end
     # OR
-    # def save
-    # TODO: serialize local values and save to Redis / DB / w.e.
-    # end
+    def save!
+      # TODO: serialize local values and save to Redis / DB / w.e.
+      @character.save! # TODO: error handling !?!?!
+    end
   end
 end
 
