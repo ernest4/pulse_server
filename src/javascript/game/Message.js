@@ -58,6 +58,8 @@ export const parse = data => {
       // [type,tileSize,width,width,height,height,tile,tile,tile,...]
       console.log("map init");
 
+      // TODO: some automatic way to track and return byte offset?? maybe if this was a class and we
+      // had a method for each get... that would track it's own byte count and post that to class...
       const tileSize = view.getUint16(1, true);
       const width = view.getUint16(3, true);
       const height = view.getUint16(5, true);
@@ -70,6 +72,15 @@ export const parse = data => {
       // might be more efficient to keep the tile info in the buffer where we can take advantage of
       // cache locality !!! lets try go with that...
       const tiles = data.slice(7, width * height);
+
+      console.log("tileSize");
+      console.log(tileSize);
+      console.log("width");
+      console.log(width);
+      console.log("height");
+      console.log(height);
+      console.log("tiles");
+      console.log(tiles);
 
       return { tileSize, width, height, tiles };
     }

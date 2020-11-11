@@ -18,7 +18,8 @@ module Pulse
 
       seeded_number_generator = Random.new(seed)
 
-      @tiles = generate_tiles(seeded_number_generator, width, height)
+      tiles_u32 = generate_tiles(seeded_number_generator, width, height)
+      @tiles = map_i32_to_u16(tiles_u32)
       @name = generate_name(seeded_number_generator)
       @clients = [] of Pulse::Client
     end
@@ -28,7 +29,7 @@ module Pulse
       @file_path = file_path
 
       # placeholder
-      @tiles = [[1,1], [1,1]]
+      @tiles = map_i32_to_u16([[1,1], [1,1]])
       @width = 2
       @height = 2
       @name = "file_loaded_map"
@@ -37,12 +38,14 @@ module Pulse
 
     # For testing
     def initialize
-      @tiles = [[1,1,1,1,1,1],
-                [1,2,1,1,2,1],
-                [1,1,5,5,1,1],
-                [1,2,1,5,3,1],
-                [1,1,1,1,1,1],
-                [1,1,1,1,1,1]]
+      tiles_u32 = [[1,1,1,1,1,1],
+                  [1,2,1,1,2,1],
+                  [1,1,5,5,1,1],
+                  [1,2,1,5,3,1],
+                  [1,1,1,1,1,1],
+                  [1,1,1,1,1,1]]
+
+      @tiles = map_i32_to_u16(tiles_u32)
       @name = "hub_0" # TODO: default for any new character
       @clients = [] of Pulse::Client
       @width = 6
@@ -69,6 +72,14 @@ module Pulse
       # TODO: will involve keeping track of the current highest name value, then taking that and
       # producing the next incremental one... like C5 -> C6 ... D1 -> D2 ...
       "Genesis_#{seeded_number_generator.rand(1..5)}"
+    end
+
+    def map_i32_to_u16(map_i32)
+      map_i32.map do |row|
+        row.map do |column|
+          column.to_u16
+        end
+      end
     end
 
     def move(client, direction)
