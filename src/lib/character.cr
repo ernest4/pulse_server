@@ -1,32 +1,32 @@
 # TODO: specs !!!
 
 # TESTING (not really open struct... sign... hard to implement in crystal)
-class OpenStruct
-  property :id, :name, :last_x, :last_y, :speed
+# class OpenStruct
+#   property :id, :name, :last_x, :last_y, :speed
 
-  def initialize
-    @id = 123
-    @name = "Ernestό"
-    @last_x = 3
-    @last_y = 2
-    @speed = 32
-  end
-end
+#   def initialize
+#     @id = 123
+#     @name = "Ernestό"
+#     @last_x = 3
+#     @last_y = 2
+#     @speed = 32
+#   end
+# end
 
 # TODO: probably have User::Memory and User::Redis
 module Pulse
   class Character
     # TODO: the default values here should come from the model somehow...
-    @id : Int32 = -1
-    # # @client_id : String
-    @name : String = ""
-    @current_map : (String)?
-    @last_x : Int32 = 0
-    @last_y : Int32 = 0
-    @speed : Int32 = 32 # 32 pixels per second
+    # @id : Int32 = -1
+    # # # @client_id : String
+    # @name : String = ""
+    # @current_map : (String)?
+    # @last_x : Int32 = 0
+    # @last_y : Int32 = 0
+    # @speed : Int32 = 32 # 32 pixels per second
     @character : ::Character
 
-    property :id, :name, :current_map, :last_x, :last_y, :speed
+    # property :id, :name, :current_map, :last_x, :last_y, :speed
 
     delegate id, name, current_map, last_x, last_y, speed, to: @character # delegates known methods
 
@@ -42,9 +42,12 @@ module Pulse
     #   load!
     # end
 
-    def initialize(id : Int32)
-      @character = ::Character.find!(id)
+    def initialize(character_id : Int32)
+      @character = ::Character.find!(character_id)
       # load!(id)
+    rescue ex : Jennifer::RecordNotFound
+      # TODO: ...
+      raise ex # just reraise for now...
     end
 
     # def load!(id)

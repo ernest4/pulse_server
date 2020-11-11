@@ -36,7 +36,7 @@ end
 # TODO: user redis for game state storage as kemal wont be thread safe once Crystal drops
 # true parallelism for fibers
 
-# TODO: sidekiq
+# TODO: sidekiq - set it up https://www.mikeperham.com/2016/05/25/sidekiq-for-crystal/
 
 # load the map data. initialize global state etc
 # maps = {} of String => Pulse::Map
@@ -73,6 +73,7 @@ ws "/" do |socket, env|
   # client.authenticate!
   client.initialize_socket(reducer)
   # client.enter_map
+
 
 rescue ex : Pulse::Unauthorized
   # TODO: ...

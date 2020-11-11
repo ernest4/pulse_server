@@ -25,18 +25,18 @@ module Pulse
           # TODO: before sending out position, validate that it's still walkable. Since user last
           # position might be blocked now, then need to find next closest free position (or spawn
           # point) instead and send that. Don't forget to save the new player position in that case!
-          Pulse::Messages::Position.new(client.character.position)
+          Pulse::Messages::Position.new(client.character.position),
         ]
 
         broadcast_map(current_client_map, messages)
       end
 
-      def current_map(client)  
+      def current_map(client)
         # TESTING...
         # map_name = @state.maps.keys.first
         # # client.character.update({current_map: map_name})
         # client.character.current_map = map_name
-        
+
         # @state.maps.values.first
 
         @state.maps[client.character.current_map]
@@ -68,9 +68,9 @@ module Pulse
         case parsed_message.class.to_s
         when Pulse::Messages::Move.to_s
           move(client, parsed_message)
-        # TODO: rest ...
-        # when Pulse::Messages::....to_s
-        #   ...(client, parsed_message)
+          # TODO: rest ...
+          # when Pulse::Messages::....to_s
+          #   ...(client, parsed_message)
         else
           puts "[Pulse] Unrecognized message type #{parsed_message.class}"
         end
@@ -79,7 +79,6 @@ module Pulse
       def move(client, parsed_message)
         puts "[Pulse] Got message. Type: #{parsed_message.class}"
 
-        
         # TODO: !!! test to make sure this rate limiting of messages works !!!
         last_received_time = client.last_received_time[Pulse::Messages::Position::TYPE]? || Time::Span.new # Time::Span.new => time since epoch...
         # Time.monotonic should be used for time comparisons instead of Time.utc https://crystal-lang.org/api/0.35.1/Time.html#measuring-time
@@ -114,7 +113,6 @@ module Pulse
         map.clients.each do |client|
           serialized_messages.each do |serialized_message|
             client.socket.send(serialized_message)
-
           rescue ex : IO::Error
             # TODO: close client that's 'Exception: Closed stream (IO::Error)'
             # puts ex
@@ -127,14 +125,13 @@ module Pulse
   end
 end
 
-
-    # # Maybe:
-    # # broadcast_room(scope : String, message : Pulse::Message, include_yourself : false)
-    # #  e.g. scopes SCOPE::ROOM => "room", SCOPE::CLAN => "clan", SCOPE::GLOBAL => "global", SCOPE::FACTION => "faction", SCOPE::PARTY => "party"
-    # # end
-    # def broadcast_map_except_yourself(message : Pulse::Messages::ApplicationMessage)
-    #   # TODO: ...
-    #   # current_map.clients.each do |client|
-    #   #   client.socket.send(message) if client.character.name != @user.name
-    #   # end
-    # end
+# # Maybe:
+# # broadcast_room(scope : String, message : Pulse::Message, include_yourself : false)
+# #  e.g. scopes SCOPE::ROOM => "room", SCOPE::CLAN => "clan", SCOPE::GLOBAL => "global", SCOPE::FACTION => "faction", SCOPE::PARTY => "party"
+# # end
+# def broadcast_map_except_yourself(message : Pulse::Messages::ApplicationMessage)
+#   # TODO: ...
+#   # current_map.clients.each do |client|
+#   #   client.socket.send(message) if client.character.name != @user.name
+#   # end
+# end
