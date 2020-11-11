@@ -1,13 +1,6 @@
+import { generate, parse } from "./Message";
 import store from "./store";
 import * as gameActions from "./store/actions/game";
-
-const MESSAGE_TYPE = {
-  MOVE: 1,
-  POSITION: 2,
-  ENTER: 3,
-  EXIT: 4,
-  MAP_INIT: 5,
-};
 
 const initWebSocket = () => {
   const ws = new WebSocket(wsUrl());
@@ -38,17 +31,24 @@ const initWebSocket = () => {
 
     // TODO: process message here
 
+    const parsedMessage = parse(event.data);
+
     // ....
-    // push to phaser master game state thingy !?!?!
+    // push to phaser master game state thingy that other phaser things will listen on !?!?!
 
     // TODO: probably might need to push to phaser state mechanisms directly here (as well as redux
     // for UI...updates)
-    store.dispatch(gameActions.addServerMessageToQueue(event.data));
+    store.dispatch(gameActions.addServerMessageToQueue(parsedMessage));
   };
 
-  // return ws;
+  ws.serializeAndSend = message => {
+    const serializedMessage = generate(message);
+    ws.send(serializedMessage);
+  };
+
   // keep player socket globally accessible
   store.dispatch(gameActions.setSocket(ws));
+  return ws; // also return it ?? not sure if useful ??
 };
 
 export default initWebSocket;

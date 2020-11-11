@@ -1,13 +1,15 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Map
-    TILE_SIZE_IN_PX = 32 # 32 px
-    MAX_WORLD_SIZE_IN_TILES = 60
-    MAX_WORLD_SIZE_IN_PX = TILE_SIZE_IN_PX * MAX_WORLD_SIZE_IN_TILES # square worlds
+    TILE_SIZE_IN_PX = 32_u8 # 32 px
+    MAX_WORLD_SIZE_IN_TILES = 60_u16
+    MAX_WORLD_SIZE_IN_PX = (TILE_SIZE_IN_PX * MAX_WORLD_SIZE_IN_TILES).to_u16 # square worlds
 
     property :name, :clients, :tiles, :width, :height
 
-    @tiles : Array(Array(Int32))
+    @tiles : Array(Array(UInt16))
+    @width : UInt16
+    @height : UInt16
     # @clients : Array(Pulse::Client)
 
     def initialize(width, height, seed = 1234)

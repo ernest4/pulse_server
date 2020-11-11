@@ -11,6 +11,7 @@ module Pulse
 
       property :x, :y
 
+      # need to push player ID here...
       def initialize(x, y)
         @x = x.to_u16
         @y = y.to_u16
