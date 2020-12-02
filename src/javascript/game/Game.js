@@ -5,6 +5,7 @@ import Example from "./scenes/Example";
 
 import { GAME_HEIGHT, GAME_WIDTH } from "./config";
 import initWebSocket from "./network/webSocket";
+import Network from "./scenes/Network";
 
 class Game extends React.Component {
   componentDidMount() {
@@ -17,7 +18,7 @@ class Game extends React.Component {
         mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
         // autoCenter: Phaser.Scale.CENTER_BOTH,
       },
-      scene: [Example],
+      scene: [Network, Example],
     };
 
     new Phaser.Game(config);

@@ -6,7 +6,7 @@ import initWebSocket from "../network/webSocket";
 const PACKETS_PER_SECOND = 20; // 20 MAX !!
 const MIN_PACKET_INTERVAL = 1 / PACKETS_PER_SECOND;
 
-export default class Example extends Scene {
+export default class Network extends Scene {
   constructor() {
     super();
     this.lastPacketTime = 0;
