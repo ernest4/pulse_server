@@ -14,11 +14,11 @@ module Pulse
       @socket = socket
       # @client_id = client_id # TODO: not needed as instance var??
       @user = ::User.where { _uid == client_id }.first! # ... probably good to have a ref to user??
-      @character = Pulse::Character.new(@user.characters.first.id.not_nil!)
+      @character = Pulse::Character.new(@user.characters.first.id!)
       @last_received_time = {} of UInt8 => Time::Span
-    rescue ex : NilAssertionError
-      # TODO: ...
-      raise ex # just reraise for now...
+    # rescue ex : NilAssertionError
+    #   # TODO: ...
+    #   raise ex # just reraise for now...
     end
 
     # TODO: is this needed?

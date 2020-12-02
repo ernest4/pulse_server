@@ -28,7 +28,7 @@ module Pulse
 
     # property :id, :name, :current_map, :last_x, :last_y, :speed
 
-    delegate id, name, current_map, last_x, last_y, speed, to: @character # delegates known methods
+    delegate id, id!, name, current_map, last_x, last_y, speed, to: @character # delegates known methods
 
     # def initialize(client_id : String)
     #   # @id = -1

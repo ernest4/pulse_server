@@ -9,7 +9,7 @@ module Pulse
       @name : String # TODO: enforce max name length to 12 chars max
 
       def initialize(character : Pulse::Character)
-        @character_id = character.id
+        @character_id = character.id!
         @name = character.name
       end
 
