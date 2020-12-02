@@ -4,7 +4,7 @@ import Phaser from "phaser";
 import Example from "./scenes/Example";
 
 import { GAME_HEIGHT, GAME_WIDTH } from "./config";
-import initWebSocket from "./webSocket";
+import initWebSocket from "./network/webSocket";
 
 class Game extends React.Component {
   componentDidMount() {

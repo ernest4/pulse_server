@@ -44,10 +44,10 @@ game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory an
 game_state.load!
 reducer = Pulse::State::Reducer.new(game_state)
 
-get "/test" do
-  # TODO: only accessible in develop !!
-  Pulse::ApplicationController.pulse_render "test", "default"
-end
+# get "/test" do
+#   # TODO: only accessible in develop !!
+#   Pulse::ApplicationController.pulse_render "test", "default"
+# end
 
 get "/test/:name" do |env|
   name = env.params.url["name"]
