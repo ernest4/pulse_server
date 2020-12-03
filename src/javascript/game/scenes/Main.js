@@ -8,9 +8,9 @@ import initCameraControls from "../camera";
 
 // TODO: add optional full screen support https://rexrainbow.github.io/phaser3-rex-notes/docs/site/fullscreen/
 
-export default class Example extends Scene {
+export default class Main extends Scene {
   constructor() {
-    super();
+    super({ key: "Main", active: true }); // active: true, to launch on start up
     this.tileScale = 100; // TODO: whats this again??
   }
 

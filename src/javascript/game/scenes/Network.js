@@ -8,7 +8,7 @@ const MIN_PACKET_INTERVAL = 1 / PACKETS_PER_SECOND;
 
 export default class Network extends Scene {
   constructor() {
-    super();
+    super({ key: "Network", active: true });
     this.lastPacketTime = 0;
   }
 
