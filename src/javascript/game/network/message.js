@@ -1,4 +1,4 @@
-const MESSAGE_TYPE = {
+export const MESSAGE_TYPE = {
   MOVE: 1,
   POSITION: 2,
   ENTER: 3,
@@ -33,7 +33,7 @@ export const parse = data => {
       console.log("y");
       console.log(y);
 
-      return { characterId, x, y };
+      return { messageType, characterId, x, y };
     }
     case MESSAGE_TYPE.ENTER: {
       // [type,id,id,id,id,name,name,name,...]
@@ -48,7 +48,7 @@ export const parse = data => {
 
       console.log(name);
 
-      return { characterId, name };
+      return { messageType, characterId, name };
     }
     case MESSAGE_TYPE.EXIT: {
       console.log("exit");
@@ -61,8 +61,8 @@ export const parse = data => {
       // TODO: some automatic way to track and return byte offset?? maybe if this was a class and we
       // had a method for each get... that would track it's own byte count and post that to class...
       const tileSize = view.getUint8(1, true);
-      const width = view.getUint16(2, true);
-      const height = view.getUint16(4, true);
+      const mapWidth = view.getUint16(2, true);
+      const mapHeight = view.getUint16(4, true);
 
       // couuuuld extract the tiles into plain array but...
       // const tiles = [];
@@ -72,19 +72,19 @@ export const parse = data => {
       // might be more efficient to keep the tile info in the buffer where we can take advantage of
       // cache locality !!! lets try go with that...
       const tile_bytes = 2;
-      const tiles_array_buffer = data.slice(6, width * height * tile_bytes); // raw ArrayBuffer
+      const tiles_array_buffer = data.slice(6, mapWidth * mapHeight * tile_bytes); // raw ArrayBuffer
       const tiles = new Int16Array(tiles_array_buffer); // can loop over Int16Array with forEach()
 
       console.log("tileSize");
       console.log(tileSize);
-      console.log("width");
-      console.log(width);
-      console.log("height");
-      console.log(height);
+      console.log("mapWidth");
+      console.log(mapWidth);
+      console.log("mapHeight");
+      console.log(mapHeight);
       console.log("tiles");
       console.log(tiles);
 
-      return { tileSize, width, height, tiles };
+      return { messageType, tileSize, mapWidth, mapHeight, tiles };
     }
     default: {
       console.log("Unrecognised message type received");

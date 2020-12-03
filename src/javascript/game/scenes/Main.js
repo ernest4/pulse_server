@@ -5,6 +5,7 @@ import { log, debugLog } from "../debug/logging";
 import createColorRectangle from "../debug/rectangles";
 import initEntity from "../entity";
 import initCameraControls from "../camera";
+import { MESSAGE_TYPE } from "../network/message";
 
 // TODO: add optional full screen support https://rexrainbow.github.io/phaser3-rex-notes/docs/site/fullscreen/
 
@@ -50,52 +51,6 @@ export default class Main extends Scene {
       store.dispatch(gameActions.showUI(!store.getState().showUi));
     });
 
-    // const { tiles } = this.cache.json.get("testy");
-    // const { tiles } = this.cache.json.get("testy2");
-    // console.log(tiles); // testing level loading
-
-    // const tileMap = new TileMap();
-
-    // createColorRectangle({ scene: this, x: 50, y: 50, width: 100, height: 100, color: "green" });
-
-    // tiles.forEach((row, y) => {
-    //   row.forEach((column, x) => {
-    //     const entity = initEntity({ scene: this, x, y, key: column });
-    //   });
-    // });
-
-    // ws.close();
-    // It may be helpful to examine the socket's bufferedAmount attribute before attempting to close
-    // the connection to determine if any data has yet to be transmitted on the network. If this
-    // value isn't 0, there's pending data still, so you may wish to wait before closing the
-    // connection.
-
-    // TODO: the prototype.
-
-    // Then can start building out rudimentary level with camera movement and left click
-    // turn based movement using redux to manage game state.
-
-    // MAP target size 50x50, 100x50 and 100 x 100 = 10,000 tiles. 4 leves of height (no height for now)?
-
-    // Finally look at storing game map on server, reading it, updateing based on client movement
-    // and persisiting it in the file (later, in DB).
-
-    // Then look at adding basic graphics, something basic enough to show public but get the style
-    // accross (chibi xcom, androidarts etc) and emphasize on engine vision to be cheap, simple but
-    // serve ludicrous number of users!
-
-    // light testing
-    // this.add.sprite(600, 400, "bump_map_test").setPipeline("Light2D");
-    // const light = this.lights.addLight(600, 400, 800).setIntensity(2);
-    // this.lights.enable().setAmbientColor(0x888888);
-
-    // this.add
-    //   .sprite(600, 400, "bump_map_test_pixel")
-    //   .setDisplaySize(100, 100)
-    //   .setPipeline("Light2D");
-    // const light = this.lights.addLight(600, 400, 800, 0x00ff00).setIntensity(1);
-    // this.lights.enable().setAmbientColor(0x000000);
-
     // this.input.on("pointermove", pointer => {
     //   light.x = pointer.x;
     //   light.y = pointer.y;
@@ -114,16 +69,47 @@ export default class Main extends Scene {
   }
 
   updateMain(parent, key, data) {
-    // serverMessages
     switch (key) {
       case "serverMessages":
-        // TODO: check if map message present (TODO: need to include message types in parsedMessage !!!)
-        // TODO: build the map
-        // TODO: remove map message from queue or let the Network scene flush the queue?
-        // this.generateTiles();
-        console.log(data);
+        // console.log(data);
+        this.processServerMessages(data);
         break;
+      default:
+      // blank...
     }
+  }
+
+  processServerMessages(messages) {
+    messages.forEach(message => {
+      switch (messages.messageType) {
+        case MESSAGE_TYPE.MAP_INIT:
+          // TODO: remove map message from queue or let the Network scene flush the queue?
+          this.mapInit(message);
+          break;
+        default:
+        // TODO: ...
+      }
+    });
+  }
+
+  mapInit({ tiles, tileSize, mapHeight, mapWidth }) {
+    // TODO: build the map
+    // createColorRectangle({ scene: this, x: 50, y: 50, width: 100, height: 100, color: "green" });
+    // tiles.forEach((row, y) => {
+    //   row.forEach((column, x) => {
+    //     const entity = initEntity({ scene: this, x, y, key: column });
+    //   });
+    // });
+
+    // TODO: maybe put this logic into some TileMap class??
+    tiles.forEach((tile, index) => {
+      this.createTile({ tile, index, tileSize, mapHeight, mapWidth });
+    });
+  }
+
+  createTile() {
+    // TODO: use some stuff from here for now...
+    // const entity = initEntity({ scene: this, x, y, key: column });
   }
 }
 
