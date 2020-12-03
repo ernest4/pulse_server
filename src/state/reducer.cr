@@ -25,7 +25,7 @@ module Pulse
           # TODO: before sending out position, validate that it's still walkable. Since user last
           # position might be blocked now, then need to find next closest free position (or spawn
           # point) instead and send that. Don't forget to save the new player position in that case!
-          Pulse::Messages::Position.new(client.character.position),
+          Pulse::Messages::Position.new(client.character),
         ]
 
         broadcast_map(current_client_map, messages)
@@ -99,7 +99,7 @@ module Pulse
         client.character.position = new_position
         # client.character.save    ... ? maybe worker will do this periodically instead?
 
-        broadcast_map(current_client_map, [Pulse::Messages::Position.new(new_position)])
+        broadcast_map(current_client_map, [Pulse::Messages::Position.new(client.character)])
       end
 
       def broadcast

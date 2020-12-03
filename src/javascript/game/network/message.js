@@ -7,12 +7,12 @@ const MESSAGE_TYPE = {
 };
 
 export const parse = data => {
-  console.log("data");
+  console.log("New message: raw data");
   console.log(data);
 
   const view = new DataView(data);
   const messageType = view.getUint8(0, true);
-  console.log(`message type: ${messageType}`);
+  console.log(`New message: message type: ${messageType}`);
 
   switch (messageType) {
     case 0: {
@@ -22,23 +22,23 @@ export const parse = data => {
     case MESSAGE_TYPE.POSITION: {
       // [type,id,id,id,id,x,x,y,y]
 
-      const playerId = view.getInt32(1, true);
+      const characterId = view.getInt32(1, true);
       const x = view.getUint16(5, true);
       const y = view.getUint16(7, true);
 
-      console.log("playerId");
-      console.log(playerId);
+      console.log("characterId");
+      console.log(characterId);
       console.log("x");
       console.log(x);
       console.log("y");
       console.log(y);
 
-      return { playerId, x, y };
+      return { characterId, x, y };
     }
     case MESSAGE_TYPE.ENTER: {
       // [type,id,id,id,id,name,name,name,...]
 
-      const playerId = view.getInt32(1, true);
+      const characterId = view.getInt32(1, true);
 
       console.log("decoder utf-8");
 
@@ -48,7 +48,7 @@ export const parse = data => {
 
       console.log(name);
 
-      return { playerId, name };
+      return { characterId, name };
     }
     case MESSAGE_TYPE.EXIT: {
       console.log("exit");
@@ -60,9 +60,9 @@ export const parse = data => {
 
       // TODO: some automatic way to track and return byte offset?? maybe if this was a class and we
       // had a method for each get... that would track it's own byte count and post that to class...
-      const tileSize = view.getUint16(1, true);
-      const width = view.getUint16(3, true);
-      const height = view.getUint16(5, true);
+      const tileSize = view.getUint8(1, true);
+      const width = view.getUint16(2, true);
+      const height = view.getUint16(4, true);
 
       // couuuuld extract the tiles into plain array but...
       // const tiles = [];
@@ -71,7 +71,9 @@ export const parse = data => {
       // }
       // might be more efficient to keep the tile info in the buffer where we can take advantage of
       // cache locality !!! lets try go with that...
-      const tiles = data.slice(7, width * height);
+      const tile_bytes = 2;
+      const tiles_array_buffer = data.slice(6, width * height * tile_bytes); // raw ArrayBuffer
+      const tiles = new Int16Array(tiles_array_buffer); // can loop over Int16Array with forEach()
 
       console.log("tileSize");
       console.log(tileSize);

@@ -21,8 +21,9 @@ const initWebSocket = scene => {
 export default initWebSocket;
 
 const wsUrl = () => window.location.origin.replace("http", "ws");
-const pushMessageToPhaserRegistry = (scene, parsedMessage) => {
-  if (!scene.registry.serverMessages) scene.registry.set("serverMessages", []);
 
-  scene.registry.values.serverMessages.push(parsedMessage);
+const pushMessageToPhaserRegistry = (scene, parsedMessage) => {
+  if (!scene.registry.values.serverMessages) scene.registry.set("serverMessages", []);
+
+  scene.registry.values.serverMessages = [...scene.registry.values.serverMessages, parsedMessage];
 };
