@@ -1,10 +1,10 @@
 import Phaser, { Scene } from "phaser";
-import store from "../store";
-import * as gameActions from "../store/actions/game";
-import { log, debugLog } from "../debug/logging";
-import createColorRectangle from "../debug/rectangles";
-import initEntity from "../entity";
-import initCameraControls from "../camera";
+// import store from "../store";
+// import * as gameActions from "../store/actions/game";
+// import { log, debugLog } from "../debug/logging";
+// import createColorRectangle from "../debug/rectangles";
+// import initEntity from "../entity";
+// import initCameraControls from "../camera";
 
 // TODO: add optional full screen support https://rexrainbow.github.io/phaser3-rex-notes/docs/site/fullscreen/
 
@@ -29,5 +29,8 @@ export default class UI extends Scene {
     // this.cameras.main.debug.cameraInfo(this.game.camera, 32, 32);
   }
 
-  updateUI() {}
+  updateUI(parent, key, data) {
+    console.log("UI update");
+    // TODO: ...
+  }
 }

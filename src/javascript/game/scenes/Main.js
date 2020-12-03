@@ -1,10 +1,10 @@
 import Phaser, { Scene } from "phaser";
 import store from "../store";
 import * as gameActions from "../store/actions/game";
-import { log, debugLog } from "../debug/logging";
-import createColorRectangle from "../debug/rectangles";
-import initEntity from "../entity";
-import initCameraControls from "../camera";
+// import { log, debugLog } from "../debug/logging";
+// import createColorRectangle from "../debug/rectangles";
+// import initEntity from "../entity";
+// import initCameraControls from "../camera";
 import { MESSAGE_TYPE } from "../network/message";
 
 // TODO: add optional full screen support https://rexrainbow.github.io/phaser3-rex-notes/docs/site/fullscreen/
@@ -12,14 +12,13 @@ import { MESSAGE_TYPE } from "../network/message";
 export default class Main extends Scene {
   constructor() {
     super({ key: "Main", active: true }); // active: true, to launch on start up
-    this.tileScale = 100; // TODO: whats this again??
   }
 
   preload() {
-    // debugger
-    // this.load.image("turtle", "assets/images/turtle_T.jpg");
-    // this.load.image("shark", "assets/images/shark_T.png");
-    // this.load.image("grass", "assets/images/grass_T.png");
+    this.load.image("turtle", "/images/turtle_T.jpg");
+    this.load.image("shark", "/images/shark_T.png");
+    this.load.image("grass", "/images/grass_T.png");
+    this.load.image("item", "/images/item_T.png");
     // // this.load.json("testy", "assets/areas/testy.json");
     // this.load.json("testy2", "assets/areas/testy2.json");
     // // this.load.image("sky", "assets/sky.png");
@@ -35,10 +34,12 @@ export default class Main extends Scene {
     //   "assets/images/shark_T.png",
     //   "assets/images/bump_map_example_pixel.png",
     // ]);
+
+    // NOTE: This needs to be in preload so it can receive messages asap
+    this.registry.events.on("changedata", this.updateMain, this);
   }
 
   create() {
-    this.registry.events.on("changedata", this.updateMain, this);
     this.input.mouse.disableContextMenu(); // disable default right click
 
     const text = this.add.text(25, 500, "Toggle UI", {
@@ -55,7 +56,6 @@ export default class Main extends Scene {
     //   light.x = pointer.x;
     //   light.y = pointer.y;
     // });
-
     // TODO: init controls for character. Camera will be locket to character
     // initCameraControls(this);
   }
@@ -69,6 +69,8 @@ export default class Main extends Scene {
   }
 
   updateMain(parent, key, data) {
+    console.log("Main update"); // TESTING
+
     switch (key) {
       case "serverMessages":
         // console.log(data);
@@ -81,7 +83,7 @@ export default class Main extends Scene {
 
   processServerMessages(messages) {
     messages.forEach(message => {
-      switch (messages.messageType) {
+      switch (message.messageType) {
         case MESSAGE_TYPE.MAP_INIT:
           // TODO: remove map message from queue or let the Network scene flush the queue?
           this.mapInit(message);
@@ -103,13 +105,29 @@ export default class Main extends Scene {
 
     // TODO: maybe put this logic into some TileMap class??
     tiles.forEach((tile, index) => {
-      this.createTile({ tile, index, tileSize, mapHeight, mapWidth });
+      const x = (index % mapWidth) * tileSize;
+      const y = Math.floor(index / mapWidth) * tileSize;
+
+      this.createTile({ tile, x, y, tileSize });
     });
   }
 
-  createTile() {
+  createTile({ tile, x, y, tileSize }) {
     // TODO: use some stuff from here for now...
     // const entity = initEntity({ scene: this, x, y, key: column });
+
+    const keys = ["grass", "turtle", "item", "shark"];
+
+    const entity = this.add
+      .image(x, y, keys[tile - 1])
+      .setOrigin(0)
+      .setDisplaySize(tileSize, tileSize);
+
+    // TESTING
+    entity.on("pointerdown", pointer => {
+      console.log(`tile: ${tile}`);
+      entity.setTint(0xff0000);
+    });
   }
 }
 

@@ -58,7 +58,7 @@ export default class Network extends Scene {
   // }
 
   updateTestLog(parent, key, data) {
-    console.log("redux update");
+    console.log("network update");
     // TODO: update redux
     // console.log("parent");
     // console.log(parent);

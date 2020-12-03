@@ -30,7 +30,6 @@ const initEntity = ({ scene, x, y, key, imageOnly }) => {
     entity.clearTint();
   });
 
-  entity.setInteractive();
   entity.on("pointerup", pointer => {
     entity.clearTint();
   });

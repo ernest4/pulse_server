@@ -7,7 +7,7 @@ export const MESSAGE_TYPE = {
 };
 
 export const parse = data => {
-  console.log("New message: raw data");
+  console.warn("New message: raw data");
   console.log(data);
 
   const view = new DataView(data);

@@ -40,8 +40,8 @@ module Pulse
     def initialize
       tiles_u32 = [[1,1,1,1,1,1],
                   [1,2,1,1,2,1],
-                  [1,1,5,5,1,1],
-                  [1,2,1,5,3,1],
+                  [1,1,4,4,1,1],
+                  [1,2,1,4,3,1],
                   [1,1,1,1,1,1],
                   [1,1,1,1,1,1]]
 
@@ -128,7 +128,7 @@ module Pulse
 
       # TODO: use proper tile type numbers later...
       # tile == 0 || tile == 1 || tile == 2 || tile == 3 || tile == 4
-      tile != 5
+      tile != 4
     end
   end
 end
