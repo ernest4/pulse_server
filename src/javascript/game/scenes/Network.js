@@ -14,30 +14,58 @@ export default class Network extends Scene {
 
   create() {
     this.ws = initWebSocket(this);
-    store.dispatch(gameActions.setSocket(this.ws)); // keep player socket globally accessible to UI?
+    // TODO: dispatch init event to registry. Let the UI scene read and set redux there...
+    // store.dispatch(gameActions.setSocket(this.ws)); // keep player socket globally accessible to UI?
 
-    this.registry.events.on("changedata", this.updateRedux, this);
+    this.registry.events.on("changedata", this.updateTestLog, this);
   }
 
-  updateRedux(parent, key, data) {
+  // updateGame(parent, key, data) {
+  //   this.updatePhaser(parent, key, data);
+  //   this.updateRedux(parent, key, data);
+  // }
+
+  // updateGame(...params) {
+  //   // this.updatePhaser(...params);
+  //   this.updateRedux(...params);
+  // }
+
+  // updatePhaser(parent, key, data) {
+  //   console.log("phaser update");
+  // }
+
+  // TODO: this should probably me moved to UI scene...
+  // updateRedux(parent, key, data) {
+  //   console.log("redux update");
+  //   // TODO: update redux
+  //   // console.log("parent");
+  //   // console.log(parent);
+  //   console.log("key");
+  //   console.log(key);
+  //   console.log("data");
+  //   console.log(data);
+
+  //   // 1:
+  //   // TODO: probably might need to push to phaser state mechanisms directly here (as well as redux
+  //   // for UI...updates)
+  //   // store.dispatch(gameActions.addServerMessageToQueue(parsedMessage));
+
+  //   // 2:
+  //   // store.dispatch(gameActions.setSocketOpen(true));
+
+  //   // 3:
+  //   // store.dispatch(gameActions.setSocketOpen(false));
+  // }
+
+  updateTestLog(parent, key, data) {
+    console.log("redux update");
     // TODO: update redux
-    console.log("parent");
-    console.log(parent);
+    // console.log("parent");
+    // console.log(parent);
     console.log("key");
     console.log(key);
     console.log("data");
     console.log(data);
-
-    // 1:
-    // TODO: probably might need to push to phaser state mechanisms directly here (as well as redux
-    // for UI...updates)
-    // store.dispatch(gameActions.addServerMessageToQueue(parsedMessage));
-
-    // 2:
-    // store.dispatch(gameActions.setSocketOpen(true));
-
-    // 3:
-    // store.dispatch(gameActions.setSocketOpen(false));
   }
 
   // TODO: send updates to server every 20th of a second at most.
@@ -48,7 +76,7 @@ export default class Network extends Scene {
 
     this.lastPacketTime = 0;
 
-    this.registry.values.clientMessages.forEach(clientMessage => {
+    this.registry.values.clientMessages?.forEach(clientMessage => {
       this.ws.serializeAndSend(clientMessage);
     });
   }

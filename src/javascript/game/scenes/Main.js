@@ -37,6 +37,9 @@ export default class Main extends Scene {
   }
 
   create() {
+    this.registry.events.on("changedata", this.updateMain, this);
+    this.input.mouse.disableContextMenu(); // disable default right click
+
     const text = this.add.text(25, 500, "Toggle UI", {
       backgroundColor: "white",
       color: "blue",
@@ -54,8 +57,6 @@ export default class Main extends Scene {
     // const tileMap = new TileMap();
 
     // createColorRectangle({ scene: this, x: 50, y: 50, width: 100, height: 100, color: "green" });
-
-    this.input.mouse.disableContextMenu(); // disable default right click
 
     // tiles.forEach((row, y) => {
     //   row.forEach((column, x) => {
@@ -106,25 +107,23 @@ export default class Main extends Scene {
 
   // TODO: send character position to server if there is new position, once every 20th of a second
   // at most.
-  update(time, deltaTime) {
-    // read redux store and make decision off that?? for enemy ui (for single player deffo, mulitplayer, enemy ui will come from server)??
-    // User does actions in game, builds up messages to send to server. likewise server pushes messages async
-    // Once valid message is constructed (e.g. has action tile, action and target tile), it gets sent to server.
-    // 1. update game state based on server response (process server message queue) - server is authority!
-    // 1.5 smoothly transitition states before and after action.
-    // 2. validate player message queue based on game state changes pushed by server? (might not be necessary after step 1?)
-    // 3. push to server player actions message queue.
-    // 4. repeat 1.
-    // const currentGameState = store.getState();
-    // const { socket, clientMessageQueue } = currentGameState;
-    // checkSocketHealth({ socket, deltaTime });
-    // const newGameState = applyServerMessageQueueToGameState(currentGameState);
-    // transitionGameState({ currentGameState, newGameState, scene: this }); // each tick, keep applying changes until done?
-    // broadcastClientMessageQueueToServer({ socket, messages: clientMessageQueue });
-  }
+  update(time, deltaTime) {}
 
   render() {
     // this.cameras.main.debug.cameraInfo(this.game.camera, 32, 32);
+  }
+
+  updateMain(parent, key, data) {
+    // serverMessages
+    switch (key) {
+      case "serverMessages":
+        // TODO: check if map message present (TODO: need to include message types in parsedMessage !!!)
+        // TODO: build the map
+        // TODO: remove map message from queue or let the Network scene flush the queue?
+        // this.generateTiles();
+        console.log(data);
+        break;
+    }
   }
 }
 

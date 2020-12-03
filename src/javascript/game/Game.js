@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import Main from "./scenes/Main";
 import { GAME_HEIGHT, GAME_WIDTH } from "./config";
 import Network from "./scenes/Network";
+import UI from "./scenes/UI";
 
 class Game extends React.Component {
   componentDidMount() {
@@ -19,7 +20,7 @@ class Game extends React.Component {
       scene: [
         Network, // Network is last to process change so it can send packets to server (might need to tweak the order later)
         Main,
-        // UI ? ... got react handling UI for now
+        UI, // UI should (almost) always be first to process inputs
       ],
     };
 
