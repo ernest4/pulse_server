@@ -124,6 +124,7 @@ export default class Main extends Scene {
       .setDisplaySize(tileSize, tileSize);
 
     // TESTING
+    entity.setInteractive();
     entity.on("pointerdown", pointer => {
       console.log(`tile: ${tile}`);
       entity.setTint(0xff0000);
