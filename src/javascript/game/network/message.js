@@ -48,6 +48,7 @@ export const parse = data => {
 
       console.log(name);
 
+      // TODO: add the image / texture info for character appearance (send key)
       return { messageType, characterId, name };
     }
     case MESSAGE_TYPE.EXIT: {
@@ -94,7 +95,7 @@ export const parse = data => {
 };
 
 export const serialize = message => {
-  switch (message.type) {
+  switch (message.messageType) {
     case MESSAGE_TYPE.MOVE: {
       console.log("move");
 

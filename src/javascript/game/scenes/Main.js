@@ -19,6 +19,7 @@ export default class Main extends Scene {
     this.load.image("shark", "images/shark_T.png");
     this.load.image("grass", "images/grass_T.png");
     this.load.image("item", "images/item_T.png");
+    this.load.image("unit", "images/unit_T.png");
     // // this.load.json("testy", "assets/areas/testy.json");
     // this.load.json("testy2", "assets/areas/testy2.json");
     // // this.load.image("sky", "assets/sky.png");
@@ -58,6 +59,8 @@ export default class Main extends Scene {
     // TODO: init controls for character. Camera will be locket to character
     // initCameraControls(this);
 
+    this.initControls();
+
     this.scene.launch("Network");
   }
 
@@ -77,22 +80,35 @@ export default class Main extends Scene {
         // console.log(data);
         this.processServerMessages(data);
         break;
+      case "characters":
+        this.processCharacters(data);
+        break;
       default:
       // blank...
     }
   }
 
   processServerMessages(messages) {
-    messages.forEach(message => {
+    if (!messages?.length) return;
+
+    messages.forEach((message, index) => {
       switch (message.messageType) {
         case MESSAGE_TYPE.MAP_INIT:
           // TODO: remove map message from queue or let the Network scene flush the queue?
           this.mapInit(message);
           break;
+        case MESSAGE_TYPE.ENTER:
+          this.characterInit(message);
+          break;
+        case MESSAGE_TYPE.POSITION:
+          this.positionUpdate(message);
+          break;
         default:
         // TODO: ...
       }
     });
+
+    this.registry.values.serverMessages = []; // flush the buffer
   }
 
   mapInit({ tiles, tileSize, mapHeight, mapWidth }) {
@@ -105,7 +121,7 @@ export default class Main extends Scene {
     // });
 
     // TODO: maybe put this logic into some TileMap class??
-    tiles.forEach((tile, index) => {
+    tiles?.forEach((tile, index) => {
       const x = (index % mapWidth) * tileSize;
       const y = Math.floor(index / mapWidth) * tileSize;
 
@@ -130,81 +146,102 @@ export default class Main extends Scene {
       console.log(`tile: ${tile}`);
       entity.setTint(0xff0000);
     });
+    entity.on("pointerout", pointer => {
+      entity.clearTint();
+    });
+    entity.on("pointerup", pointer => {
+      entity.clearTint();
+    });
+  }
+
+  characterInit({ characterId, name }) {
+    const character = { characterId, name };
+
+    this.pushCharacterToPhaserRegistry(character);
+  }
+
+  pushCharacterToPhaserRegistry(character) {
+    if (!this.registry.values.characters) this.registry.set("characters", {});
+
+    this.registry.values.characters = {
+      ...this.registry.values.characters,
+      // TODO: normally image key will come with the message, for now just dropping it in manually
+      [character.characterId]: { ...character, image: "unit" },
+    };
+  }
+
+  positionUpdate({ characterId, x, y }) {
+    const character = this.registry.values.characters[characterId];
+    this.registry.values.characters[characterId] = { ...character, x, y };
+  }
+
+  processCharacters(characters) {
+    if (!characters?.length) return;
+
+    Object.values(characters).forEach(({ x, y, image }) => {
+      if (isNaN(x) || isNaN(y) || !image) return; // dont add to scene until position and texture info ready
+
+      // TODO: this isnt printing
+      console.error("character rendered !!!");
+
+      const entity = this.add.image(x, y, image).setOrigin(0).setDisplaySize(32, 32);
+    });
+  }
+
+  initControls() {
+    this.input.keyboard.on("keydown-A", event => {
+      console.log("Hello from the A Key!");
+      this.sendMoveMessage({ direction: 1 });
+    });
+
+    this.input.keyboard.on("keydown-W", event => {
+      console.log("Hello from the W Key!");
+      this.sendMoveMessage({ direction: 3 });
+    });
+
+    this.input.keyboard.on("keydown-D", event => {
+      console.log("Hello from the D Key!");
+      this.sendMoveMessage({ direction: 5 });
+    });
+
+    this.input.keyboard.on("keydown-S", event => {
+      console.log("Hello from the S Key!");
+      this.sendMoveMessage({ direction: 7 });
+    });
+
+    // const keyDownHandler = (event) => {
+    //   switch(event.keyCode){
+    //     case 37: // left
+    //     case 65: // a
+    //       sendMove({direction: 1});
+    //       break;
+    //     case 38: // up
+    //     case 87: // w
+    //       sendMove({direction: 3});
+    //       break;
+    //     case 39: // right
+    //     case 68: // d
+    //       sendMove({direction: 5});
+    //       break;
+    //     case 40: // down
+    //     case 83: // s
+    //       sendMove({direction: 7});
+    //       break;
+    //     default:
+    //       console.log('unrecognised key command');
+    //   }
+    // }
+  }
+
+  sendMoveMessage(data) {
+    const message = { messageType: MESSAGE_TYPE.MOVE, ...data };
+
+    this.pushClientMessageToPhaserRegistry(message);
+  }
+
+  pushClientMessageToPhaserRegistry(message) {
+    if (!this.registry.values.clientMessages) this.registry.set("clientMessages", []);
+
+    this.registry.values.clientMessages = [...this.registry.values.clientMessages, message];
   }
 }
-
-// const checkSocketHealth = ({ socket, deltaTime }) => {
-//   // log(`socketOpen: ${gameState.socketOpen}`);
-//   log(`socketOpen: ${socket.socketReadState}`);
-// };
-
-// const applyServerMessageQueueToGameState = gameState => {
-//   const messages = gameState.serverMessageQueue;
-
-//   messages.forEach(message => {
-//     // TODO: ... apply the message to produce draft game state
-//   });
-
-//   // TODO: ...implement
-//   // const newGameState = updateGameState(currentGameState, messages);
-//   // updateGameState(currentGameState, messages);
-
-//   return gameState;
-// };
-
-// const transitionGameState = ({ currentGameState, newGameState, scene }) => {
-//   // TODO: ... implement. This needs too perform all the animations, tweens, smooth transitions from
-//   // current game state to new game state.
-//   let _keep;
-
-//   return newGameState; // just a mock for now...instant transition
-// };
-
-// const broadcastClientMessageQueueToServer = ({ socket, messages }) => {
-//   const validClientMessages = validateClientMessages(messages);
-//   // store.dispatch(gameActions.setClientMessageQueue([])); // flush client messages
-
-//   // broadcast validClientMessages.....
-//   //
-
-//   validClientMessages.forEach(message => {
-//     socket.send(message);
-//   });
-// };
-
-// const validateClientMessages = messages => {
-//   let _keep;
-//   // TODO: implement
-
-//   return messages;
-// };
-
-// const yieldTiles = ({ tiles, callback }) =>
-//   tiles.forEach((row, x) => row.forEach((column, y) => callback({ x, y, column })));
-
-// listening to redux ??
-// might not be efficient. Could have many async state changes in 16ms which would fire the
-// listener. The listener would then have to walk through the entire state to figure out where
-// the change is and compute the next change for each and every small change.
-// Just use the update() loop. There you walk through the whole state once very 16ms fixed rate!
-
-// let currentValue;
-// function handleChange() {
-//   const previousValue = currentValue;
-//   currentValue = store.getState().activeTile[0];
-
-//   console.log("store activity");
-//   console.log(store.getState());
-//   console.log("prev val");
-//   console.log(previousValue);
-//   console.log("cur val");
-//   console.log(currentValue);
-
-//   if (previousValue !== currentValue) {
-//     console.log("Some deep nested property changed from", previousValue, "to", currentValue);
-//     store.dispatch(gameActions.setActiveTile([1, 1]));
-//   }
-// }
-
-// const unsubscribe = store.subscribe(handleChange);
-// // // unsubscribe()

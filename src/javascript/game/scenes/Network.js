@@ -76,9 +76,13 @@ export default class Network extends Scene {
 
     this.lastPacketTime = 0;
 
-    this.registry.values.clientMessages?.forEach(clientMessage => {
+    if (!this.registry.values.clientMessages?.length) return;
+
+    this.registry.values.clientMessages.forEach(clientMessage => {
       this.ws.serializeAndSend(clientMessage);
     });
+
+    this.registry.values.clientMessage = []; // flush the buffer
   }
 
   // render() {}
