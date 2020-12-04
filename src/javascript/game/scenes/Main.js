@@ -81,6 +81,8 @@ export default class Main extends Scene {
         this.processServerMessages(data);
         break;
       case "characters":
+        console.error("Characters update"); // TESTING
+        console.error(data);
         this.processCharacters(data);
         break;
       default:
@@ -171,14 +173,22 @@ export default class Main extends Scene {
   }
 
   positionUpdate({ characterId, x, y }) {
-    const character = this.registry.values.characters[characterId];
-    this.registry.values.characters[characterId] = { ...character, x, y };
+    const characters = this.registry.values.characters;
+    // const character = characters[characterId];
+    // this.registry.values.characters[characterId] = { ...character, x, y };
+    this.registry.values.characters = {
+      ...characters,
+      [characterId]: { ...characters[characterId], x, y },
+    };
   }
 
   processCharacters(characters) {
-    if (!characters?.length) return;
+    const characters_array = Object.values(characters);
+    if (!characters_array?.length) return;
 
-    Object.values(characters).forEach(({ x, y, image }) => {
+    characters_array.forEach(({ x, y, image }) => {
+      console.error("Character update"); // TESTING
+
       if (isNaN(x) || isNaN(y) || !image) return; // dont add to scene until position and texture info ready
 
       // TODO: this isnt printing

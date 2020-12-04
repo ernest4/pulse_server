@@ -21,14 +21,16 @@ module Pulse
     # # # @client_id : String
     # @name : String = ""
     # @current_map : (String)?
-    # @last_x : Int32 = 0
-    # @last_y : Int32 = 0
+    @last_x : Int32 = 0
+    @last_y : Int32 = 0
     # @speed : Int32 = 32 # 32 pixels per second
     @character : ::Character
 
     # property :id, :name, :current_map, :last_x, :last_y, :speed
+    property :last_x, :last_y
 
-    delegate id, id!, name, current_map, last_x, last_y, speed, to: @character # delegates known methods
+    # delegate id, id!, name, current_map, last_x, last_y, speed, to: @character # delegates known methods
+    delegate id, id!, name, current_map, speed, to: @character # delegates known methods
 
     # def initialize(client_id : String)
     #   # @id = -1
@@ -44,6 +46,9 @@ module Pulse
 
     def initialize(character_id : Int32)
       @character = ::Character.find!(character_id)
+
+      @last_x = @character.last_x
+      @last_y = @character.last_y
       # load!(id)
     # rescue ex : Jennifer::RecordNotFound
     #   # TODO: ...

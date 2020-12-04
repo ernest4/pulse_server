@@ -82,7 +82,7 @@ export default class Network extends Scene {
       this.ws.serializeAndSend(clientMessage);
     });
 
-    this.registry.values.clientMessage = []; // flush the buffer
+    this.registry.values.clientMessages = []; // flush the buffer
   }
 
   // render() {}
