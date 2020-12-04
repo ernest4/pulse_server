@@ -21,8 +21,8 @@ module Pulse
     # # # @client_id : String
     # @name : String = ""
     # @current_map : (String)?
-    @last_x : Int32 = 0
-    @last_y : Int32 = 0
+    @last_x : (Int32 | UInt16) = 0
+    @last_y : (Int32 | UInt16) = 0
     # @speed : Int32 = 32 # 32 pixels per second
     @character : ::Character
 
@@ -50,9 +50,9 @@ module Pulse
       @last_x = @character.last_x
       @last_y = @character.last_y
       # load!(id)
-    # rescue ex : Jennifer::RecordNotFound
-    #   # TODO: ...
-    #   raise ex # just reraise for now...
+      # rescue ex : Jennifer::RecordNotFound
+      #   # TODO: ...
+      #   raise ex # just reraise for now...
     end
 
     # def load!(id)
@@ -74,8 +74,15 @@ module Pulse
     end
 
     def position=(new_position)
-      last_x = new_position[:x]
-      last_y = new_position[:y]
+      # Somehow this doesnt work???
+      # last_x = new_position[:x]
+      # last_y = new_position[:y]
+
+      # but
+
+      # Somehow this works???
+      @last_x = new_position[:x]
+      @last_y = new_position[:y]
     end
 
     # TODO: wip ....
@@ -99,9 +106,6 @@ end
 #   delegate gsub, to: @string
 #   delegate empty?, capitalize, to: @string
 # end
-
-
-
 
 # macro define_dummy_methods(hash)
 #   {% for key, value in hash %}

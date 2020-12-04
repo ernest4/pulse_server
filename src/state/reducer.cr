@@ -96,10 +96,10 @@ module Pulse
         new_position = current_client_map.move(client, parsed_message.direction)
         return if new_position == client.character.position # map determined can't change position ...
 
-        puts new_position # testing
-        puts client.character.position # testing
-        client.character.position = new_position # TODO: this isnt assignint it properly!!?!
-        puts client.character.position # testing
+        puts new_position # testing 
+        puts client.character.position # testing 
+        client.character.position = new_position # TODO: this isnt assignint it properly!!?!!
+        puts client.character.position # testing 
         # client.character.save    ... ? maybe worker will do this periodically instead?
 
         broadcast_map(current_client_map, [Pulse::Messages::Position.new(client.character)])
