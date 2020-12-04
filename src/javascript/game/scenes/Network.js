@@ -8,7 +8,7 @@ const MIN_PACKET_INTERVAL = 1 / PACKETS_PER_SECOND;
 
 export default class Network extends Scene {
   constructor() {
-    super({ key: "Network", active: true });
+    super({ key: "Network" }); // turn this on when main game is initialized and listeners set up!
     this.lastPacketTime = 0;
   }
 

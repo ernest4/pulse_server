@@ -18,9 +18,9 @@ class Game extends React.Component {
       },
       physics: { default: "arcade", arcade: { debug: false, gravity: { y: 0 } } },
       scene: [
-        Network, // Network is last to process change so it can send packets to server (might need to tweak the order later)
         Main,
         UI, // UI should (almost) always be first to process inputs
+        Network, // Network is last to process change
       ],
     };
 

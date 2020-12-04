@@ -15,10 +15,10 @@ export default class Main extends Scene {
   }
 
   preload() {
-    this.load.image("turtle", "/images/turtle_T.jpg");
-    this.load.image("shark", "/images/shark_T.png");
-    this.load.image("grass", "/images/grass_T.png");
-    this.load.image("item", "/images/item_T.png");
+    this.load.image("turtle", "images/turtle_T.jpg");
+    this.load.image("shark", "images/shark_T.png");
+    this.load.image("grass", "images/grass_T.png");
+    this.load.image("item", "images/item_T.png");
     // // this.load.json("testy", "assets/areas/testy.json");
     // this.load.json("testy2", "assets/areas/testy2.json");
     // // this.load.image("sky", "assets/sky.png");
@@ -34,12 +34,11 @@ export default class Main extends Scene {
     //   "assets/images/shark_T.png",
     //   "assets/images/bump_map_example_pixel.png",
     // ]);
-
-    // NOTE: This needs to be in preload so it can receive messages asap
-    this.registry.events.on("changedata", this.updateMain, this);
   }
 
   create() {
+    this.registry.events.on("changedata", this.updateMain, this);
+
     this.input.mouse.disableContextMenu(); // disable default right click
 
     const text = this.add.text(25, 500, "Toggle UI", {
@@ -58,6 +57,8 @@ export default class Main extends Scene {
     // });
     // TODO: init controls for character. Camera will be locket to character
     // initCameraControls(this);
+
+    this.scene.launch("Network");
   }
 
   // TODO: send character position to server if there is new position, once every 20th of a second
