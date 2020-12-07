@@ -96,9 +96,15 @@ module Pulse
 
         # TODO: !!! test to make sure this rate limiting of messages works !!!
         last_received_time = client.last_received_time[Pulse::Messages::Position::TYPE]? || Time::Span.new # Time::Span.new => time since epoch...
+        puts "last_received_time"
+        puts last_received_time
         # Time.monotonic should be used for time comparisons instead of Time.utc https://crystal-lang.org/api/0.35.1/Time.html#measuring-time
         current_received_time = Time.monotonic # => Time::Span
+        puts "current_received_time"
+        puts current_received_time
         delta_time = (current_received_time - last_received_time).total_milliseconds.to_i
+        puts "delta_time"
+        puts delta_time
         # Discard spammy messages
         return if delta_time < Pulse::Messages::Position::MIN_UPDATE_RATE
 
