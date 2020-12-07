@@ -186,23 +186,29 @@ export default class Main extends Scene {
     const characters_array = Object.values(characters);
     if (!characters_array?.length) return;
 
-    characters_array.forEach(({ characterId, x, y, image, entity }) => {
-      console.error("Character update"); // TESTING
-
+    characters_array.forEach(({ characterId, x, y, image, name, phaserContainer }) => {
       if (isNaN(x) || isNaN(y) || !image) return; // dont add to scene until position and texture info ready
 
-      // TODO: this isnt printing
-      console.error("character rendered !!!");
+      // console.warn("character rendered !!!"); // TESTING
 
-      if (!entity) {
+      if (!phaserContainer) {
+        const phaserContainer = this.add.container(x, y);
+
         // initialize character entity
-        const entity = this.add.image(x, y, image).setOrigin(0).setDisplaySize(32, 32);
+        // const entity = this.add.image(x, y, image).setOrigin(0).setDisplaySize(32, 32);
+        const entity = this.add.image(0, 0, image).setOrigin(0).setDisplaySize(32, 32);
+        phaserContainer.add(entity);
         // This update will set value but wont replace the characters array, thus wont trigger the
         // registry callback for characters (which is what we want as we're just adding meta data).
-        this.registry.values.characters[characterId].entity = entity;
+        const characterName = this.add.text(0, -12, name);
+        characterName.font = "Arial";
+        characterName.setOrigin(0, 0.5);
+        phaserContainer.add(characterName);
+
+        this.registry.values.characters[characterId].phaserContainer = phaserContainer;
       } else {
         // move character entity. This wont trigger registry callback
-        entity.setPosition(x, y);
+        phaserContainer.setPosition(x, y);
       }
     });
   }
