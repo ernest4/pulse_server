@@ -55,7 +55,9 @@ export const parse = data => {
     }
     case MESSAGE_TYPE.EXIT: {
       console.log("exit");
-      break;
+      const characterId = view.getInt32(1, true);
+
+      return { messageType, characterId };
     }
     // TODO: use this potentially more optimal way to batch initialize all characters
     // case MESSAGE_TYPE.CHARACTERS_INIT: {

@@ -108,6 +108,9 @@ export default class Main extends Scene {
         case MESSAGE_TYPE.POSITION:
           this.positionUpdate(message);
           break;
+        case MESSAGE_TYPE.EXIT:
+          this.characterExit(message);
+          break;
         default:
         // TODO: ...
       }
@@ -193,11 +196,21 @@ export default class Main extends Scene {
     };
   }
 
+  characterExit({ characterId }) {
+    const character = this.registry.values.characters[characterId];
+
+    // TODO: might not need to spread existing character attributes again??
+    this.registry.values.characters = {
+      ...this.registry.values.characters,
+      [characterId]: { ...character, exiting: true },
+    };
+  }
+
   processCharacters(characters) {
     const characters_array = Object.values(characters);
     if (!characters_array?.length) return;
 
-    characters_array.forEach(({ characterId, x, y, image, name, phaserContainer }) => {
+    characters_array.forEach(({ characterId, x, y, image, name, phaserContainer, exiting }) => {
       if (isNaN(x) || isNaN(y) || !image) return; // dont add to scene until position and texture info ready
 
       // console.warn("character rendered !!!"); // TESTING
@@ -217,6 +230,9 @@ export default class Main extends Scene {
         phaserContainer.add(characterName);
 
         this.registry.values.characters[characterId].phaserContainer = phaserContainer;
+      } else if (exiting) {
+        // TODO: clean up container, rendering & remove from registry
+        // WIP....
       } else {
         // move character entity. This wont trigger registry callback
         phaserContainer.setPosition(x, y);
