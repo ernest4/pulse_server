@@ -96,9 +96,12 @@ export default class Main extends Scene {
     messages.forEach((message, index) => {
       switch (message.messageType) {
         case MESSAGE_TYPE.MAP_INIT:
-          // TODO: remove map message from queue or let the Network scene flush the queue?
           this.mapInit(message);
           break;
+        // TODO: use this potentially more optimal way to batch initialize all characters
+        // case MESSAGE_TYPE.CHARACTERS_INIT:
+        //   this.charactersInit(message);
+        //   break;
         case MESSAGE_TYPE.ENTER:
           this.characterInit(message);
           break;
@@ -155,6 +158,14 @@ export default class Main extends Scene {
       entity.clearTint();
     });
   }
+
+  // TODO: use this potentially more optimal way to batch initialize all characters
+  // charactersInit({ characters }) {
+  //   // TODO: probably more efficient way to do this...
+  //   characters.each(character => {
+  //     this.pushCharacterToPhaserRegistry(character);
+  //   });
+  // }
 
   characterInit({ characterId, name }) {
     const character = { characterId, name };

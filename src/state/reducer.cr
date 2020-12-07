@@ -28,7 +28,22 @@ module Pulse
           Pulse::Messages::Position.new(client.character),
         ]
 
+        # Let everyone know of new character
         broadcast_map(current_client_map, messages)
+
+        # Let new character know of everyone else
+        current_client_map.clients.each do |other_client|
+          # don't send yourself, you already did up there a moment ago...
+          next if other_client.user.id == client.user.id
+
+          client.socket.send(Pulse::Messages::Enter.new(other_client.character).to_slice)
+          client.socket.send(Pulse::Messages::Position.new(other_client.character).to_slice)
+        rescue ex : IO::Error
+          # TODO: close client that's 'Exception: Closed stream (IO::Error)'
+          # puts ex
+          # raise ex
+          close(client)
+        end
       end
 
       def current_map(client)
@@ -96,10 +111,10 @@ module Pulse
         new_position = current_client_map.move(client, parsed_message.direction)
         return if new_position == client.character.position # map determined can't change position ...
 
-        puts new_position # testing 
-        puts client.character.position # testing 
+        puts new_position                        # testing
+        puts client.character.position           # testing
         client.character.position = new_position # TODO: this isnt assignint it properly!!?!!
-        puts client.character.position # testing 
+        puts client.character.position           # testing
         # client.character.save    ... ? maybe worker will do this periodically instead?
 
         broadcast_map(current_client_map, [Pulse::Messages::Position.new(client.character)])

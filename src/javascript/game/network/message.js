@@ -4,6 +4,8 @@ export const MESSAGE_TYPE = {
   ENTER: 3,
   EXIT: 4,
   MAP_INIT: 5,
+  // TODO: use this potentially more optimal way to batch initialize all characters
+  // CHARACTERS_INIT: 6, // kinda like ENTER + POSITION but for all present characters
 };
 
 export const parse = data => {
@@ -55,6 +57,15 @@ export const parse = data => {
       console.log("exit");
       break;
     }
+    // TODO: use this potentially more optimal way to batch initialize all characters
+    // case MESSAGE_TYPE.CHARACTERS_INIT: {
+    //   console.log("CHARACTERS_INIT");
+    //   const characters = [];
+
+    //   characters.push({ characterId, name });
+
+    //   return { messageType, characters };
+    // }
     case MESSAGE_TYPE.MAP_INIT: {
       // [type,tileSize,width,width,height,height,tile,tile,tile,...]
       console.log("map init");
