@@ -186,7 +186,7 @@ export default class Main extends Scene {
     const characters_array = Object.values(characters);
     if (!characters_array?.length) return;
 
-    characters_array.forEach(({ x, y, image }) => {
+    characters_array.forEach(({ characterId, x, y, image, entity }) => {
       console.error("Character update"); // TESTING
 
       if (isNaN(x) || isNaN(y) || !image) return; // dont add to scene until position and texture info ready
@@ -194,7 +194,16 @@ export default class Main extends Scene {
       // TODO: this isnt printing
       console.error("character rendered !!!");
 
-      const entity = this.add.image(x, y, image).setOrigin(0).setDisplaySize(32, 32);
+      if (!entity) {
+        // initialize character entity
+        const entity = this.add.image(x, y, image).setOrigin(0).setDisplaySize(32, 32);
+        // This update will set value but wont replace the characters array, thus wont trigger the
+        // registry callback for characters (which is what we want as we're just adding meta data).
+        this.registry.values.characters[characterId].entity = entity;
+      } else {
+        // move character entity. This wont trigger registry callback
+        entity.setPosition(x, y);
+      }
     });
   }
 
