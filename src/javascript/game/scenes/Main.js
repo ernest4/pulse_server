@@ -231,8 +231,9 @@ export default class Main extends Scene {
 
         this.registry.values.characters[characterId].phaserContainer = phaserContainer;
       } else if (exiting) {
-        // TODO: clean up container, rendering & remove from registry
-        // WIP....
+        phaserContainer.destroy(); // destroy container, recursively calls destroy on children too..
+        // update the registry. This wont trigger registry callback
+        delete this.registry.values.characters[characterId];
       } else {
         // move character entity. This wont trigger registry callback
         phaserContainer.setPosition(x, y);
