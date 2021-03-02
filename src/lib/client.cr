@@ -44,8 +44,8 @@ module Pulse
         reducer.reduce(self, message)
       end
 
-      # TODO: queue async worker to read redis and save player progress too DB?
-      # TODO: for now save straigth to DB here ???
+      # TODO: queue async worker to read redis and save player progress to DB?
+      # TODO: for now save straight to DB here ???
       # TODO: clean up game state etc.
       @socket.on_close do |_|
         reducer.close(self)

@@ -54,7 +54,7 @@ const UI = () => {
           backgroundColor: "#fcfcfc",
         }}
       >
-        copyright and social media and twitter and patreon etc...
+        Ad Finitum © / OutlierStudio: [year] / twitter / youtube / patreon / supporters ... \ version
       </div>
       {/* Bottom */}
       <div>

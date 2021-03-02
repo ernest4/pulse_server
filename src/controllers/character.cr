@@ -103,7 +103,7 @@ module Pulse
         <<-HTML
           <div>
             <span class="text-green-500">Success</span>
-            <a href="/play" class="text-2xl rounded border-4 p-2 px-16 text-secondary hover:border-primary">Enter the universe</a>
+            <a href="/play" class="text-2xl rounded border-4 p-2 px-16 text-secondary hover:border-primary">Enter the universe!</a>
           </div>
         HTML
       end

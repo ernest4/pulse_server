@@ -16,7 +16,7 @@ module Pulse
       @width = width
       @height = height
 
-      seeded_number_generator = Random.new(seed)
+      seeded_number_generator = Random.new(seed) # side effect, extract as input to function
 
       tiles_u32 = generate_tiles(seeded_number_generator, width, height)
       @tiles = map_i32_to_u16(tiles_u32)

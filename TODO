@@ -1,0 +1,15 @@
+[DONE][1] TODO: keep game react separate from rest of app view templates.
+    - play is the only endpoint that returns react game...
+    - rest of app is stimulus + tailwind css
+[DONE][2] TODO: Authenticate user and let them create character model (auth after via websocket)
+[DONE][3] TODO: make the websocket connection package in JS to connect to Crystal Kemal Pulse
+    to execute game commands
+[DONE][4] TODO: make the basic movement rendered and playable.
+[DONE][4.5] fix joining, leaving and initialization.
+[5] TODO: add attacking.
+[6] TODO: add environment mod (pick up & place game blocks / bricks)
+[7] TODO: specify version info in the game to be shown to users!!
+
+
+[4.6] TODO: clean up front end a bit, put links to social stuff etc
+

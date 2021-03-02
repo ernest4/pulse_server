@@ -20,7 +20,7 @@ class User < ApplicationRecord
     updated_at: {type: Time, null: true}
   )
 
-  # TODO: reevaluate. At the moment it makes sense to only permit one to stop one account from
+  # TODO: re-evaluate. At the moment it makes sense to only permit one to stop one account from
   # ruling over multiple resources with multiple characters!
   has_many :characters, Character
 
