@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import Phaser from "phaser";
 import Main from "./scenes/Main";
 import { GAME_HEIGHT, GAME_WIDTH } from "./config";
 import Network from "./scenes/Network";
 import UI from "./scenes/UI";
 
-class Game extends React.Component {
+class Game extends Component {
   componentDidMount() {
     const config = {
       type: Phaser.WEBGL,
@@ -24,6 +24,7 @@ class Game extends React.Component {
       ],
     };
 
+    // eslint-disable-next-line no-new
     new Phaser.Game(config);
   }
 
