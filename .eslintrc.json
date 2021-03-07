@@ -54,6 +54,7 @@
     "max-len": "off",
     "no-restricted-globals": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "import/extensions": 0
+    "import/extensions": 0,
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

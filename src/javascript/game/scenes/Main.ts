@@ -51,6 +51,16 @@ class Main extends Scene {
     text.on("pointerup", () => {
       store.dispatch(gameActions.showUI(!store.getState().showUi));
     });
+    text.on("pointerover", (e: any) => {
+      console.log("pointerover");
+      console.log(e);
+    });
+    text.on("pointerout", (e: any) => {
+      console.log("pointerout");
+      console.log(e);
+    });
+
+    // TODO: test on hover and create an "entity" for each block that can receive on click and on hover
 
     // this.input.on("pointermove", pointer => {
     //   light.x = pointer.x;
