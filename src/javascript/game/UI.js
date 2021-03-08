@@ -14,10 +14,9 @@ const UI = () => {
 
   return (
     <div className="fixed">
-      <div className="pt-8">Testy</div>
-      <Left />
       <Top />
-      <Bottom />
+      <Left />
+      {/* <Bottom /> */}
     </div>
   );
 };
@@ -50,16 +49,19 @@ const Left = () => {
 };
 
 const Top = () => (
-  <div
-    style={{
-      position: "absolute",
-      width: GAME_WIDTH,
-      height: 20,
-      top: 0,
-      backgroundColor: "#fcfcfc",
-    }}
-  >
-    Ad Finitum © / OutlierStudio: [year] / twitter / youtube / patreon / supporters ... \ version
+  <div className="p-1 bg-black flex w-screen justify-between">
+    <div>
+      <span>Ad Finitum ©</span>
+      <span> · </span>
+      <span>OutlierStudio: {new Date().getFullYear()}</span>
+      <span> · </span>
+      <a target="_blank" rel="noreferrer" href="https://twitter.com/StudioOutlier">twitter</a>
+      <span> · </span>
+      <a target="_blank" rel="noreferrer" href="https://www.youtube.com/channel/UCg25zE5F4u1i8gGlr7CFa6w/videos">youtube</a>
+      {/* <span> · </span> */}
+      {/* <a>patreon</a> */}
+    </div>
+    <div>version</div>
   </div>
 );
 
