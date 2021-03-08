@@ -33,7 +33,7 @@ class Game extends Component {
   }
 
   render() {
-    return <div id="phaser-game" className="fixed" />;
+    return <div id="phaser-game" className="fixed pt-8" />;
   }
 }
 
