@@ -5,8 +5,8 @@ import UI from "./UI";
 
 const App = () => (
   <>
-    <UI />
     <Game />
+    <UI />
   </>
 );
 
