@@ -8,18 +8,19 @@ export const MESSAGE_TYPE = {
   // CHARACTERS_INIT: 6, // kinda like ENTER + POSITION but for all present characters
 };
 
-export const parse = data => {
+export const parse = (data: ArrayBuffer) => {
   console.warn("New message: raw data");
   console.log(data);
 
   const view = new DataView(data);
-  const messageType = view.getUint8(0, true);
+  const messageType = view.getUint8(0);
   console.log(`New message: message type: ${messageType}`);
 
   switch (messageType) {
     case 0: {
       // TODO:
-      break;
+      // return { messageType, characterId};
+      return {};
     }
     case MESSAGE_TYPE.POSITION: {
       // [type,id,id,id,id,x,x,y,y]
@@ -28,36 +29,36 @@ export const parse = data => {
       const x = view.getUint16(5, true);
       const y = view.getUint16(7, true);
 
-      console.log("characterId");
-      console.log(characterId);
-      console.log("x");
-      console.log(x);
-      console.log("y");
-      console.log(y);
+      const message_object = { messageType, characterId, x, y };
 
-      return { messageType, characterId, x, y };
+      console.log(message_object);
+
+      return message_object;
     }
     case MESSAGE_TYPE.ENTER: {
       // [type,id,id,id,id,name,name,name,...]
 
       const characterId = view.getInt32(1, true);
 
-      console.log("decoder utf-8");
-
       const decoder = new TextDecoder("utf-8");
-      const textSlice = data.slice(5, data.length);
+      const textSlice = data.slice(5, data.byteLength);
       const name = decoder.decode(textSlice);
 
-      console.log(name);
-
       // TODO: add the image / texture info for character appearance (send key)
-      return { messageType, characterId, name };
+      const message_object = { messageType, characterId, name };
+
+      console.log(message_object);
+
+      return message_object;
     }
     case MESSAGE_TYPE.EXIT: {
-      console.log("exit");
       const characterId = view.getInt32(1, true);
 
-      return { messageType, characterId };
+      const message_object = { messageType, characterId };
+
+      console.log(message_object);
+
+      return message_object;
     }
     // TODO: use this potentially more optimal way to batch initialize all characters
     // case MESSAGE_TYPE.CHARACTERS_INIT: {
@@ -74,7 +75,7 @@ export const parse = data => {
 
       // TODO: some automatic way to track and return byte offset?? maybe if this was a class and we
       // had a method for each get... that would track it's own byte count and post that to class...
-      const tileSize = view.getUint8(1, true);
+      const tileSize = view.getUint8(1);
       const mapWidth = view.getUint16(2, true);
       const mapHeight = view.getUint16(4, true);
 
@@ -89,16 +90,11 @@ export const parse = data => {
       const tiles_array_buffer = data.slice(6, mapWidth * mapHeight * tile_bytes); // raw ArrayBuffer
       const tiles = new Int16Array(tiles_array_buffer); // can loop over Int16Array with forEach()
 
-      console.log("tileSize");
-      console.log(tileSize);
-      console.log("mapWidth");
-      console.log(mapWidth);
-      console.log("mapHeight");
-      console.log(mapHeight);
-      console.log("tiles");
-      console.log(tiles);
+      const message_object = { messageType, tileSize, mapWidth, mapHeight, tiles };
 
-      return { messageType, tileSize, mapWidth, mapHeight, tiles };
+      console.log(message_object);
+
+      return message_object;
     }
     default: {
       console.log("Unrecognised message type received");
@@ -107,16 +103,14 @@ export const parse = data => {
   }
 };
 
-export const serialize = message => {
+export const serialize = (message: any) => {
   switch (message.messageType) {
     case MESSAGE_TYPE.MOVE: {
-      console.log("move");
-
       const buffer = new ArrayBuffer(2);
       const view = new DataView(buffer);
 
-      view.setUint8(0, MESSAGE_TYPE.MOVE, true);
-      view.setUint8(1, message.direction, true);
+      view.setUint8(0, MESSAGE_TYPE.MOVE);
+      view.setUint8(1, message.direction);
 
       console.warn("move buffer");
       console.log(buffer);

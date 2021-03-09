@@ -20,20 +20,11 @@ class Main extends Scene {
     this.load.image("grass", "images/grass_T.png");
     this.load.image("item", "images/item_T.png");
     this.load.image("unit", "images/unit_T.png");
-    // // this.load.json("testy", "assets/areas/testy.json");
-    // this.load.json("testy2", "assets/areas/testy2.json");
-    // // this.load.image("sky", "assets/sky.png");
-    // // this.load.image("ground", "assets/platform.png");
-    // // this.load.image("star", "assets/star.png");
-    // // this.load.image("bomb", "assets/bomb.png");
-    // // this.load.spritesheet("dude", "assets/dude.png", { frameWidth: 32, frameHeight: 48 });
+    // this.load.json("testy", "assets/areas/testy.json");
+    // this.load.spritesheet("dude", "assets/dude.png", { frameWidth: 32, frameHeight: 48 });
     // this.load.image("bump_map_test", [
     //   "assets/images/block_T.png",
     //   "assets/images/bump_map_example.png",
-    // ]);
-    // this.load.image("bump_map_test_pixel", [
-    //   "assets/images/block_T.png",
-    //   "assets/images/bump_map_example_pixel.png",
     // ]);
   }
 
@@ -105,43 +96,28 @@ class Main extends Scene {
   processServerMessages(messages: any[]) {
     if (!messages?.length) return;
 
-    messages.forEach(
-      (
-        message: {
-          messageType?: any;
-          tiles?: any;
-          tileSize?: any;
-          mapHeight?: any;
-          mapWidth?: any;
-          characterId?: any;
-          name?: any;
-          x?: any;
-          y?: any;
-        },
-        _index: any
-      ) => {
-        switch (message.messageType) {
-          case MESSAGE_TYPE.MAP_INIT:
-            this.mapInit(message);
-            break;
-          // TODO: use this potentially more optimal way to batch initialize all characters
-          // case MESSAGE_TYPE.CHARACTERS_INIT:
-          //   this.charactersInit(message);
-          //   break;
-          case MESSAGE_TYPE.ENTER:
-            this.characterInit(message);
-            break;
-          case MESSAGE_TYPE.POSITION:
-            this.positionUpdate(message);
-            break;
-          case MESSAGE_TYPE.EXIT:
-            this.characterExit(message);
-            break;
-          default:
-          // TODO: ...
-        }
+    messages.forEach((message: any, _index: any) => {
+      switch (message.messageType) {
+        case MESSAGE_TYPE.MAP_INIT:
+          this.mapInit(message);
+          break;
+        // TODO: use this potentially more optimal way to batch initialize all characters
+        // case MESSAGE_TYPE.CHARACTERS_INIT:
+        //   this.charactersInit(message);
+        //   break;
+        case MESSAGE_TYPE.ENTER:
+          this.characterInit(message);
+          break;
+        case MESSAGE_TYPE.POSITION:
+          this.positionUpdate(message);
+          break;
+        case MESSAGE_TYPE.EXIT:
+          this.characterExit(message);
+          break;
+        default:
+        // TODO: ...
       }
-    );
+    });
 
     this.registry.values.serverMessages = []; // flush the buffer
   }

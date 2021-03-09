@@ -10,8 +10,9 @@ const COLOR = {
 };
 
 // createColorRectangle
-const createColorRectangle = ({ scene, x, y, width, height, color }) => {
+const createColorRectangle = ({ scene, x, y, width, height, color }: any) => {
   const rect = new Phaser.Geom.Rectangle(x, y, width, height || width);
+  // @ts-ignore
   const graphics = scene.add.graphics({ fillStyle: { color: COLOR[color] } });
   graphics.fillRectShape(rect);
   return graphics;

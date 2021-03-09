@@ -7,6 +7,9 @@ const PACKETS_PER_SECOND = 20; // 20 MAX !!
 const MIN_PACKET_INTERVAL = 1 / PACKETS_PER_SECOND;
 
 export default class Network extends Scene {
+  lastPacketTime: number;
+  ws!: WebSocket;
+
   constructor() {
     super({ key: "Network" }); // turn this on when main game is initialized and listeners set up!
     this.lastPacketTime = 0;
@@ -57,7 +60,7 @@ export default class Network extends Scene {
   //   // store.dispatch(gameActions.setSocketOpen(false));
   // }
 
-  updateTestLog(parent, key, data) {
+  updateTestLog(parent: any, key: any, data: any) {
     console.log("network update");
     // TODO: update redux
     // console.log("parent");
@@ -69,7 +72,7 @@ export default class Network extends Scene {
   }
 
   // TODO: send updates to server every 20th of a second at most.
-  update(time, deltaTime) {
+  update(time: number, deltaTime: number) {
     this.lastPacketTime += deltaTime;
 
     if (this.lastPacketTime < MIN_PACKET_INTERVAL) return;
@@ -78,7 +81,8 @@ export default class Network extends Scene {
 
     if (!this.registry.values.clientMessages?.length) return;
 
-    this.registry.values.clientMessages.forEach(clientMessage => {
+    this.registry.values.clientMessages.forEach((clientMessage: any) => {
+      // @ts-ignore
       this.ws.serializeAndSend(clientMessage);
     });
 

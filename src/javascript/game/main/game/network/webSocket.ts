@@ -1,6 +1,7 @@
+import { Scene } from "phaser";
 import { serialize, parse } from "./message";
 
-const initWebSocket = scene => {
+const initWebSocket = (scene: Scene) => {
   const ws = new WebSocket(wsUrl());
   ws.binaryType = "arraybuffer";
 
@@ -13,7 +14,8 @@ const initWebSocket = scene => {
     pushMessageToPhaserRegistry(scene, parsedMessage);
   };
 
-  ws.serializeAndSend = message => ws.send(serialize(message));
+  // @ts-ignore
+  ws.serializeAndSend = (message: any) => ws.send(serialize(message));
 
   return ws; // also return it ?? not sure if useful ??
 };
@@ -22,7 +24,7 @@ export default initWebSocket;
 
 const wsUrl = () => window.location.origin.replace("http", "ws");
 
-const pushMessageToPhaserRegistry = (scene, parsedMessage) => {
+const pushMessageToPhaserRegistry = (scene: Scene, parsedMessage: any) => {
   if (!scene.registry.values.serverMessages) scene.registry.set("serverMessages", []);
 
   scene.registry.values.serverMessages = [...scene.registry.values.serverMessages, parsedMessage];
