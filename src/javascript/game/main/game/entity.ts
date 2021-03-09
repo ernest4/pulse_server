@@ -1,7 +1,7 @@
-import store from "./store";
-import * as gameActions from "./store/actions/game";
+import store from "../reactUi/store";
+import * as gameActions from "../reactUi/store/actions/game";
 
-const initEntity = ({ scene, x, y, key, imageOnly }) => {
+const initEntity = ({ scene, x, y, key, imageOnly }: any) => {
   const TINT = {
     grass: 0xff0000,
     water: 0x0000ff,
@@ -21,16 +21,17 @@ const initEntity = ({ scene, x, y, key, imageOnly }) => {
     .setDisplaySize(100, 100);
 
   entity.setInteractive();
-  entity.on("pointerdown", pointer => {
+  entity.on("pointerdown", (pointer: any) => {
     if (pointer.rightButtonDown()) store.dispatch(gameActions.setTargetTile([x, y]));
     else store.dispatch(gameActions.setActiveTile([x, y]));
+    // @ts-ignore
     entity.setTint(TINT[key]);
   });
-  entity.on("pointerout", pointer => {
+  entity.on("pointerout", (pointer: any) => {
     entity.clearTint();
   });
 
-  entity.on("pointerup", pointer => {
+  entity.on("pointerup", (pointer: any) => {
     entity.clearTint();
   });
 

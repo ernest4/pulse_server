@@ -8,7 +8,7 @@ import Phaser, { Scene } from "phaser";
 
 // TODO: add optional full screen support https://rexrainbow.github.io/phaser3-rex-notes/docs/site/fullscreen/
 
-export default class UI extends Scene {
+export default class PhaserUI extends Scene {
   constructor() {
     super({ key: "UI", active: true }); // active: true, to launch on start up
     // this.tileScale = 100; // TODO: whats this again??
@@ -23,13 +23,13 @@ export default class UI extends Scene {
 
   // TODO: send character position to server if there is new position, once every 20th of a second
   // at most.
-  update(time, deltaTime) {}
+  update(time: any, deltaTime: any) {}
 
   render() {
     // this.cameras.main.debug.cameraInfo(this.game.camera, 32, 32);
   }
 
-  updateUI(parent, key, data) {
+  updateUI(parent: any, key: any, data: any) {
     console.log("UI update");
     // TODO: ...
   }

@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
-import store from "../store";
-import * as gameActions from "../store/actions/game";
+import store from "../../reactUi/store";
+import * as gameActions from "../../reactUi/store/actions/game";
 // import { log, debugLog } from "../debug/logging";
 // import createColorRectangle from "../debug/rectangles";
 // import initEntity from "../entity";

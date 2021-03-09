@@ -4,15 +4,15 @@ import { Provider } from "react-redux";
 import '../css/main.css';
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import App from "./App";
+import Main from "./Main";
 import * as serviceWorker from "./serviceWorker";
 
-import store from "./store";
+import store from "./main/reactUi/store";
 
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <Main />
     </Provider>
   </StrictMode>,
   document.getElementById("root")

@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
-import store from "../store";
-import * as gameActions from "../store/actions/game";
+import store from "../../reactUi/store";
+import * as gameActions from "../../reactUi/store/actions/game";
 import initWebSocket from "../network/webSocket";
 
 const PACKETS_PER_SECOND = 20; // 20 MAX !!

@@ -56,6 +56,8 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "import/extensions": 0,
     "@typescript-eslint/no-explicit-any": "off",
-    "arrow-body-style": "off"
+    "arrow-body-style": "off",
+    "no-undef": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 }
