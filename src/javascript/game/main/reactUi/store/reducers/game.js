@@ -14,6 +14,9 @@ const initialMessagesState = {
 
 const initialUiState = {
   showUi: false,
+  hover: null,
+  hoverX: 0,
+  hoverY: 0,
 };
 
 const initialGameState = {
@@ -55,6 +58,11 @@ const uiReducer = handleActions(
   {
     SHOW_UI: produce((state, action) => {
       state.showUi = action.payload;
+    }),
+    SET_HOVER: produce((state, action) => {
+      state.hover = action.payload.component;
+      state.hoverX = action.payload.x;
+      state.hoverY = action.payload.y;
     }),
   },
   initialUiState

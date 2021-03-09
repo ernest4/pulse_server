@@ -9,6 +9,7 @@ export const addClientMessageToQueue = createAction("ADD_CLIENT_MESSAGE_TO_QUEUE
 export const setClientMessageToQueue = createAction("SET_CLIENT_MESSAGE_TO_QUEUE");
 
 export const showUI = createAction("SHOW_UI");
+export const setHover = createAction("SET_HOVER");
 
 export const setActiveTile = createAction("SET_ACTIVE_TILE");
 export const setTargetTile = createAction("SET_TARGET_TILE");

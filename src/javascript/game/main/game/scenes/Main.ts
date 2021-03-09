@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import Info from "../../reactUi/hover/Info";
 import store from "../../reactUi/store";
 import * as gameActions from "../../reactUi/store/actions/game";
 // import { log, debugLog } from "../debug/logging";
@@ -43,12 +44,12 @@ class Main extends Scene {
       store.dispatch(gameActions.showUI(!store.getState().showUi));
     });
     text.on("pointerover", (e: any) => {
-      console.log("pointerover");
-      console.log(e);
+      store.dispatch(
+        gameActions.setHover({ component: Info({ testy: 123 }), x: e.event.x, y: e.event.y })
+      );
     });
-    text.on("pointerout", (e: any) => {
-      console.log("pointerout");
-      console.log(e);
+    text.on("pointerout", () => {
+      store.dispatch(gameActions.setHover({}));
     });
 
     // TODO: test on hover and create an "entity" for each block that can receive on click and on hover
