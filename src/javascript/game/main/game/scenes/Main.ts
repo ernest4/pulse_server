@@ -61,6 +61,8 @@ class Main extends Scene {
     // TODO: init controls for character. Camera will be locket to character
     // initCameraControls(this);
 
+    // TODO: set up camera to follow player and stay center on player
+
     this.initControls();
 
     this.scene.launch("Network");

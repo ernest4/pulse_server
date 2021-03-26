@@ -13,14 +13,15 @@ targets:
 dependencies:
   spectator:
     gitlab: arctic-fox/spectator
-    version: ~> 0.9.27
+    version: "~> 0.9.27"
   spec-kemal:
     github: kemalcr/spec-kemal
     # branch: master
     version: "~> 0.5.0"
   kemal:
     github: kemalcr/kemal
-    commit: a819d4792bbc63d993d6dd2b15f9af5efb0c2d8c
+    # commit: a819d4792bbc63d993d6dd2b15f9af5efb0c2d8c
+    version: "~> 1.0.0"
     # branch: master
   # clear:
   #   github: anykeyh/clear
@@ -34,15 +35,15 @@ dependencies:
     version: "~> 0.10.0"
   jennifer:
     github: imdrasil/jennifer.cr
-    # version: "~> 0.9.0"
-    # branch: master
-    commit: 1ad2a558f71370ac2787af64459b77ddcfaefcba
+    branch: master
+    # version: "~> 0.10.0"
+    # commit: 1ad2a558f71370ac2787af64459b77ddcfaefcba
   sam:
     github: imdrasil/sam.cr
-    version: ~> 0.4.0
+    version: "~> 0.4.0"
   kemal-session:
     github: kemalcr/kemal-session
-    version: ~> 0.12.1
+    version: "~> 1.0.0"
   # kemal-session-postgres:
   #   github: mang/kemal-session-postgres
   # version: ~> 0.1.0
@@ -51,18 +52,18 @@ dependencies:
   # kemal-session-redis:
   #   github: crisward/kemal-session-redis
   #   # version: ~> 0.5.0
-  #   branch: master
   # kemal-csrf:
   #   github: kemalcr/kemal-csrf
-  #   version: ~> 0.6
+  #   branch: master
+    # version: ~> 0.7.0
   kemal-csrf:
     github: ernest4/kemal-csrf
-    commit: 69cbe61a37181471a3c0fb7d0d7c1067fb308e97
+    commit: af3b96d59518ee87663e060ac1937c0fcdd939ac
     # version: ~> 0.6
   multi_auth:
     github: msa7/multi_auth
-    version: ~> 1.1.1
+    version: "~> 1.1.1"
 
-crystal: 0.35.1
+crystal: 1.0.0
 
 license: UNLICENSED

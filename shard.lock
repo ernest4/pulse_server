@@ -2,14 +2,14 @@ version: 2.0
 shards:
   db:
     git: https://github.com/crystal-lang/crystal-db.git
-    version: 0.10.0
+    version: 0.10.1
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
     version: 0.1.4
 
   i18n:
-    git: https://github.com/TechMagister/i18n.cr.git
+    git: https://github.com/techmagister/i18n.cr.git
     version: 0.3.1
 
   ifrit:
@@ -22,23 +22,23 @@ shards:
 
   jennifer:
     git: https://github.com/imdrasil/jennifer.cr.git
-    version: 0.9.0+git.commit.1ad2a558f71370ac2787af64459b77ddcfaefcba
+    version: 0.10.0+git.commit.2224a3febc6d2844d12f6abba73715e691145c6f
 
   kemal:
     git: https://github.com/kemalcr/kemal.git
-    version: 0.26.1+git.commit.a819d4792bbc63d993d6dd2b15f9af5efb0c2d8c
+    version: 1.0.0
 
   kemal-csrf:
     git: https://github.com/ernest4/kemal-csrf.git
-    version: 0.6.1+git.commit.69cbe61a37181471a3c0fb7d0d7c1067fb308e97
+    version: 0.8.0+git.commit.af3b96d59518ee87663e060ac1937c0fcdd939ac
 
   kemal-session:
     git: https://github.com/kemalcr/kemal-session.git
-    version: 0.12.1
+    version: 1.0.0
 
   kilt:
     git: https://github.com/jeromegn/kilt.git
-    version: 0.4.0
+    version: 0.4.1
 
   multi_auth:
     git: https://github.com/msa7/multi_auth.git
@@ -50,7 +50,7 @@ shards:
 
   radix:
     git: https://github.com/luislavena/radix.git
-    version: 0.3.9
+    version: 0.4.1
 
   sam:
     git: https://github.com/imdrasil/sam.cr.git
@@ -62,5 +62,5 @@ shards:
 
   spectator:
     git: https://gitlab.com/arctic-fox/spectator.git
-    version: 0.9.27
+    version: 0.9.33
 
