@@ -52,14 +52,15 @@ dependencies:
   # kemal-session-redis:
   #   github: crisward/kemal-session-redis
   #   # version: ~> 0.5.0
-  # kemal-csrf:
-  #   github: kemalcr/kemal-csrf
-  #   branch: master
-    # version: ~> 0.7.0
   kemal-csrf:
-    github: ernest4/kemal-csrf
-    commit: af3b96d59518ee87663e060ac1937c0fcdd939ac
-    # version: ~> 0.6
+    github: kemalcr/kemal-csrf
+    # branch: master
+    commit: abaee30f1e8e28d896ed6bf5267a530b5d6ca638
+    # version: ~> 0.7.0
+  # kemal-csrf:
+  #   github: ernest4/kemal-csrf
+  #   commit: af3b96d59518ee87663e060ac1937c0fcdd939ac
+  #   # version: ~> 0.6
   multi_auth:
     github: msa7/multi_auth
     version: "~> 1.1.1"

@@ -29,8 +29,8 @@ shards:
     version: 1.0.0
 
   kemal-csrf:
-    git: https://github.com/ernest4/kemal-csrf.git
-    version: 0.8.0+git.commit.af3b96d59518ee87663e060ac1937c0fcdd939ac
+    git: https://github.com/kemalcr/kemal-csrf.git
+    version: 0.8.0+git.commit.abaee30f1e8e28d896ed6bf5267a530b5d6ca638
 
   kemal-session:
     git: https://github.com/kemalcr/kemal-session.git
