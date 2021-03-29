@@ -17,7 +17,8 @@ dependencies:
   spec-kemal:
     github: kemalcr/spec-kemal
     # branch: master
-    version: "~> 0.5.0"
+    # version: "~> 0.5.0"
+    commit: 88a56be7eda0a7f102a3e3f20cc492816581176a
   kemal:
     github: kemalcr/kemal
     # commit: a819d4792bbc63d993d6dd2b15f9af5efb0c2d8c
@@ -65,6 +66,6 @@ dependencies:
     github: msa7/multi_auth
     version: "~> 1.1.1"
 
-crystal: 1.0.0
+crystal: '>= 1.0.0'
 
 license: UNLICENSED
