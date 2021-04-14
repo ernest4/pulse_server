@@ -29,3 +29,4 @@ require "../controllers/application_controller"
 require "../controllers/**"
 
 require "../game"
+require "../ecs/**"

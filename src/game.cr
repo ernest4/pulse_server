@@ -1,18 +1,18 @@
 module Pulse
   class Game
-    def initialize
-      debug = Pulse::Config::ENVIRONMENT == "development"
-      @engine = Fast::ECS::Engine.new(debug)
+    def initialize(debug : Bool)
+      @debug = debug
+      @engine = Fast::ECS::Engine.new(@debug)
     end
 
     def start
-      # @engine.add_system(Manager.new)
-      # # @engine.add_system(Serializer.new)
-      # @engine.add_system(Network.new(debug)) # TODO: basic POC print messages to server console on receipt
-      # # @engine.add_system(Input.new)
-      # # # @engine.add_system(AI.new)
-      # # @engine.add_system(Movement.new)
-      # # @engine.add_system(Collision.new)
+      @engine.add_system(Pulse::Ecs::Systems::Manager.new)
+      # @engine.add_system(Serializer.new)
+      @engine.add_system(Pulse::Ecs::Systems::Network.new(@debug)) # TODO: basic POC print messages to server console on receipt
+      # @engine.add_system(Input.new)
+      # # @engine.add_system(AI.new)
+      # @engine.add_system(Movement.new)
+      # @engine.add_system(Collision.new)
 
       tick
     end
