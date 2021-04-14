@@ -19,3 +19,5 @@ got slow. Once i shut server down speed came back....
 
 [DONE][5] TODO: update to crystal 1.0 !!!!
 [DONE][6] TODO: update kemal to 1.0 !!!
+
+[7] TODO: rewrite to use fast-ecs.

@@ -4,6 +4,8 @@ require "json"
 require "kemal"
 require "kemal-session"
 require "kemal-csrf"
+require "sparse-set"
+require "fast-ecs"
 
 require "../models/application_model"
 require "../models/**"
