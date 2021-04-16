@@ -14,6 +14,7 @@ module Pulse
         def initialize(debug : Bool)
           @debug = debug
           @socket_items_set = SparseSet::SparseSet.new
+          @message_buffer = [] of Message
         end
 
         def start
@@ -45,41 +46,48 @@ module Pulse
           # # client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
           # client.initialize_socket(reducer)
 
-          register_socket_callbacks(socket)
-          entity_id = create_socket_component(socket, env)
-          create_socket_item(entity_id, socket)
+          entity_id = create_socket_components(socket, env)
+          socket_item = create_socket_item(entity_id, socket)
+          register_socket_callbacks(socket_item)
           
           # rescue ex : Pulse::Unauthorized
           #   # TODO: ...
           #   raise ex # just reraise for now...
         end
 
-        private def register_socket_callbacks(socket)
+        private def register_socket_callbacks(socket_item)
           # TODO: may or may not use this, not as efficient as binary, even for regular chat...
           # socket.on_message do |message|
           # end
     
-          socket.on_binary do |message|
+          socket_item.socket.on_binary do |message|
             # reducer.reduce(self, message)
+
+            # TODO: push messages to buffer ?? or create components ??
           end
     
           # TODO: queue async worker to read redis and save player progress to DB?
           # TODO: for now save straight to DB here ???
           # TODO: clean up game state etc.
-          socket.on_close do |_|
+          socket_item.socket.on_close do |_|
             # reducer.close(self)
             #   # sockets.delete(socket)
             #   puts "Closing Socket: #{socket}"
+            remove_socket_item(socket_item)
           end
     
           # reducer.enter(self)
         end
 
-        private def create_socket_component(socket, env)
+        private def create_socket_components(socket, env)
           entity_id = engine.generate_entity_id
           uuid = env.session.string("uid")
           socket_component = Pulse::Ecs::Component::Socket.new(entity_id: entity_id, uuid: uuid)
           engine.add_component(socket_component)
+
+          serialize_component = Pulse::Ecs::Component::Serialize.new(entity_id: entity_id, action: Serialize::Action::Load)
+          engine.add_component(serialize_component)
+
           entity_id
         end
 
@@ -94,6 +102,10 @@ module Pulse
 
         private def get_socket_item(socket : Pulse::Ecs::Component::Socket)
           # TODO: ...
+        end
+
+        private def remove_socket_item(socket_item)
+          @socket_items_set.remove(socket_item.id)
         end
 
         private def dispose_unused_socket_items
