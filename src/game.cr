@@ -7,8 +7,8 @@ module Pulse
 
     def start
       @engine.add_system(Pulse::Ecs::Systems::Manager.new)
-      # @engine.add_system(Serializer.new)
       @engine.add_system(Pulse::Ecs::Systems::Network.new(@debug)) # TODO: basic POC print messages to server console on receipt
+      # @engine.add_system(Serializer.new)
       # @engine.add_system(Input.new)
       # # @engine.add_system(AI.new)
       # @engine.add_system(Movement.new)
