@@ -1,12 +1,23 @@
 module Pulse
   module Ecs
     module Systems
+      class Message
+        getter :socket_item, :binary_message
+
+        def initialize(socket_item : Socket, binary_message)
+          @socket_item = socket_item
+          @binary_message = binary_message
+        end
+      end
+
       class Socket < SparseSet::Item # TODO: move this out of here
+        property :last_received_time
         getter :socket
 
         def initialize(entity_id : Int32, socket)
           super
           @socket = socket
+          @last_received_time = {} of UInt8 => Time::Span
         end
       end
 
@@ -29,7 +40,8 @@ module Pulse
         end
 
         def update
-          # TODO: ...
+          clean_up_message_event_entities
+          create_message_event_entities
         end
 
         def destroy
@@ -60,10 +72,13 @@ module Pulse
           # socket.on_message do |message|
           # end
     
-          socket_item.socket.on_binary do |message|
+          socket_item.socket.on_binary do |binary_message|
             # reducer.reduce(self, message)
+            
+            # TODO: add message throttling mechanism here...
 
-            # TODO: push messages to buffer ?? or create components ??
+            new_message = Message.new(socket_item, binary_message)
+            @message_buffer.push(new_message)
           end
     
           # TODO: queue async worker to read redis and save player progress to DB?
@@ -76,6 +91,7 @@ module Pulse
             remove_socket_item(socket_item)
           end
     
+          # TODO: some "welcome" system will init this enter() step ??
           # reducer.enter(self)
         end
 
@@ -114,6 +130,25 @@ module Pulse
 
         private def dispose_unused_socket_item(socket : Socket)
           # TODO:
+        end
+
+        private def clean_up_message_event_entities
+          engine.query(MessageEvent) do |query_set|
+            message_event = query_set.first
+            engine.remove_entity(message_event.id)
+          end
+        end
+
+        private def create_message_event_entities
+          @message_buffer.each do |message|
+            entity_id = engine.generate_entity_id
+            binary_message = message.binary_message
+            socket_entity_id = message.socket_item.id
+            message_event_component = Pulse::Ecs::Component::MessageEvent.new(entity_id: entity_id, category: MessageEvent::Category::Binary, message: binary_message, from: socket_entity_id)
+            engine.add_component(message_event_component)
+          end
+
+          @message_buffer = [] of Message
         end
       end
     end
