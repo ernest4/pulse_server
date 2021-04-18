@@ -58,9 +58,17 @@ module Pulse
           # # client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
           # client.initialize_socket(reducer)
 
-          entity_id = create_socket_components(socket, env)
+          entity_id = create_socket_component(socket, env)
           socket_item = create_socket_item(entity_id, socket)
           register_socket_callbacks(socket_item)
+
+          serialize_component = Pulse::Ecs::Component::Serialize.new(entity_id: entity_id, action: Serialize::Action::Load)
+          engine.add_component(serialize_component)
+
+          # TODO: some "welcome" system will init this enter() step ??
+          # reducer.enter(self)
+          player_enter_event = Pulse::Ecs::Component::PlayerEnterEvent.new(entity_id)
+          engine.add_component(player_enter_event)
           
           # rescue ex : Pulse::Unauthorized
           #   # TODO: ...
@@ -89,31 +97,27 @@ module Pulse
             #   # sockets.delete(socket)
             #   puts "Closing Socket: #{socket}"
             remove_socket_item(socket_item)
+            player_exit_event = Pulse::Ecs::Component::PlayerExitEvent.new(socket_item.id)
+            engine.add_component(player_exit_event)
           end
-    
-          # TODO: some "welcome" system will init this enter() step ??
-          # reducer.enter(self)
         end
 
-        private def create_socket_components(socket, env)
+        private def create_socket_component(socket, env)
           entity_id = engine.generate_entity_id
           uuid = env.session.string("uid")
           socket_component = Pulse::Ecs::Component::Socket.new(entity_id: entity_id, uuid: uuid)
           engine.add_component(socket_component)
-
-          serialize_component = Pulse::Ecs::Component::Serialize.new(entity_id: entity_id, action: Serialize::Action::Load)
-          engine.add_component(serialize_component)
-
           entity_id
         end
 
         private def create_socket_item(entity_id, socket)
           socket_item = Socket.new(entity_id, socket)
           add_socket_item(socket_item)
+          socket_item
         end
 
         private def add_socket_item(socket_item : Socket)
-          @socket_items_set.add(socket)
+          @socket_items_set.add(socket_item)
         end
 
         private def get_socket_item(socket : Pulse::Ecs::Component::Socket)
