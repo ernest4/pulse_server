@@ -25,7 +25,7 @@ module Pulse
         def initialize(debug : Bool)
           @debug = debug
           @socket_items_set = SparseSet::SparseSet.new
-          @message_buffer = [] of Message
+          @message_buffer = Buffer(Message).new
         end
 
         def start
@@ -144,6 +144,8 @@ module Pulse
         end
 
         private def create_message_event_entities
+          @message_buffer.swap
+
           @message_buffer.each do |message|
             entity_id = engine.generate_entity_id
             binary_message = message.binary_message
@@ -152,7 +154,7 @@ module Pulse
             engine.add_component(message_event_component)
           end
 
-          @message_buffer = [] of Message
+          @message_buffer.flush
         end
       end
     end
