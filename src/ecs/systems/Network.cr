@@ -2,11 +2,11 @@ module Pulse
   module Ecs
     module Systems
       class Message
-        getter :socket_item, :binary_message
+        getter :socket_item, :parsed_message
 
-        def initialize(socket_item : Socket, binary_message)
+        def initialize(socket_item : Socket, parsed_message : Pulse::Messages::ApplicationMessage)
           @socket_item = socket_item
-          @binary_message = binary_message
+          @parsed_message = parsed_message
         end
       end
 
@@ -40,8 +40,9 @@ module Pulse
         end
 
         def update
-          clean_up_message_event_entities
-          create_message_event_entities
+          # clean_up_message_event_entities
+          # create_message_event_entities
+          create_message_components
         end
 
         def destroy
@@ -85,7 +86,8 @@ module Pulse
             
             # TODO: add message throttling mechanism here...
 
-            new_message = Message.new(socket_item, binary_message)
+            parsed_message = Pulse::Messages::Resolver.resolve(binary_message)
+            new_message = Message.new(socket_item, parsed_message)
             @message_buffer.push(new_message)
           end
     
@@ -136,22 +138,40 @@ module Pulse
           # TODO:
         end
 
-        private def clean_up_message_event_entities
-          engine.query(MessageEvent) do |query_set|
-            message_event = query_set.first
-            engine.remove_entity(message_event.id)
-          end
-        end
+        # private def clean_up_message_event_entities
+        #   engine.query(MessageEvent) do |query_set|
+        #     message_event = query_set.first
+        #     engine.remove_entity(message_event.id)
+        #   end
+        # end
 
-        private def create_message_event_entities
+        # private def create_message_event_entities
+        #   @message_buffer.swap
+
+        #   @message_buffer.each do |message|
+        #     entity_id = engine.generate_entity_id
+        #     binary_message = message.binary_message
+        #     socket_entity_id = message.socket_item.id
+        #     message_event_component = Pulse::Ecs::Component::MessageEvent.new(entity_id: entity_id, category: MessageEvent::Category::Binary, message: binary_message, from: socket_entity_id)
+        #     engine.add_component(message_event_component)
+        #   end
+
+        #   @message_buffer.flush
+        # end
+
+        private def create_message_components
+          # TODO: ... create a message component per type of message...
+          # e.g. MessageMove
+
           @message_buffer.swap
 
           @message_buffer.each do |message|
-            entity_id = engine.generate_entity_id
-            binary_message = message.binary_message
+            parsed_message = message.parsed_message
             socket_entity_id = message.socket_item.id
-            message_event_component = Pulse::Ecs::Component::MessageEvent.new(entity_id: entity_id, category: MessageEvent::Category::Binary, message: binary_message, from: socket_entity_id)
-            engine.add_component(message_event_component)
+            # NOTE: this will automatically enforce one message type per engine tick i think !!
+            # which means it automatically throttles the messages ? that would be good ...
+            message_component = Pulse::Ecs::Component::MessageMove.new(entity_id: socket_entity_id, message: parsed_message)
+            engine.add_component(message_component)
           end
 
           @message_buffer.flush

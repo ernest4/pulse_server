@@ -81,54 +81,5 @@ module Pulse
         end
       end
     end
-
-    def move(client, direction)
-      speed = client.character.speed
-      last_x = client.character.last_x
-      last_y = client.character.last_y
-
-      new_position = {:x => last_x, :y => last_y}
-
-      case direction
-      when Pulse::Messages::Move::LEFT
-        new_position = {:x => last_x - speed, :y => last_y}
-      when Pulse::Messages::Move::LEFT_TOP
-        new_position = {:x => last_x - speed, :y => last_y - speed}
-      when Pulse::Messages::Move::TOP
-        new_position = {:x => last_x, :y => last_y - speed}
-      when Pulse::Messages::Move::RIGHT_TOP
-        new_position = {:x => last_x + speed, :y => last_y - speed}
-      when Pulse::Messages::Move::RIGHT
-        new_position = {:x => last_x + speed, :y => last_y}
-      when Pulse::Messages::Move::RIGHT_BOTTOM
-        new_position = {:x => last_x + speed, :y => last_y + speed}
-      when Pulse::Messages::Move::BOTTOM
-        new_position = {:x => last_x, :y => last_y + speed}
-      when Pulse::Messages::Move::LEFT_BOTTOM
-        new_position = {:x => last_x - speed, :y => last_y + speed}
-      else
-        puts "[Pulse] Unrecognized move direction #{direction}"
-      end
-
-      new_position = clip_position_to_world_bounds(new_position)
-
-      last_position = {:x => last_x, :y => last_y}
-      can_move_to?(new_position) ? new_position : last_position
-    end
-
-    private def clip_position_to_world_bounds(position)
-      {:x => position[:x].clamp(0, width * TILE_SIZE_IN_PX), :y => position[:y].clamp(0, height * TILE_SIZE_IN_PX)}
-    end
-
-    private def can_move_to?(position)
-      tile_y = position[:y] // TILE_SIZE_IN_PX
-      tile_x = position[:x] // TILE_SIZE_IN_PX
-
-      tile = @tiles[tile_y][tile_x]
-
-      # TODO: use proper tile type numbers later...
-      # tile == 0 || tile == 1 || tile == 2 || tile == 3 || tile == 4
-      tile != 4
-    end
   end
 end

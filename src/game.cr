@@ -3,17 +3,20 @@ module Pulse
     def initialize(debug : Bool)
       @debug = debug
       @engine = Fast::ECS::Engine.new(@debug)
+
+      @game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory and redis based on env config !! (waiting to get config done ...)
+      @game_state.load!
     end
 
     def start
       @engine.add_system(Pulse::Ecs::Systems::Manager.new)
       @engine.add_system(Pulse::Ecs::Systems::Network.new(@debug)) # TODO: basic POC print messages to server console on receipt
-      @engine.add_system(Pulse::Ecs::Systems::MessageParser.new)
       @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers
       @engine.add_system(Pulse::Ecs::Systems::PlayerEnter.new)
       # @engine.add_system(Input.new)
       # # @engine.add_system(AI.new)
-      # @engine.add_system(Movement.new)
+      @engine.add_system(Pulse::Ecs::Systems::MovementControls.new)
+      @engine.add_system(Pulse::Ecs::Systems::Movement.new(@game_state.maps))
       # @engine.add_system(Collision.new)
 
       tick
