@@ -11,9 +11,12 @@ module Pulse
         end
 
         def update
-          # 1. TODO: grab all the MoveMessage components and translate them to changes in velocity first
+          engine.query(ClientMoveMessage, Attributes, Velocity) do |query_set|
+            handle_move_message(query_set)
+          end
 
-          # 2. apply velocity and check collisions on current map
+          clear_move_messages
+
           engine.query(Transform, Velocity, Location) do |query_set|
             handle_movement(query_set)
           end
@@ -21,6 +24,51 @@ module Pulse
 
         def destroy
           # TODO: ...
+        end
+
+        private def handle_move_message(query_set)
+          move_message, attributes, velocity = query_set
+
+          new_velocity = get_new_velocity(velocity, attributes.speed, move_message.parsed_message.direction)
+
+          if valid?(new_velocity)
+            velocity.x = new_velocity.x
+            velocity.y = new_velocity.y
+
+            entity_id = engine.generate_entity_id
+            message = Pulse::Messages::Position.new(client.character)
+            broadcast_message = Pulse::Ecs::Component::MessageBroadcast.new(entity_id: entity_id, message: message)
+            engine.add_component(broadcast_message)
+          end
+
+          engine.remove_component(move_message)
+        end
+
+        private def get_new_velocity(velocity, speed, direction)
+          new_velocity = {:x => 0, :y => 0}
+
+          case direction
+          when Pulse::Messages::Move::LEFT
+            new_velocity = {:x => -speed, :y => 0}
+          when Pulse::Messages::Move::LEFT_TOP
+            new_velocity = {:x => -speed, :y => -speed}
+          when Pulse::Messages::Move::TOP
+            new_velocity = {:x => 0, :y => -speed}
+          when Pulse::Messages::Move::RIGHT_TOP
+            new_velocity = {:x => speed, :y => -speed}
+          when Pulse::Messages::Move::RIGHT
+            new_velocity = {:x => speed, :y => 0}
+          when Pulse::Messages::Move::RIGHT_BOTTOM
+            new_velocity = {:x => speed, :y => speed}
+          when Pulse::Messages::Move::BOTTOM
+            new_velocity = {:x => 0, :y => speed}
+          when Pulse::Messages::Move::LEFT_BOTTOM
+            new_velocity = {:x => -speed, :y => speed}
+          else
+            puts "[Pulse] Unrecognized move direction #{direction}"
+          end
+
+          new_velocity
         end
 
         private def handle_movement(query_set)

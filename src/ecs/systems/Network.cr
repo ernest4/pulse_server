@@ -107,7 +107,7 @@ module Pulse
         private def create_socket_component(socket, env)
           entity_id = engine.generate_entity_id
           uuid = env.session.string("uid")
-          socket_component = Pulse::Ecs::Component::Socket.new(entity_id: entity_id, uuid: uuid)
+          socket_component = Pulse::Ecs::Component::Client::Socket.new(entity_id: entity_id, uuid: uuid)
           engine.add_component(socket_component)
           entity_id
         end
@@ -122,7 +122,7 @@ module Pulse
           @socket_items_set.add(socket_item)
         end
 
-        private def get_socket_item(socket : Pulse::Ecs::Component::Socket)
+        private def get_socket_item(socket : Pulse::Ecs::Component::Client::Socket)
           # TODO: ...
         end
 
@@ -161,7 +161,7 @@ module Pulse
 
         private def create_message_components
           # TODO: ... create a message component per type of message...
-          # e.g. MessageMove
+          # e.g Client::Message::Move
 
           @message_buffer.swap
 
@@ -170,7 +170,8 @@ module Pulse
             socket_entity_id = message.socket_item.id
             # NOTE: this will automatically enforce one message type per engine tick i think !!
             # which means it automatically throttles the messages ? that would be good ...
-            message_component = Pulse::Ecs::Component::MessageMove.new(entity_id: socket_entity_id, message: parsed_message)
+            # but then the other messages will be silently dropped...which is not good
+            message_component = Pulse::Ecs::Component::Client::Message::Move.new(entity_id: socket_entity_id, message: parsed_message)
             engine.add_component(message_component)
           end
 
