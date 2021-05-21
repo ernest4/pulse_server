@@ -65,6 +65,12 @@ dependencies:
   multi_auth:
     github: msa7/multi_auth
     version: "~> 1.1.1"
+  sparse-set:
+    github: ernest4/sparse-set
+    version: "~> 1.1"
+  # fast-ecs:
+  #   github: ernest4/fast-ecs
+  #   version: "~> 0.1"
 
 crystal: '>= 1.0.0'
 
