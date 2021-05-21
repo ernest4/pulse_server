@@ -1,7 +1,10 @@
 module Pulse
   class Game
-    def initialize(debug : Bool)
+    def initialize(debug : Bool, server_fps : Int32 = 20)
       @debug = debug
+      @server_fps = server_fps
+      @server_milliseconds_per_tick = 1000 / @server_fps
+      @server_microseconds_per_tick = (1000 * @server_milliseconds_per_tick)
       @engine = Fast::ECS::Engine.new(@debug)
 
       @game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory and redis based on env config !! (waiting to get config done ...)
@@ -28,8 +31,8 @@ module Pulse
 
         total_microseconds += delta_time_micro_seconds
 
-        if total_microseconds > 1000 # we have at least 1 ms of delta_time accumulated
-          total_milliseconds = total_microseconds // 1000 # use 1 or more full milliseconds
+        if total_microseconds > @server_microseconds_per_tick
+          total_milliseconds = total_microseconds // 1000 # get 1 or more full milliseconds
           @engine.update(total_milliseconds)
           # puts "total_microseconds: #{total_microseconds}"
           # puts "total_milliseconds: #{total_milliseconds}"
