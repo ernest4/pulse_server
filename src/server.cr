@@ -107,6 +107,13 @@ end
 
 
 
+
+
+# TODO: compress packets as it's more efficient for bandwith !!
+# LZHL algorithm?
+
+
+
 # Ensure Nagle algorithm is turned off
 
 # MONKEY PATCH Crystal to expose server sockets
