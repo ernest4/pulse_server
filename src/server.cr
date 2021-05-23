@@ -162,7 +162,7 @@ Kemal.run do |config|
 
   unless socket_server.nil?
     tcp_server = socket_server.is_a?(OpenSSL::SSL::Server) ? socket_server.wrapped : socket_server
-    tcp_server.as(TCPServer).tcp_nodelay = false
+    tcp_server.as(TCPServer).tcp_nodelay = true
     puts "tcp_nodelay? #{tcp_server.as(TCPServer).tcp_nodelay?}"
   end
 end
