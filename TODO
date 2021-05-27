@@ -29,3 +29,28 @@ Good for people jumping in and trying...
 look at time for actions to take.
 Can have a test object even that is instantiated every frame with a timing function before and after.
 If instantiation takes longer to run than usual, can send a warning / alarm etc. (to Rollbar?)
+
+
+
+Pivot !!! move back to Node.js back end. Crystal IO is not as fast as uWS, nowhere near! (
+even though crystal resource usage might be better than node.js)
+
+Combine the front end code from this repo where appropriate and merge with Node.js code that was using
+uWS from another project you had.
+
+Another advantage will be code sharing between front end and back end, especially for state
+management & validation.
+
+Make sure to batch as many messages together and send them in big blobs for bandwidth efficiency
+
+TypeScript all the way!
+
+note uWS has TCP_NODELAY enabled (i.e. NAGLE algorithm disabled) by default for max perf! so no
+so no need to worry about it.
+
+General JS perf:
+use FOR loops over MAP or FOREACH as map is x4 times slower, while foreach is x2 slower.
+
+benchmark uWS with Thor and compare against crystal and raw node.js like here
+https://gist.github.com/sdogruyol/bdd400a6eac13e26228e
+
