@@ -19,3 +19,13 @@ got slow. Once i shut server down speed came back....
 
 [DONE][5] TODO: update to crystal 1.0 !!!!
 [DONE][6] TODO: update kemal to 1.0 !!!
+
+[7] GUEST MODE: !!! where player just enters name and plays, but no state is loaded / saved for DB.
+Good for people jumping in and trying...
+
+[8] Add referal bonus system https://stackoverflow.com/questions/41311519/simple-referral-system-in-rails
+
+[9] When stress testing server and monitoring, don't just look at server FPS,
+look at time for actions to take.
+Can have a test object even that is instantiated every frame with a timing function before and after.
+If instantiation takes longer to run than usual, can send a warning / alarm etc. (to Rollbar?)

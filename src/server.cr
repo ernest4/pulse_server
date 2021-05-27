@@ -67,8 +67,9 @@ ws "/" do |socket, env|
   # puts context.session.strings #returns {}
   # puts context.response.cookies #correctly returns the cookie
 
+  pulse_socket = Pulse::Socket.new(socket)
   # TODO: read from session
-  client = Pulse::Client.new(socket: socket, client_id: env.session.string("uid"))
+  client = Pulse::Client.new(socket: pulse_socket, client_id: env.session.string("uid"))
   # client = Pulse::Client.new(socket: socket, client_id: Random::Secure.hex) # random id for testing
   # client.authenticate!
   client.initialize_socket(reducer)
