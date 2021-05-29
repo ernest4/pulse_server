@@ -34,3 +34,15 @@ If instantiation takes longer to run than usual, can send a warning / alarm etc.
 spawn do
   socket.send "..."
 end
+[12] benchmark broadcast with and without fibers...
+
+[11] Pub/Sub model for managing messages.
+Like here https://github.com/uNetworking/pubsub-example/blob/master/uWebSockets.js/server.js
+
+Players would subscribe to channels like:
+
+"chat:global"
+"chat:map:<map_name>"
+
+"map:<map_name>:<section_number>"   <-- for position / action broadcasts
+(can serialize all the messages in bulk before sending them out in one blob)

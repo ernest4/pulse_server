@@ -63,13 +63,16 @@ module Pulse
           socket_item = create_socket_item(entity_id, socket)
           register_socket_callbacks(socket_item)
 
-          serialize_component = Pulse::Ecs::Component::Serialize.new(entity_id: entity_id, action: Serialize::Action::Load)
-          engine.add_component(serialize_component)
+          # TODO: all of the below should happen in their own systems!
 
-          # TODO: some "welcome" system will init this enter() step ??
-          # reducer.enter(self)
-          player_enter_event = Pulse::Ecs::Component::PlayerEnterEvent.new(entity_id)
-          engine.add_component(player_enter_event)
+          # serialize_component = Pulse::Ecs::Component::Serialize.new(entity_id: entity_id, action: Serialize::Action::Load)
+          # engine.add_component(serialize_component)
+
+          # # TODO: some "welcome" system will init this enter() step ??
+          # # reducer.enter(self)
+          # # TODO: rename => Pulse::Ecs::Component::Event::Player::Enter
+          # player_enter_event = Pulse::Ecs::Component::PlayerEnterEvent.new(entity_id)
+          # engine.add_component(player_enter_event)
           
           # rescue ex : Pulse::Unauthorized
           #   # TODO: ...
