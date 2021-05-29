@@ -79,7 +79,7 @@ game.start
 
 
 
-# TODO: compress packets as it's more efficient for bandwith !!
+# TODO: compress packets as it's more efficient for bandwith !?!
 # LZHL algorithm?
 
 

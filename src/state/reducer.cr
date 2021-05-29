@@ -136,7 +136,10 @@ module Pulse
 
         map.clients.each do |client|
           serialized_messages.each do |serialized_message|
-            client.socket.send(serialized_message)
+            # good idea ?? google ask on stack overflow ??
+            # spawn do
+              client.socket.send(serialized_message)
+            # end
           rescue ex : IO::Error
             # TODO: close client that's 'Exception: Closed stream (IO::Error)'
             # puts ex

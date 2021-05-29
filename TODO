@@ -23,10 +23,14 @@ got slow. Once i shut server down speed came back....
 [7] GUEST MODE: !!! where player just enters name and plays, but no state is loaded / saved for DB.
 Good for people jumping in and trying...
 
-[8] Add referal bonus system https://stackoverflow.com/questions/41311519/simple-referral-system-in-rails
+[8] Add referral bonus system https://stackoverflow.com/questions/41311519/simple-referral-system-in-rails
 
 [9] When stress testing server and monitoring, don't just look at server FPS,
 look at time for actions to take.
 Can have a test object even that is instantiated every frame with a timing function before and after.
 If instantiation takes longer to run than usual, can send a warning / alarm etc. (to Rollbar?)
 
+[10] Broadcast, spawn a fiber per send??
+spawn do
+  socket.send "..."
+end
