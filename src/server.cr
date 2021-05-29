@@ -75,4 +75,71 @@ end
 game = Pulse::Game.new(debug: Pulse::Config::ENVIRONMENT == "development")
 game.start
 
-Kemal.run
+
+
+
+
+# TODO: compress packets as it's more efficient for bandwith !!
+# LZHL algorithm?
+
+
+
+# Ensure Nagle algorithm is turned off
+
+# MONKEY PATCH Crystal to expose server sockets
+class HTTP::Server
+  getter :sockets
+end
+
+# MONKEY PATCH kemal to expose HTTP::Server after sockets are added
+module Kemal
+  def self.run(port : Int32? = nil, args = ARGV, &block)
+    Kemal::CLI.new args
+    config = Kemal.config
+    config.setup
+    config.port = port if port
+
+    # Test environment doesn't need to have signal trap and logging.
+    if config.env != "test"
+      setup_404
+      setup_trap_signal
+    end
+
+    server = config.server ||= HTTP::Server.new(config.handlers)
+
+    config.running = true
+
+    # yield config
+
+    # Abort if block called `Kemal.stop`
+    return unless config.running
+
+    unless server.each_address { |_| break true }
+      {% if flag?(:without_openssl) %}
+        server.bind_tcp(config.host_binding, config.port)
+      {% else %}
+        if ssl = config.ssl
+          server.bind_tls(config.host_binding, config.port, ssl)
+        else
+          server.bind_tcp(config.host_binding, config.port)
+        end
+      {% end %}
+    end
+
+    yield config
+
+    display_startup_message(config, server)
+
+    server.listen unless config.env == "test"
+  end
+end
+
+Kemal.run do |config|
+  socket_server = config.server.try &.sockets.try &.first
+
+  unless socket_server.nil?
+    tcp_server = socket_server.is_a?(OpenSSL::SSL::Server) ? socket_server.wrapped : socket_server
+    tcp_server.as(TCPServer).tcp_nodelay = true
+    puts "tcp_nodelay? #{tcp_server.as(TCPServer).tcp_nodelay?}"
+  end
+end

@@ -10,6 +10,10 @@ const initWebSocket = (scene: Scene) => {
   ws.onclose = event => scene.registry.set("socketOpen", { isOpen: false, event });
 
   ws.onmessage = event => {
+    // To combat Nagle algorithm
+    // https://stackoverflow.com/a/19581883
+    ws.send(""); // empty, but still includes headers
+
     const parsedMessage = parse(event.data);
     pushMessageToPhaserRegistry(scene, parsedMessage);
   };

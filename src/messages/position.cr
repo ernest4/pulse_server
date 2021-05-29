@@ -13,7 +13,7 @@ module Pulse
       property :x, :y
 
       def initialize(character)
-        @character_id = character.id!
+        @character_id = character.id! # TODO: don't use DB record, use another number. Game server should generate and provide ids itself!
         @x = character.position[:x].to_u16
         @y = character.position[:y].to_u16
       end

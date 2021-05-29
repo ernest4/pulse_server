@@ -81,12 +81,13 @@ export default class Network extends Scene {
 
     if (!this.registry.values.clientMessages?.length) return;
 
-    this.registry.values.clientMessages.forEach((clientMessage: any) => {
+    const clientMessages = [...this.registry.values.clientMessages]; // make a copy so the buffer doesn't change as you're iterating over it! though ws.send() should be sync...
+    this.registry.values.clientMessages = []; // flush the buffer
+
+    clientMessages.forEach((clientMessage: any) => {
       // @ts-ignore
       this.ws.serializeAndSend(clientMessage);
     });
-
-    this.registry.values.clientMessages = []; // flush the buffer
   }
 
   // render() {}
