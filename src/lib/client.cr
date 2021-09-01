@@ -35,26 +35,26 @@ module Pulse
     end
 
     # TODO: ... wipp
-    def initialize_socket(reducer)
-      # TODO: may or may not use this, not as efficient as binary, even for regular chat...
-      # socket.on_message do |message|
-      # end
+    # def initialize_socket(reducer)
+    #   # TODO: may or may not use this, not as efficient as binary, even for regular chat...
+    #   # socket.on_message do |message|
+    #   # end
 
-      @socket.on_binary do |message|
-        reducer.reduce(self, message)
-      end
+    #   @socket.on_binary do |message|
+    #     reducer.reduce(self, message)
+    #   end
 
-      # TODO: queue async worker to read redis and save player progress to DB?
-      # TODO: for now save straight to DB here ???
-      # TODO: clean up game state etc.
-      @socket.on_close do |_|
-        reducer.close(self)
-        #   # sockets.delete(socket)
-        #   puts "Closing Socket: #{socket}"
-      end
+    #   # TODO: queue async worker to read redis and save player progress to DB?
+    #   # TODO: for now save straight to DB here ???
+    #   # TODO: clean up game state etc.
+    #   @socket.on_close do |_|
+    #     reducer.close(self)
+    #     #   # sockets.delete(socket)
+    #     #   puts "Closing Socket: #{socket}"
+    #   end
 
-      reducer.enter(self)
-    end
+    #   reducer.enter(self)
+    # end
   end
 end
 

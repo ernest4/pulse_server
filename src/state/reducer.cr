@@ -7,6 +7,25 @@ module Pulse
         @state = state
       end
 
+      def register_client(client)
+        # TODO: may or may not use this, not as efficient as binary, even for regular chat...
+        # socket.on_message do |message|
+        # end
+
+        client.socket.on_binary do |message|
+          reduce(client, message)
+        end
+
+        # TODO: queue async worker to read redis and save player progress to DB?
+        # TODO: for now save straight to DB here ???
+        # TODO: clean up game state etc.
+        client.socket.on_close do |_|
+          close(client)
+          #   # sockets.delete(socket)
+          #   puts "Closing Socket: #{socket}"
+        end
+      end
+
       def enter(client)
         puts "[Pulse] Client has entered: user_id = #{client.user.id}, character_id = #{client.character.id}, name = #{client.character.name}"
 
