@@ -13,13 +13,22 @@ module Pulse
 
     def start
       @engine.add_system(Pulse::Ecs::Systems::Manager.new)
-      @engine.add_system(Pulse::Ecs::Systems::Network.new(@debug)) # TODO: basic POC print messages to server console on receipt
-      @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers
+      # @engine.add_system(Pulse::Ecs::Systems::Network.new(@debug)) # TODO: basic POC print messages to server console on receipt
+      @engine.add_system(Pulse::Ecs::Systems::ConnectionListener.new)
+      @engine.add_system(Pulse::Ecs::Systems::Client.new)
+      @engine.add_system(Pulse::Ecs::Systems::MessageListener.new)
+      @engine.add_system(Pulse::Ecs::Systems::DisconnectionListener.new)
+
+      # TODO: next, deserializer / loader, need to use the ConnectionEvent uuid to load data from DB !!!
+
+      # @engine.add_system(Pulse::Ecs::Systems::Deserializer.new) # gonna invoke sidekiq workers
+      # @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers
       # @engine.add_system(Pulse::Ecs::Systems::PlayerEnter.new)
       # @engine.add_system(Input.new)
       # # @engine.add_system(AI.new)
-      @engine.add_system(Pulse::Ecs::Systems::Movement.new(@game_state.maps))
+      # @engine.add_system(Pulse::Ecs::Systems::Movement.new(@game_state.maps))
       # @engine.add_system(Collision.new)
+      # @engine.add_system(Pulse::Ecs::Systems::Broadcast.new(@game_state.maps))
 
       tick
     end

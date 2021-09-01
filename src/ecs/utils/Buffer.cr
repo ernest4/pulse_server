@@ -15,6 +15,14 @@ module Pulse
           @active_buffer.push(item)
         end
 
+        def process
+          swap
+          each { |item| yield item }
+          flush
+        end
+
+        # make all below private ??
+
         def swap
           temp = @active_buffer
           @active_buffer = @secondary_buffer
