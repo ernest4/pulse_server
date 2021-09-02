@@ -140,6 +140,8 @@ module Pulse
             spawn do
               client.socket.send(serialized_message)
             end
+
+            # Fiber.yield # this needed too?
           rescue ex : IO::Error
             # TODO: close client that's 'Exception: Closed stream (IO::Error)'
             # puts ex

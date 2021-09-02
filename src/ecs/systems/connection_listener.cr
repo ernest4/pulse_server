@@ -33,7 +33,7 @@ module Pulse
             connection_event = Pulse::Ecs::Component::ConnectionEvent.new(
               entity_id: engine.generate_entity_id,
               socket: connection[:socket],
-              uuid: connection[:env].session.string("uid")
+              uid: connection[:env].session.string("uid")
             )
             engine.add_component(connection_event)
           end

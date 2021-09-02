@@ -109,8 +109,8 @@ module Pulse
 
         private def create_socket_component(socket, env)
           entity_id = engine.generate_entity_id
-          uuid = env.session.string("uid")
-          socket_component = Pulse::Ecs::Component::Client::Socket.new(entity_id: entity_id, uuid: uuid)
+          uid = env.session.string("uid")
+          socket_component = Pulse::Ecs::Component::Client::Socket.new(entity_id: entity_id, uid: uid)
           engine.add_component(socket_component)
           entity_id
         end
