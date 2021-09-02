@@ -36,9 +36,9 @@ dependencies:
     version: "~> 0.10.0"
   jennifer:
     github: imdrasil/jennifer.cr
-    branch: master
+    version: "~> 0.11.1" # otherwise try master
+    # branch: master
     # version: "~> 0.10.0"
-    # commit: 1ad2a558f71370ac2787af64459b77ddcfaefcba
   sam:
     github: imdrasil/sam.cr
     version: "~> 0.4.0"

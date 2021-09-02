@@ -19,7 +19,9 @@ module Pulse
       @engine.add_system(Pulse::Ecs::Systems::MessageListener.new)
       @engine.add_system(Pulse::Ecs::Systems::DisconnectionListener.new)
 
-      # TODO: next, deserializer / loader, need to use the ConnectionEvent uuid to load data from DB !!!
+      # TODO: next, deserializer / loader, need to use the ConnectionEvent uuid to load data from DB !!!!
+      # need to decide too create all sub components here or in separate systems using the loaded data blob
+      @engine.add_system(Pulse::Ecs::Systems::CharacterLoader.new)
 
       # @engine.add_system(Pulse::Ecs::Systems::Deserializer.new) # gonna invoke sidekiq workers
       # @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers
