@@ -12,8 +12,8 @@ module Pulse
 
         def update
           register_socket_message_listeners
-          remove_message_events
-          create_message_events
+          remove_client_message_events
+          create_client_message_events
         end
 
         def destroy
@@ -40,21 +40,21 @@ module Pulse
           end
         end
 
-        private def remove_message_events
-          engine.query(MessageEvent) do |query_set|
-            message_event = query_set.first
-            engine.remove_component(message_event)
+        private def remove_client_message_events
+          engine.query(ClientMessageEvent) do |query_set|
+            client_message_event = query_set.first
+            engine.remove_component(client_message_event)
           end
         end
 
-        private def create_message_events
+        private def create_client_message_events
           @messages_buffer.process do |message|
-            message_event = Pulse::Ecs::Component::MessageEvent.new(
+            client_message_event = Pulse::Ecs::Component::ClientMessageEvent.new(
               entity_id: engine.generate_entity_id,
               from_entity_id: message[:from_entity_id],
               binary_message: message[:binary_message]
             )
-            engine.add_component(message_event)
+            engine.add_component(client_message_event)
           end
         end
       end

@@ -2,7 +2,7 @@
 module Pulse
   module Ecs
     module Component
-      class MessageEvent < Base
+      class ClientMessageEvent < Base
         property :from_entity_id, :binary_message
 
         def initialize(entity_id : Int32, from_entity_id : Int32, binary_message : Slice(UInt8))

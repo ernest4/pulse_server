@@ -2,11 +2,11 @@ module Pulse
   module Ecs
     module Component
       class Location < Base
-        getter :current_map
+        getter :current_map_name
 
-        def initialize(entity_id : Int32, current_map : String)
+        def initialize(entity_id : Int32, current_map_name : String)
           super(entity_id)
-          @current_map = current_map
+          @current_map_name = current_map_name
         end
       end
     end

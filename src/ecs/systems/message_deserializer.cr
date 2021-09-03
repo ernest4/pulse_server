@@ -20,7 +20,7 @@ module Pulse
         end
 
         MESSAGE_COMPONENT_CLASSES = {
-          Pulse::Messages::Move.to_s => Pulse::Ecs::Component::MoveMessage,
+          Pulse::Messages::Move.to_s => Pulse::Ecs::Component::ClientMoveMessage,
         }
 
         private def remove_message_components
@@ -33,15 +33,15 @@ module Pulse
         end
 
         private def create_message_components
-          engine.query(MessageEvent) do |query_set|
-            message_event = query_set.first
+          engine.query(ClientMessageEvent) do |query_set|
+            client_message_event = query_set.first
             
-            parsed_message = Pulse::Messages::Resolver.resolve(message_event.binary_message)
+            message = Pulse::Messages::Resolver.resolve(client_message_event.binary_message)
             # TODO: move out into helper class ? resolver ?
-            message_component = MESSAGE_COMPONENT_CLASSES[parsed_message.class.to_s].new(
+            message_component = MESSAGE_COMPONENT_CLASSES[message.class.to_s].new(
               entity_id: engine.generate_entity_id,
-              from_entity_id: message_event.from_entity_id,
-              parsed_message: parsed_message
+              from_entity_id: client_message_event.from_entity_id,
+              message: message
             )
             engine.add_component(message_component)
           end

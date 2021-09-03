@@ -142,7 +142,7 @@ module Pulse
         end
 
         # private def clean_up_message_event_entities
-        #   engine.query(MessageEvent) do |query_set|
+        #   engine.query(ClientMessageEvent) do |query_set|
         #     message_event = query_set.first
         #     engine.remove_entity(message_event.id)
         #   end
@@ -155,7 +155,7 @@ module Pulse
         #     entity_id = engine.generate_entity_id
         #     binary_message = message.binary_message
         #     socket_entity_id = message.socket_item.id
-        #     message_event_component = Pulse::Ecs::Component::MessageEvent.new(entity_id: entity_id, category: MessageEvent::Category::Binary, message: binary_message, from: socket_entity_id)
+        #     message_event_component = Pulse::Ecs::Component::ClientMessageEvent.new(entity_id: entity_id, category: ClientMessageEvent::Category::Binary, message: binary_message, from: socket_entity_id)
         #     engine.add_component(message_event_component)
         #   end
 

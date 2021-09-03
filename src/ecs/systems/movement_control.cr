@@ -19,13 +19,13 @@ module Pulse
         end
 
         private def apply_move_message
-          engine.query(MoveMessage) do |query_set|
+          engine.query(ClientMoveMessage) do |query_set|
             move_message = query_set.first
             
             physics_body = engine.get_component(PhysicsBody, move_message.from_entity_id)
             speed = engine.get_component(Speed, move_message.from_entity_id)
 
-            direction = move_message.parsed_message.direction
+            direction = move_message.message.direction
             new_linear_velocity = calculate_new_linear_velocity(speed.units, direction)
 
             physics_body.linear_velocity.x = new_linear_velocity[:x]

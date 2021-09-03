@@ -49,7 +49,7 @@ module Pulse
             Pulse::Ecs::Component::Health.new(entity_id: entity_id, points: 100), # TODO: add points to and load points from, the DB
             Pulse::Ecs::Component::Location.new(
               entity_id: entity_id,
-              current_map: character.current_map
+              current_map_name: character.current_map
             ),
             Pulse::Ecs::Component::Speed.new(
               entity_id: entity_id,

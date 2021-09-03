@@ -3,7 +3,7 @@
 module Pulse
   module Messages
     class Move < Pulse::Messages::ApplicationMessage
-      TYPE = 1_u8
+      TYPE = 1_u8 # TODO: maybe send message types lookup as first message to client??
 
       # 8 directions:
       # no_value => 0
