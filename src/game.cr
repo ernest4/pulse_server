@@ -18,10 +18,40 @@ module Pulse
       @engine.add_system(Pulse::Ecs::Systems::Client.new)
       @engine.add_system(Pulse::Ecs::Systems::MessageListener.new)
       @engine.add_system(Pulse::Ecs::Systems::DisconnectionListener.new)
-      
-      # TODO: next, deserializer / loader, need to use the ConnectionEvent uid to load data from DB !!!!
-      # need to decide too create all sub components here or in separate systems using the loaded data blob
       @engine.add_system(Pulse::Ecs::Systems::CharacterDeserializer.new)
+      @engine.add_system(Pulse::Ecs::Systems::MessageDeserializer.new)
+      @engine.add_system(Pulse::Ecs::Systems::MovementControl.new) # TODO: takes in MoveMessage and applies it to PhysicsBody
+      @engine.add_system(Pulse::Ecs::Systems::Movement.new) # TODO: takes in PhysicsBody and applies it to Transform
+      @engine.add_system(Pulse::Ecs::Systems::Collision.new) # TODO: takes in transform and checks it against map. Might be useful to store 'previous' values on Transform (that get auto updated) so in case of collision Transform could be reverted to that?
+
+      # TODO: next need to set up broadcaster / notify everyone of new character joining map
+      # set up maps first ?/!
+
+      # Pulse::Ecs::Systems::Broadcast {
+      #   update {
+      #     query [new_connection, location, transform] {
+      #       set up player in the broadcast_hash_list_thing
+      #     }
+
+      #     query [move_message, transform] {
+      #       update up player in the broadcast_hash_list_thing
+      #     }
+
+      #     query [...] {
+      #       perform broadcasts using broadcast_hash_list_thing
+      #     }
+      #   }
+      # }
+
+      # ALTERNATIVE: 
+      # inspiration from: https://davidwalsh.name/3d-websocketshttps://davidwalsh.name/3d-websockets
+      # NearbyClients component that stores clients in broadcast range. It's an array of entity_ids
+      # of other client components.
+      # When broadcasting, iterate over client entity_ids and load them in one by one with # O(n)
+      # engine.get_component(component_class : Component.class, entity_id : Int32) # O(1)
+      # ALSO: control the broadcast rate, 2-4 times a second? for movement maybe, shooting should
+      # be faster
+
 
       # @engine.add_system(Pulse::Ecs::Systems::Deserializer.new) # gonna invoke sidekiq workers
       # @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers

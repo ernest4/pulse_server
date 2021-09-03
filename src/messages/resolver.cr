@@ -14,6 +14,8 @@ module Pulse
       #   # TODO: drop item... # if player sends this, resend this back to player to acknowledge it as validated
       #   # TODO: pick up item... # if player sends this, resend this back to player to acknowledge it as validated
       #   # TODO: use item... (drinking potion, cast spell, put on armour, spend gold etc) # if player sends this, resend this back to player to acknowledge it as validated
+      # TODO: action...more general than 'attack', like, use a skill?
+      # TODO: skill...more specific than 'action', better?
       # }
 
       MESSAGE_TYPE_CLASSES = {
