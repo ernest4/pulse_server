@@ -13,7 +13,6 @@ module Pulse
 
     def start
       @engine.add_system(Pulse::Ecs::Systems::Manager.new)
-      # @engine.add_system(Pulse::Ecs::Systems::Network.new(@debug)) # TODO: basic POC print messages to server console on receipt
       @engine.add_system(Pulse::Ecs::Systems::ConnectionListener.new)
       @engine.add_system(Pulse::Ecs::Systems::Client.new)
       @engine.add_system(Pulse::Ecs::Systems::MessageListener.new)
@@ -21,7 +20,7 @@ module Pulse
       @engine.add_system(Pulse::Ecs::Systems::CharacterDeserializer.new)
       @engine.add_system(Pulse::Ecs::Systems::MessageDeserializer.new)
       @engine.add_system(Pulse::Ecs::Systems::MovementControl.new)
-      @engine.add_system(Pulse::Ecs::Systems::Movement.new) # TODO: takes in PhysicsBody and applies it to Transform
+      @engine.add_system(Pulse::Ecs::Systems::Movement.new)
       @engine.add_system(Pulse::Ecs::Systems::Collision.new) # TODO: takes in transform and checks it against map. Might be useful to store 'previous' values on Transform (that get auto updated) so in case of collision Transform could be reverted to that?
 
       # TODO: next need to set up broadcaster / notify everyone of new character joining map
