@@ -22,7 +22,7 @@ module Pulse
       @engine.add_system(Pulse::Ecs::Systems::MovementControl.new)
       @engine.add_system(Pulse::Ecs::Systems::Movement.new)
       @engine.add_system(Pulse::Ecs::Systems::Collision.new) # TODO: takes in transform and checks it against map. Might be useful to store 'previous' values on Transform (that get auto updated) so in case of collision Transform could be reverted to that?
-      @engine.add_system(Pulse::Ecs::Systems::SpatialPartitioning.new) # TODO: once all movement resolved, add/update NearbyCharacters of each character based on map and location and transform!
+      @engine.add_system(Pulse::Ecs::Systems::SpatialPartitioning.new)
       @engine.add_system(Pulse::Ecs::Systems::CharacterEnter.new)
       # TODO: any other systems here
       # @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers

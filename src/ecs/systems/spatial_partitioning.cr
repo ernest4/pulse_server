@@ -14,7 +14,7 @@ module Pulse
           engine.query(Location, Transform) do |query_set|
             location, transform = query_set
             update_map(location, transform)
-            create_or_update_nearby_characters_component(location, transform)
+            update_or_create_nearby_characters_component(location, transform)
           end
         end
 
@@ -27,36 +27,19 @@ module Pulse
           current_map.update_map(transform.position.x, transform.position.y, transform.id)
         end
 
-        private def create_or_update_nearby_characters_component(location, transform)
+        private def update_or_create_nearby_characters_component(location, transform)
           nearby_characters = find_or_create_nearby_characters_component(transform.id)
-
-          # https://davidwalsh.name/3d-websockets
-          # NOTE: not sure why the link above suggests comparing two lists, just replace them!
-          # current_nearby_set = nearby_characters.entity_ids
           updated_nearby_set = SparseSet::SparseSet.new
-
           current_map = state.maps[location.current_map_name]
-          cell_x, cell_y = world_to_cell_coordinates(transform.position.x, transform.position.y, current_map.cell_size)
-
-          # TODO: move the double loop to map.cell(x,y).with_nearby_cells {|cell| cell}
-          [cell_x - 1, cell_x, cell_x + 1].each do |current_cell_x|
-            [cell_y - 1, cell_y, cell_y + 1].each do |current_cell_y|
-              # TODO: the map.cell() should be able to handle coordinates out of bounds and just return nil for those instead of erroring out like arrays normally do
-              current_map.cell(current_cell_x, current_cell_y).characters.stream_ids do |character_entity_id|
-                updated_nearby_set.add(character_entity_id) unless character_entity_id == transform.id
-              end
-            end
+          current_map.nearby_characters(transform.position.x, transform.position.y) do |character_entity_id|
+            updated_nearby_set.add(character_entity_id) unless character_entity_id == transform.id
           end
-
           nearby_characters.entity_ids_set = updated_nearby_set
         end
 
         private def find_or_create_nearby_characters_component(entity_id)
           nearby_characters = engine.get_component(NearbyCharacters, entity_id)
-
-          if nearby_characters.nil?
-            nearby_characters = create_nearby_characters_component(entity_id)
-          end
+          return create_nearby_characters_component(entity_id) if nearby_characters.nil?
 
           nearby_characters
         end

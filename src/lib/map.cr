@@ -14,7 +14,7 @@ module Pulse
         @characters.remove(entity_id)
       end
 
-      def stream_ids
+      def stream_character_ids
         @characters.stream do |sparse_set_item|
           yield sparse_set_item.id
         end
@@ -71,9 +71,25 @@ module Pulse
       @name = "hub_0" # TODO: default for any new character
       @width = 6
       @height = 6
+      @cells = generate_empty_cells
     end
 
-    def map_i32_to_u16(map_i32)
+    def update_map(x, y, entity_id)
+      # Always removing and adding means we dont need to explicitly check if new cell matches old
+      # Removing and adding are O(1) for sparse-set
+      remove_character(x, y, entity_id) # remove from old cell w.e. it was
+      add_character(x, y, entity_id) # put into new cell w.e. it is
+    end
+
+    def nearby_characters(x, y)
+      nearby_cells(x, y).do |cell|
+        cell.stream_character_ids do |character_entity_id|
+          yield character_entity_id
+        end
+      end
+    end
+
+    private def map_i32_to_u16(map_i32)
       map_i32.map do |row|
         row.map do |column|
           column.to_u16
@@ -81,29 +97,10 @@ module Pulse
       end
     end
 
-    def cell_size
-      CELL_SIZE_IN_PX
-    end
-
-    def world_to_cell_coordinates(x, y)
-      # x = x // cell_size;
-      # y = y // cell_size;
-     
-      # {x: x, y: y}
-
-      [x // cell_size, y // cell_size]
-    end
-
-    # map needs to know which cell character should be in.
-    # add to cell if in no cells. OR
-    # remove from old cell and put into new cell.
-    def update_map(x, y, entity_id)
-      # TODO: check current cell vs new cell and update accordingly
-      add_character(transform.position.x, transform.position.y, connection_event.id)
-    end
-    
-    def cell(x, y)
-      # TODO: ...
+    private def generate_empty_cells
+      MAX_WORLD_SIZE_IN_CELLS.times.map do
+        MAX_WORLD_SIZE_IN_CELLS.times.map { nil }.to_a
+      end.to_a
     end
     
     private def add_character(x, y, entity_id)
@@ -114,6 +111,30 @@ module Pulse
     private def remove_character(x, y, entity_id)
       cell_x, cell_y = world_to_cell_coordinates(x, y)
       cell(cell_x, cell_y).remove_character(entity_id)
+    end
+
+    private def world_to_cell_coordinates(x, y)
+      [x // CELL_SIZE_IN_PX, y // CELL_SIZE_IN_PX]
+    end
+
+    private def nearby_cells(x, y)
+      cell_x, cell_y = world_to_cell_coordinates(x, y)
+
+      [cell_x - 1, cell_x, cell_x + 1].each do |current_cell_x|
+        [cell_y - 1, cell_y, cell_y + 1].each do |current_cell_y|
+          cell = cell(current_cell_x, current_cell_y) 
+          yield cell unless cell.nil?
+        end
+      end
+    end
+
+    private def cell(x, y)
+      return nil if x < 0 || y < 0
+      return nil if MAX_WORLD_SIZE_IN_CELLS < x || MAX_WORLD_SIZE_IN_CELLS < y
+
+      cell = @cells[x][y]
+      cell = Cell.new if cell.nil? # lazy initialization
+      cell
     end
 
     # def load
