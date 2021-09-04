@@ -2,8 +2,8 @@ module Pulse
   module Ecs
     module Systems
       class SpatialPartitioning < Fast::ECS::System
-        def initialize(world : Pulse::World)
-          @world = world
+        def initialize(state : Pulse::State::ApplicationState)
+          @state = state
         end
 
         def start
@@ -24,20 +24,20 @@ module Pulse
 
         # TODO: move this to world class?
         private def add_to_world(connection_event, location, transform)
-          current_map = world.maps[location.current_map_name]
+          current_map = state.maps[location.current_map_name]
 
           # TODO: can probs move this to some map.add_character() method
-          cell_x, cell_y = world_to_cell_coordinates(transform.position.x, transform.position.y, current_map.grid_size)
+          cell_x, cell_y = world_to_cell_coordinates(transform.position.x, transform.position.y, current_map.cell_size)
           current_map.cell(cell_x, cell_y).characters.add(connection_event.id) # TODO: units is sparse set
         end
 
-        private def world_to_cell_coordinates(x, y, grid_size)
-          # x = x // grid_size;
-          # y = y // grid_size;
+        private def world_to_cell_coordinates(x, y, cell_size)
+          # x = x // cell_size;
+          # y = y // cell_size;
          
           # {x: x, y: y}
 
-          [x // grid_size, y // grid_size]
+          [x // cell_size, y // cell_size]
         end
 
         private def create_or_update_nearby_characters_component(connection_event, location, transform)
@@ -48,10 +48,10 @@ module Pulse
           # current_nearby_set = nearby_characters.entity_ids
           updated_nearby_set = SparseSet::SparseSet.new
 
-          current_map = world.maps[location.current_map_name]
-          cell_x, cell_y = world_to_cell_coordinates(transform.position.x, transform.position.y, current_map.grid_size)
+          current_map = state.maps[location.current_map_name]
+          cell_x, cell_y = world_to_cell_coordinates(transform.position.x, transform.position.y, current_map.cell_size)
 
-          # TODO: move the double loop to world.cell(x,y).with_nearby_cells {|cell| cell}
+          # TODO: move the double loop to map.cell(x,y).with_nearby_cells {|cell| cell}
           [cell_x - 1, cell_x, cell_x + 1].each do |current_cell_x|
             [cell_y - 1, cell_y, cell_y + 1].each do |current_cell_y|
               # TODO: the map.cell() should be able to handle coordinates out of bounds and just return nil for those instead of erroring out like arrays normally do

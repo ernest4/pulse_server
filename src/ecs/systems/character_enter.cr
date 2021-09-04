@@ -2,8 +2,8 @@ module Pulse
   module Ecs
     module Systems
       class CharacterEnter < Fast::ECS::System
-        def initialize(world : Pulse::World)
-          @world = world
+        def initialize(state : Pulse::State::ApplicationState)
+          @state = state
         end
 
         def start
@@ -47,7 +47,7 @@ module Pulse
         private def map_init_message(current_map_name, recipient_character_entity_id)
           Pulse::Ecs::Component::ServerMessage.new(
             entity_id: engine.generate_entity_id,
-            message: Pulse::Messages::MapInit.new(world.maps[current_map_name]),
+            message: Pulse::Messages::MapInit.new(state.maps[current_map_name]),
             to_entity_id: recipient_character_entity_id
           )
         end

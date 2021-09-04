@@ -5,25 +5,18 @@ module Pulse
     class Memory < Pulse::State::ApplicationState
       # @maps : Hash(String, Pulse::Map)
 
-      # property :maps : Hash(String, Pulse::Map)
-      # setter :maps
+      property :maps
 
       def initialize
-        # TODO: ...
         @maps = {} of String => Pulse::Map
       end
 
-      def maps : Hash(String, Pulse::Map)
-        @maps
-      end
-
       def load!
-        # TODO: ... load from files ?!?
+        # TODO: ... load from files ?!? CSV, to stream world info cell by cell?
 
         # TESTING ...
         # test_map = Pulse::Map.new(width: 6, height: 6)
-        test_map = Pulse::Map.new
-        @maps[test_map.name] = test_map
+        @maps["hub_0"] = Pulse::Map.new
       end
     end
   end
