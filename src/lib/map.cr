@@ -1,6 +1,26 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Map
+    class Cell
+      def initialize
+        @characters = SparseSet::SparseSet.new
+      end
+
+      def add_character(entity_id)
+        @characters.add(SparseSet::Item.new(entity_id))
+      end
+
+      def remove_character(entity_id)
+        @characters.remove(entity_id)
+      end
+
+      def stream_ids
+        @characters.stream do |sparse_set_item|
+          yield sparse_set_item.id
+        end
+      end
+    end
+
     TILE_SIZE_IN_PX = 32_u8 # 32 px
     MAX_WORLD_SIZE_IN_TILES = 60_u16
     MAX_WORLD_SIZE_IN_PX = (TILE_SIZE_IN_PX * MAX_WORLD_SIZE_IN_TILES).to_u16 # square worlds
@@ -74,13 +94,26 @@ module Pulse
       [x // cell_size, y // cell_size]
     end
 
-    def add_character(x, y, entity_id)
-      cell_x, cell_y = world_to_cell_coordinates(x, y)
-      cell(cell_x, cell_y).characters.add(entity_id) # TODO: units is sparse set
+    # map needs to know which cell character should be in.
+    # add to cell if in no cells. OR
+    # remove from old cell and put into new cell.
+    def update_map(x, y, entity_id)
+      # TODO: check current cell vs new cell and update accordingly
+      add_character(transform.position.x, transform.position.y, connection_event.id)
     end
-
+    
     def cell(x, y)
       # TODO: ...
+    end
+    
+    private def add_character(x, y, entity_id)
+      cell_x, cell_y = world_to_cell_coordinates(x, y)
+      cell(cell_x, cell_y).add_character(entity_id)
+    end
+
+    private def remove_character(x, y, entity_id)
+      cell_x, cell_y = world_to_cell_coordinates(x, y)
+      cell(cell_x, cell_y).remove_character(entity_id)
     end
 
     # def load

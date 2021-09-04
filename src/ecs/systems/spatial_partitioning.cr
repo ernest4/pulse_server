@@ -11,10 +11,10 @@ module Pulse
         end
 
         def update
-          engine.query(ConnectionEvent, Location, Transform) do |query_set|
-            connection_event, location, transform = query_set
-            add_to_map(connection_event, location, transform)
-            create_or_update_nearby_characters_component(connection_event, location, transform)
+          engine.query(Location, Transform) do |query_set|
+            location, transform = query_set
+            update_map(location, transform)
+            create_or_update_nearby_characters_component(location, transform)
           end
         end
 
@@ -22,14 +22,13 @@ module Pulse
           # TODO: ...
         end
 
-        # TODO: move this to world class?
-        private def add_to_map(connection_event, location, transform)
+        private def update_map(location, transform)
           current_map = state.maps[location.current_map_name]
-          current_map.add_character(transform.position.x, transform.position.y, connection_event.id)
+          current_map.update_map(transform.position.x, transform.position.y, transform.id)
         end
 
-        private def create_or_update_nearby_characters_component(connection_event, location, transform)
-          nearby_characters = find_or_create_nearby_characters_component(connection_event.id)
+        private def create_or_update_nearby_characters_component(location, transform)
+          nearby_characters = find_or_create_nearby_characters_component(transform.id)
 
           # https://davidwalsh.name/3d-websockets
           # NOTE: not sure why the link above suggests comparing two lists, just replace them!
@@ -43,8 +42,8 @@ module Pulse
           [cell_x - 1, cell_x, cell_x + 1].each do |current_cell_x|
             [cell_y - 1, cell_y, cell_y + 1].each do |current_cell_y|
               # TODO: the map.cell() should be able to handle coordinates out of bounds and just return nil for those instead of erroring out like arrays normally do
-              current_map.cell(current_cell_x, current_cell_y).characters.stream do |character_entity_id|
-                updated_nearby_set.add(character_entity_id) unless character_entity_id == connection_event.id
+              current_map.cell(current_cell_x, current_cell_y).characters.stream_ids do |character_entity_id|
+                updated_nearby_set.add(character_entity_id) unless character_entity_id == transform.id
               end
             end
           end
