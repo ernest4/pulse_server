@@ -28,7 +28,7 @@ module Pulse
 
           components.push(map_init_message(location.current_map_name, character_entity_id))
 
-          nearby_characters.entity_ids.each do |nearby_character_entity_id|
+          nearby_characters.entity_ids_set.stream do |nearby_character_entity_id|
             # messages to inform others of self
             components.push(enter_message(character_entity_id, name, nearby_character_entity_id))
             components.push(position_message(character_entity_id, transform, nearby_character_entity_id))
