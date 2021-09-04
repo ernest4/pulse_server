@@ -29,6 +29,8 @@ module Pulse
       # @engine.add_system(AI.new)
       @engine.add_system(Pulse::Ecs::Systems::Broadcast.new) # NOTE: always last
 
+      # TODO: try run the server and clean up to connect to client
+      # should be close to working now...
 
       tick
     end

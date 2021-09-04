@@ -11,7 +11,7 @@ module Pulse
         end
 
         def update
-          engine.query(ConnectionEvent, Name, Transform, Location, NearbyClients) do |query_set|
+          engine.query(ConnectionEvent, Name, Transform, Location, NearbyCharacters) do |query_set|
             handle_character_enter(query_set)
           end
         end
