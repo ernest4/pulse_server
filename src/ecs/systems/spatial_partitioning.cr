@@ -13,7 +13,7 @@ module Pulse
         def update
           engine.query(ConnectionEvent, Location, Transform) do |query_set|
             connection_event, location, transform = query_set
-            add_to_world(connection_event, location, transform)
+            add_to_map(connection_event, location, transform)
             create_or_update_nearby_characters_component(connection_event, location, transform)
           end
         end
@@ -23,21 +23,9 @@ module Pulse
         end
 
         # TODO: move this to world class?
-        private def add_to_world(connection_event, location, transform)
+        private def add_to_map(connection_event, location, transform)
           current_map = state.maps[location.current_map_name]
-
-          # TODO: can probs move this to some map.add_character() method
-          cell_x, cell_y = world_to_cell_coordinates(transform.position.x, transform.position.y, current_map.cell_size)
-          current_map.cell(cell_x, cell_y).characters.add(connection_event.id) # TODO: units is sparse set
-        end
-
-        private def world_to_cell_coordinates(x, y, cell_size)
-          # x = x // cell_size;
-          # y = y // cell_size;
-         
-          # {x: x, y: y}
-
-          [x // cell_size, y // cell_size]
+          current_map.add_character(transform.position.x, transform.position.y, connection_event.id)
         end
 
         private def create_or_update_nearby_characters_component(connection_event, location, transform)

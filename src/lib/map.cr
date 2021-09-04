@@ -1,9 +1,11 @@
 # TODO: speeecs ?!?!?
 module Pulse
   class Map
-    CELL_SIZE_IN_PX = 32_u8 # 32 px
-    MAX_WORLD_SIZE_IN_CELLS = 60_u16
-    MAX_WORLD_SIZE_IN_PX = (CELL_SIZE_IN_PX * MAX_WORLD_SIZE_IN_CELLS).to_u16 # square worlds
+    TILE_SIZE_IN_PX = 32_u8 # 32 px
+    MAX_WORLD_SIZE_IN_TILES = 60_u16
+    MAX_WORLD_SIZE_IN_PX = (TILE_SIZE_IN_PX * MAX_WORLD_SIZE_IN_TILES).to_u16 # square worlds
+    CELL_SIZE_IN_PX = TILE_SIZE_IN_PX * 60
+    MAX_WORLD_SIZE_IN_CELLS = MAX_WORLD_SIZE_IN_PX / CELL_SIZE_IN_PX
 
     property :name, :cell, :tiles, :width, :height
 
@@ -61,6 +63,24 @@ module Pulse
 
     def cell_size
       CELL_SIZE_IN_PX
+    end
+
+    def world_to_cell_coordinates(x, y)
+      # x = x // cell_size;
+      # y = y // cell_size;
+     
+      # {x: x, y: y}
+
+      [x // cell_size, y // cell_size]
+    end
+
+    def add_character(x, y, entity_id)
+      cell_x, cell_y = world_to_cell_coordinates(x, y)
+      cell(cell_x, cell_y).characters.add(entity_id) # TODO: units is sparse set
+    end
+
+    def cell(x, y)
+      # TODO: ...
     end
 
     # def load
