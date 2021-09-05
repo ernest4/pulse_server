@@ -12,7 +12,10 @@ module Pulse
 
         def update
           # naive
-          engine.query(ServerMessage) { |query_set| broadcast(query_set.first) }
+          engine.query(Component::ServerMessage) do |query_set|
+            server_message = query_set.first.as Component::ServerMessage
+            broadcast(server_message)
+          end
 
           # TODO: activate & test more bandwidth efficient option
           # entity_messages_hash = prepare_lists
@@ -25,7 +28,7 @@ module Pulse
 
         # naive
         private def broadcast(server_message)
-          recipient_client = engine.get_component(Client, server_message.to_entity_id)
+          recipient_client = engine.get_component(Component::Client, server_message.to_entity_id).as Component::Client
           serialized_message = server_message.message.to_slice
           recipient_client.socket.send(serialized_message)
           engine.remove_component(server_message)

@@ -3,7 +3,7 @@ module Pulse
     module Systems
       class MessageListener < Fast::ECS::System
         def initialize
-          @messages_buffer = Buffer(Hash(Symbol, Int32 | Slice)).new
+          @messages_buffer = Utils::Buffer({from_entity_id: Int32, binary_message: Slice(UInt8)}).new
         end
 
         def start
@@ -21,10 +21,10 @@ module Pulse
         end
 
         private def register_socket_message_listeners
-          engine.query(ConnectionEvent) do |query_set|
-            connection_event = query_set.first
+          engine.query(Component::ConnectionEvent, Component::Client) do |query_set|
+            connection_event, client = Tuple(Component::ConnectionEvent, Component::Client).from(query_set)
 
-            connection_event.socket.on_binary do |binary_message|
+            client.socket.on_binary do |binary_message|
               # TODO: add message throttling mechanism here... ?!?
   
               # TODO: moving this out of here...too its own system
@@ -32,16 +32,13 @@ module Pulse
               # new_message = Message.new(socket, parsed_message)
               # @message_buffer.push(new_message)
 
-              @messages_buffer.push({
-                :from_entity_id => connection_event.id,
-                :binary_message => binary_message
-              })
+              @messages_buffer.push({from_entity_id: client.id, binary_message: binary_message})
             end
           end
         end
 
         private def remove_client_message_events
-          engine.query(ClientMessageEvent) do |query_set|
+          engine.query(Component::ClientMessageEvent) do |query_set|
             client_message_event = query_set.first
             engine.remove_component(client_message_event)
           end
@@ -49,7 +46,7 @@ module Pulse
 
         private def create_client_message_events
           @messages_buffer.process do |message|
-            client_message_event = Pulse::Ecs::Component::ClientMessageEvent.new(
+            client_message_event =  Component::ClientMessageEvent.new(
               entity_id: engine.generate_entity_id,
               from_entity_id: message[:from_entity_id],
               binary_message: message[:binary_message]

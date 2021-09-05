@@ -1,7 +1,7 @@
 module Pulse
   module Ecs
     module Component
-      class Name < Base
+      class Name < Fast::ECS::Component
         getter :name
 
         def initialize(entity_id : Int32, name : String)

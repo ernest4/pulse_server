@@ -3,13 +3,11 @@ module Pulse
     module Systems
       class ConnectionListener < Fast::ECS::System
         def initialize
-          @connections_buffer = Buffer(Hash(Symbol, HTTP::WebSocket | Hash)).new
+          @connections_buffer = Utils::Buffer({socket: HTTP::WebSocket, env: HTTP::Server::Context}).new
         end
 
         def start
-          ws "/" do |socket, env|
-            @connections_buffer.push({:socket => socket, :env => env})
-          end
+          ws "/" { |socket, env| @connections_buffer.push({socket: socket, env: env}) }
         end
 
         def update
@@ -22,7 +20,7 @@ module Pulse
         end
 
         private def remove_connection_events
-          engine.query(ConnectionEvent) do |query_set|
+          engine.query(Component::ConnectionEvent) do |query_set|
             connection_event = query_set.first
             engine.remove_component(connection_event)
           end
@@ -30,12 +28,14 @@ module Pulse
 
         private def create_connection_events
           @connections_buffer.process do |connection|
-            connection_event = Pulse::Ecs::Component::ConnectionEvent.new(
-              entity_id: engine.generate_entity_id,
+            entity_id = engine.generate_entity_id
+            connection_event = Component::ConnectionEvent.new(entity_id: entity_id)
+            client = Component::Client.new(
+              entity_id: entity_id,
               socket: connection[:socket],
               uid: connection[:env].session.string("uid")
             )
-            engine.add_component(connection_event)
+            engine.add_components(connection_event, client)
           end
         end
       end

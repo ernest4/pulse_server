@@ -1,7 +1,7 @@
 module Pulse
   module Ecs
     module Component
-      class Speed < Base
+      class Speed < Fast::ECS::Component
         getter :units
 
         def initialize(entity_id : Int32, units : Int32)

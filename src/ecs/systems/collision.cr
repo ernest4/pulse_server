@@ -11,7 +11,7 @@ module Pulse
         end
 
         def update
-          engine.query(Transform) { |query_set| handle_collision(query_set) }
+          engine.query(Component::Transform) { |query_set| handle_collision(query_set) }
         end
 
         def destroy

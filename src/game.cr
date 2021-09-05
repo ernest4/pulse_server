@@ -1,9 +1,12 @@
 module Pulse
   class Game
+    @server_milliseconds_per_tick : Int32
+    @server_microseconds_per_tick : Int32
+
     def initialize(debug : Bool, server_max_fps : Int32 = 20)
       @debug = debug
       @server_max_fps = server_max_fps
-      @server_milliseconds_per_tick = 1000 / @server_max_fps
+      @server_milliseconds_per_tick = 1000 // @server_max_fps
       @server_microseconds_per_tick = (1000 * @server_milliseconds_per_tick)
       @engine = Fast::ECS::Engine.new(@debug)
 
@@ -14,7 +17,6 @@ module Pulse
     def start
       @engine.add_system(Pulse::Ecs::Systems::Manager.new)
       @engine.add_system(Pulse::Ecs::Systems::ConnectionListener.new)
-      @engine.add_system(Pulse::Ecs::Systems::Client.new)
       @engine.add_system(Pulse::Ecs::Systems::MessageListener.new)
       @engine.add_system(Pulse::Ecs::Systems::DisconnectionListener.new)
       @engine.add_system(Pulse::Ecs::Systems::CharacterDeserializer.new)

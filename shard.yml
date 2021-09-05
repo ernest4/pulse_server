@@ -70,7 +70,7 @@ dependencies:
     version: "~> 1.1"
   fast-ecs:
     github: ernest4/fast-ecs
-    version: "~> 0.1"
+    version: "~> 0.1.1"
 
 crystal: '>= 1.0.0'
 

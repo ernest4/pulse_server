@@ -1,7 +1,7 @@
 module Pulse
   module Ecs
     module Component
-      class NearbyCharacters < Base
+      class NearbyCharacters < Fast::ECS::Component
         property :entity_ids_set
 
         def initialize(entity_id : Int32)

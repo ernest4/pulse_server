@@ -1,7 +1,7 @@
 module Pulse
   module Ecs
     module Systems
-      class MessageDeserializer < Fast::ECS::System
+      class MovementControl < Fast::ECS::System
         def initialize
           # ...
         end
@@ -19,11 +19,11 @@ module Pulse
         end
 
         private def apply_move_message
-          engine.query(ClientMoveMessage) do |query_set|
-            move_message = query_set.first
+          engine.query(Component::ClientMoveMessage) do |query_set|
+            move_message = query_set.first.as Component::ClientMoveMessage
             
-            physics_body = engine.get_component(PhysicsBody, move_message.from_entity_id)
-            speed = engine.get_component(Speed, move_message.from_entity_id)
+            physics_body = engine.get_component(Component::PhysicsBody, move_message.from_entity_id).as Component::PhysicsBody
+            speed = engine.get_component(Component::Speed, move_message.from_entity_id).as Component::Speed
 
             direction = move_message.message.direction
             new_linear_velocity = calculate_new_linear_velocity(speed.units, direction)

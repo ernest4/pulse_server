@@ -1,7 +1,7 @@
 module Pulse
   module Ecs
     module Component
-      class Location < Base
+      class Location < Fast::ECS::Component
         getter :current_map_name
 
         def initialize(entity_id : Int32, current_map_name : String)

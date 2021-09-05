@@ -25,14 +25,14 @@ module Pulse
     MAX_WORLD_SIZE_IN_TILES = 60_u16
     MAX_WORLD_SIZE_IN_PX = (TILE_SIZE_IN_PX * MAX_WORLD_SIZE_IN_TILES).to_u16 # square worlds
     CELL_SIZE_IN_PX = TILE_SIZE_IN_PX * 60
-    MAX_WORLD_SIZE_IN_CELLS = MAX_WORLD_SIZE_IN_PX / CELL_SIZE_IN_PX
+    MAX_WORLD_SIZE_IN_CELLS = MAX_WORLD_SIZE_IN_PX // CELL_SIZE_IN_PX
 
-    property :name, :cell, :tiles, :width, :height
+    property :name, :tiles, :width, :height
 
     @tiles : Array(Array(UInt16))
     @width : UInt16
     @height : UInt16
-    # @clients : Array(Pulse::Client)
+    @cells : Array(Array(Pulse::Map::Cell))
 
     # def initialize(width, height, seed = 1234)
     #   @width = width
@@ -99,18 +99,18 @@ module Pulse
 
     private def generate_empty_cells
       MAX_WORLD_SIZE_IN_CELLS.times.map do
-        MAX_WORLD_SIZE_IN_CELLS.times.map { nil }.to_a
+        MAX_WORLD_SIZE_IN_CELLS.times.map { Cell.new }.to_a
       end.to_a
     end
     
     private def add_character(x, y, entity_id)
       cell_x, cell_y = world_to_cell_coordinates(x, y)
-      cell(cell_x, cell_y).add_character(entity_id)
+      cell(cell_x, cell_y).try(&.add_character(entity_id))
     end
 
     private def remove_character(x, y, entity_id)
       cell_x, cell_y = world_to_cell_coordinates(x, y)
-      cell(cell_x, cell_y).remove_character(entity_id)
+      cell(cell_x, cell_y).try(&.remove_character(entity_id))
     end
 
     private def world_to_cell_coordinates(x, y)
@@ -132,9 +132,7 @@ module Pulse
       return nil if x < 0 || y < 0
       return nil if MAX_WORLD_SIZE_IN_CELLS < x || MAX_WORLD_SIZE_IN_CELLS < y
 
-      cell = @cells[x][y]
-      cell = Cell.new if cell.nil? # lazy initialization
-      cell
+      @cells[x][y]
     end
 
     # def load
