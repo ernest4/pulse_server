@@ -3,9 +3,7 @@
 module Pulse
   module State
     class Memory < Pulse::State::ApplicationState
-      # @maps : Hash(String, Pulse::Map)
-
-      property :maps
+      property maps : Hash(String, Pulse::Map)
 
       def initialize
         @maps = {} of String => Pulse::Map

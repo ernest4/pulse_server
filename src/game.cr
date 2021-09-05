@@ -1,14 +1,14 @@
 module Pulse
   class Game
-    def initialize(debug : Bool, server_fps : Int32 = 20)
+    def initialize(debug : Bool, server_max_fps : Int32 = 20)
       @debug = debug
-      @server_fps = server_fps
-      @server_milliseconds_per_tick = 1000 / @server_fps
+      @server_max_fps = server_max_fps
+      @server_milliseconds_per_tick = 1000 / @server_max_fps
       @server_microseconds_per_tick = (1000 * @server_milliseconds_per_tick)
       @engine = Fast::ECS::Engine.new(@debug)
 
-      @game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory and redis based on env config !! (waiting to get config done ...)
-      @game_state.load!
+      @state = Pulse::State::Memory.new
+      @state.load!
     end
 
     def start
@@ -22,15 +22,12 @@ module Pulse
       @engine.add_system(Pulse::Ecs::Systems::MovementControl.new)
       @engine.add_system(Pulse::Ecs::Systems::Movement.new)
       @engine.add_system(Pulse::Ecs::Systems::Collision.new) # TODO: takes in transform and checks it against map. Might be useful to store 'previous' values on Transform (that get auto updated) so in case of collision Transform could be reverted to that?
-      @engine.add_system(Pulse::Ecs::Systems::SpatialPartitioning.new)
-      @engine.add_system(Pulse::Ecs::Systems::CharacterEnter.new)
+      @engine.add_system(Pulse::Ecs::Systems::SpatialPartitioning.new(@state))
+      @engine.add_system(Pulse::Ecs::Systems::CharacterEnter.new(@state))
       # TODO: any other systems here
       # @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers
       # @engine.add_system(AI.new)
       @engine.add_system(Pulse::Ecs::Systems::Broadcast.new) # NOTE: always last
-
-      # TODO: try run the server and clean up to connect to client
-      # should be close to working now...
 
       tick
     end

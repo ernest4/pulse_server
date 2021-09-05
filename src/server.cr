@@ -66,18 +66,8 @@ end
 
 # TODO: sidekiq - set it up https://www.mikeperham.com/2016/05/25/sidekiq-for-crystal/
 
-# load the map data. initialize global state etc
-# maps = {} of String => Pulse::Map
-# game_state = Pulse::State::Memory.new # TODO: dynamically swap between memory and redis based on env config !! (waiting to get config done ...)
-# game_state.load!
-# reducer = Pulse::State::Reducer.new(game_state)
-
 game = Pulse::Game.new(debug: Pulse::Config::ENVIRONMENT == "development")
 game.start
-
-
-
-
 
 # TODO: compress packets as it's more efficient for bandwith !?!
 # LZHL algorithm?

@@ -2,7 +2,7 @@
 
 module Pulse
   class Client
-    @socket : Pulse::Socket
+    @socket : HTTP::WebSocket
     # @client_id : String
     @user : ::User
     @character : Pulse::Character
@@ -58,32 +58,32 @@ module Pulse
   end
 end
 
-# would be nice to have socket io like abstraction here...
-@socket.on(Pulse::Messages::Move) do |message|
-   message # <- parsed message, JSON rather than class?  
-end
+# # would be nice to have socket io like abstraction here...
+# @socket.on(Pulse::Messages::Move) do |message|
+#    message # <- parsed message, JSON rather than class?  
+# end
 
-# probs need own wrapper
-module Pulse
-  class Socket
-    @socket : HTTP::WebSocket
+# # probs need own wrapper
+# module Pulse
+#   class Socket
+#     @socket : HTTP::WebSocket
 
-    delegate on_message, on_close, to: @socket # simply delegate unless we want to override
+#     delegate on_message, on_close, to: @socket # simply delegate unless we want to override
 
-    def initialize(socket)
-      @socket = socket
-    end
+#     def initialize(socket)
+#       @socket = socket
+#     end
 
-    def on(message_class : Pulse::Messages::ApplicationMessage)
-      # TODO: get type
-      # message_class::TYPE
-      @socket.on_binary do |message|
-        # reducer.reduce(self, message)
-        parsed_message = Pulse::Messages::Resolver.resolve(message)
-      end
+#     def on(message_class : Pulse::Messages::ApplicationMessage)
+#       # TODO: get type
+#       # message_class::TYPE
+#       @socket.on_binary do |message|
+#         # reducer.reduce(self, message)
+#         parsed_message = Pulse::Messages::Resolver.resolve(message)
+#       end
 
 
-      # hmmm, probably need some meta programming here... 
-    end
-  end
-end
+#       # hmmm, probably need some meta programming here... 
+#     end
+#   end
+# end

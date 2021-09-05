@@ -1,4 +1,4 @@
-# TODO: speeecs ?!?!?
+# TODO: specs ?!?!?
 module Pulse
   class Map
     class Cell
@@ -82,7 +82,7 @@ module Pulse
     end
 
     def nearby_characters(x, y)
-      nearby_cells(x, y).do |cell|
+      nearby_cells(x, y) do |cell|
         cell.stream_character_ids do |character_entity_id|
           yield character_entity_id
         end
