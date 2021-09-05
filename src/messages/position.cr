@@ -14,6 +14,7 @@ module Pulse
 
       def initialize(character_entity_id, x : Int32, y : Int32)
         @character_entity_id = character_entity_id
+        # TODO: probably need to keep this as Int32..., might be buggy to down cast...
         @x = x.to_u16
         @y = y.to_u16
       end

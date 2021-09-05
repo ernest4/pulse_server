@@ -20,12 +20,12 @@ module Pulse
 
         private def apply_move_message
           engine.query(Component::ClientMoveMessage) do |query_set|
-            move_message = query_set.first.as Component::ClientMoveMessage
+            client_move_message = query_set.first.as Component::ClientMoveMessage
             
-            physics_body = engine.get_component(Component::PhysicsBody, move_message.from_entity_id).as Component::PhysicsBody
-            speed = engine.get_component(Component::Speed, move_message.from_entity_id).as Component::Speed
+            physics_body = engine.get_component(Component::PhysicsBody, client_move_message.from_entity_id).as Component::PhysicsBody
+            speed = engine.get_component(Component::Speed, client_move_message.from_entity_id).as Component::Speed
 
-            direction = move_message.message.direction
+            direction = client_move_message.message.direction
             new_linear_velocity = calculate_new_linear_velocity(speed.units, direction)
 
             physics_body.linear_velocity.x = new_linear_velocity[:x]

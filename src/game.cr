@@ -26,6 +26,7 @@ module Pulse
       @engine.add_system(Pulse::Ecs::Systems::Collision.new) # TODO: takes in transform and checks it against map. Might be useful to store 'previous' values on Transform (that get auto updated) so in case of collision Transform could be reverted to that?
       @engine.add_system(Pulse::Ecs::Systems::SpatialPartitioning.new(@state))
       @engine.add_system(Pulse::Ecs::Systems::CharacterEnter.new(@state))
+      @engine.add_system(Pulse::Ecs::Systems::CharacterMove.new)
       # TODO: any other systems here
       # @engine.add_system(Pulse::Ecs::Systems::Serializer.new) # gonna invoke sidekiq workers
       # @engine.add_system(AI.new)
