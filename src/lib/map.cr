@@ -23,8 +23,8 @@ module Pulse
 
     TILE_SIZE_IN_PX = 32_u8 # 32 px
     MAX_WORLD_SIZE_IN_TILES = 60_u16
-    MAX_WORLD_SIZE_IN_PX = (TILE_SIZE_IN_PX * MAX_WORLD_SIZE_IN_TILES).to_u16 # square worlds
-    CELL_SIZE_IN_PX = TILE_SIZE_IN_PX * 60
+    MAX_WORLD_SIZE_IN_PX = (TILE_SIZE_IN_PX.to_u16 * MAX_WORLD_SIZE_IN_TILES).to_u16 # square worlds
+    CELL_SIZE_IN_PX = (TILE_SIZE_IN_PX.to_i32 * 60).to_u16
     MAX_WORLD_SIZE_IN_CELLS = MAX_WORLD_SIZE_IN_PX // CELL_SIZE_IN_PX
 
     property :name, :tiles, :width, :height
@@ -129,8 +129,8 @@ module Pulse
     end
 
     private def cell(x, y)
-      return nil if x < 0 || y < 0
-      return nil if MAX_WORLD_SIZE_IN_CELLS < x || MAX_WORLD_SIZE_IN_CELLS < y
+      return nil unless 0 < x < MAX_WORLD_SIZE_IN_CELLS
+      return nil unless 0 < y < MAX_WORLD_SIZE_IN_CELLS
 
       @cells[x][y]
     end
