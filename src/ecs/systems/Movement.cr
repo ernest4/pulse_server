@@ -11,7 +11,9 @@ module Pulse
         end
 
         def update
-          engine.query(Component::Transform, Component::PhysicsBody) { |query_set| handle_movement(query_set) }
+          engine.query(Component::Transform, Component::PhysicsBody) do |query_set|
+            handle_movement(query_set)
+          end
         end
 
         def destroy
@@ -21,8 +23,10 @@ module Pulse
         private def handle_movement(query_set)
           transform, physics_body = Tuple(Component::Transform, Component::PhysicsBody).from(query_set)
 
-          # seconds = engine.delta_time / 1000;
-          seconds = engine.delta_time // 1000; # no fractional pixel positions?
+          seconds = engine.delta_time / 1000;
+
+          # TODO: maybe divide by 10 here, keep the int and divide by // 100 (truncate) on client side as well?
+          # seconds = engine.delta_time // 10;
 
           transform.position.x += physics_body.linear_velocity.x * seconds
           transform.position.y += physics_body.linear_velocity.y * seconds
