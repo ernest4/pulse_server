@@ -114,7 +114,7 @@ module Pulse
     end
 
     private def world_to_cell_coordinates(x, y)
-      [x // CELL_SIZE_IN_PX, y // CELL_SIZE_IN_PX]
+      [(x // CELL_SIZE_IN_PX).to_i, (y // CELL_SIZE_IN_PX).to_i]
     end
 
     private def nearby_cells(x, y)

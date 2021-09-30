@@ -11,11 +11,21 @@ module Pulse
         end
 
         def update
+          stop_previous_movement
           apply_move_message
         end
 
         def destroy
           # TODO: ...
+        end
+
+        private def stop_previous_movement
+          engine.query(Component::Character, Component::PhysicsBody) do |query_set|
+            _character, physics_body = Tuple(Component::Character, Component::PhysicsBody).from(query_set)
+            
+            physics_body.linear_velocity.x = 0
+            physics_body.linear_velocity.y = 0
+          end
         end
 
         private def apply_move_message
@@ -28,8 +38,8 @@ module Pulse
             direction = client_move_message.message.direction
             new_linear_velocity = calculate_new_linear_velocity(speed.units, direction)
 
-            physics_body.linear_velocity.x = new_linear_velocity[:x]
-            physics_body.linear_velocity.y = new_linear_velocity[:y]
+            physics_body.linear_velocity.x = new_linear_velocity[:x].to_f32
+            physics_body.linear_velocity.y = new_linear_velocity[:y].to_f32
           end
         end
 

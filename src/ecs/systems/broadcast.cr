@@ -30,7 +30,7 @@ module Pulse
         private def broadcast(server_message)
           recipient_client = engine.get_component(Component::Client, server_message.to_entity_id).as Component::Client
           serialized_message = server_message.message.to_slice
-          recipient_client.socket.send(serialized_message)
+          recipient_client.socket.send(serialized_message) # blocking send? add some Fiber?
           engine.remove_component(server_message)
         end
 

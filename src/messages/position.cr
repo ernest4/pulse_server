@@ -7,16 +7,16 @@ module Pulse
       MIN_UPDATE_RATE = 50 # ms, 20 fps
 
       @character_entity_id : Int32
-      @x : UInt16
-      @y : UInt16
+      @x : Float32
+      @y : Float32
 
       property :x, :y
 
-      def initialize(character_entity_id, x : Int32, y : Int32)
+      def initialize(character_entity_id, x, y)
         @character_entity_id = character_entity_id
         # TODO: probably need to keep this as Int32..., might be buggy to down cast...
-        @x = x.to_u16
-        @y = y.to_u16
+        @x = x
+        @y = y
       end
 
       # def initialize(x, y)

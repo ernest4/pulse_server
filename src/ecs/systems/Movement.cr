@@ -23,11 +23,12 @@ module Pulse
         private def handle_movement(query_set)
           transform, physics_body = Tuple(Component::Transform, Component::PhysicsBody).from(query_set)
 
+          # TODO: fix the precision error 50 // 1000 => 0
           seconds = engine.delta_time / 1000;
 
-          # TODO: maybe divide by 10 here, keep the int and divide by // 100 (truncate) on client side as well?
-          # seconds = engine.delta_time // 10;
-
+          # stick to integer position and movement, everything will be discrete
+          # in this mmo world of Sinite - finite resources game!
+          
           transform.position.x += physics_body.linear_velocity.x * seconds
           transform.position.y += physics_body.linear_velocity.y * seconds
 

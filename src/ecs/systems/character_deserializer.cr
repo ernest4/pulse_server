@@ -51,8 +51,8 @@ module Pulse
              Component::PhysicsBody.new(entity_id: entity_id),
              Component::Transform.new(
               entity_id: entity_id,
-              position_x: character.last_x,
-              position_y: character.last_y,
+              position_x: character.last_x.to_f32,
+              position_y: character.last_y.to_f32,
             )
           ]
         end

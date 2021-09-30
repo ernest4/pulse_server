@@ -1,4 +1,5 @@
 export const MESSAGE_TYPE = {
+  PING: 0,
   MOVE: 1,
   POSITION: 2,
   ENTER: 3,
@@ -17,17 +18,26 @@ export const parse = (data: ArrayBuffer) => {
   console.log(`New message: message type: ${messageType}`);
 
   switch (messageType) {
-    case 0: {
-      // TODO:
-      // return { messageType, characterId};
-      return {};
+    case MESSAGE_TYPE.PING: {
+      // [type,string]
+
+      const decoder = new TextDecoder("utf-8");
+      const textSlice = data.slice(1, data.byteLength);
+      const ping = decoder.decode(textSlice);
+
+      // TODO: add the image / texture info for character appearance (send key)
+      const message_object = { messageType, ping };
+
+      console.log(message_object);
+
+      return message_object;
     }
     case MESSAGE_TYPE.POSITION: {
       // [type,id,id,id,id,x,x,y,y]
 
       const characterId = view.getInt32(1, true);
-      const x = view.getUint16(5, true);
-      const y = view.getUint16(7, true);
+      const x = view.getFloat32(5, true);
+      const y = view.getFloat32(9, true);
 
       const message_object = { messageType, characterId, x, y };
 
