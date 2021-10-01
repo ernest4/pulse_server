@@ -35,25 +35,53 @@ module Pulse
       tick
     end
 
-    private def tick(last_time = Time.monotonic, total_microseconds = 0)
+    # private def tick(last_time = Time.monotonic, total_microseconds = 0)
+    #   spawn do
+    #     current_time = Time.monotonic
+    #     delta_time_micro_seconds = (current_time - last_time).total_microseconds.to_i
+
+    #     total_microseconds += delta_time_micro_seconds
+
+    #     if total_microseconds > @server_microseconds_per_tick
+    #       total_milliseconds = total_microseconds // 1000 # get 1 or more full milliseconds
+    #       @engine.update(total_milliseconds)
+    #       # puts "total_microseconds: #{total_microseconds}"
+    #       # puts "total_milliseconds: #{total_milliseconds}"
+    #       # use the remainder for next accumulation
+    #       total_microseconds = total_microseconds % @server_microseconds_per_tick
+    #     end
+
+    #     # VERY IMPORTANT !!!
+    #     Fiber.yield # give Kemal chance to process request(s) (or unix to pass a signal)
+
+    #     tick(current_time, total_microseconds)
+    #   end
+    # end
+
+    private def tick
+      last_time = Time.monotonic
+      total_microseconds = 0
+
       spawn do
-        current_time = Time.monotonic
-        delta_time_micro_seconds = (current_time - last_time).total_microseconds.to_i
+        loop do
+          current_time = Time.monotonic
+          delta_time_micro_seconds = (current_time - last_time).total_microseconds
+          last_time = current_time
 
-        total_microseconds += delta_time_micro_seconds
-
-        if total_microseconds > @server_microseconds_per_tick
-          total_milliseconds = total_microseconds // 1000 # get 1 or more full milliseconds
-          @engine.update(total_milliseconds)
-          # puts "total_microseconds: #{total_microseconds}"
-          # puts "total_milliseconds: #{total_milliseconds}"
-          total_microseconds = total_microseconds % 1000 # use the remainder for next accumulation
+          total_microseconds += delta_time_micro_seconds
+  
+          if total_microseconds > @server_microseconds_per_tick
+            total_milliseconds = (total_microseconds // 1000).to_i # get 1 or more full milliseconds
+            @engine.update(total_milliseconds)
+            # puts "total_microseconds: #{total_microseconds}"
+            # puts "total_milliseconds: #{total_milliseconds}"
+            # use the remainder for next accumulation
+            total_microseconds = total_microseconds % @server_microseconds_per_tick
+          end
+  
+          # VERY IMPORTANT !!!
+          Fiber.yield # give Kemal chance to process request(s) (or unix to pass a signal)
         end
-
-        # VERY IMPORTANT !!!
-        Fiber.yield # give Kemal chance to process request(s) (or unix to pass a signal)
-
-        tick(current_time, total_microseconds)
       end
     end
   end
