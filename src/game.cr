@@ -18,9 +18,9 @@ module Pulse
       @engine.add_system(Pulse::Ecs::Systems::Manager.new)
       @engine.add_system(Pulse::Ecs::Systems::ConnectionListener.new)
       @engine.add_system(Pulse::Ecs::Systems::MessageListener.new)
+      @engine.add_system(Pulse::Ecs::Systems::MessageDeserializer.new)
       @engine.add_system(Pulse::Ecs::Systems::DisconnectionListener.new)
       @engine.add_system(Pulse::Ecs::Systems::CharacterDeserializer.new)
-      @engine.add_system(Pulse::Ecs::Systems::MessageDeserializer.new)
       @engine.add_system(Pulse::Ecs::Systems::MovementControl.new)
       @engine.add_system(Pulse::Ecs::Systems::Movement.new)
       @engine.add_system(Pulse::Ecs::Systems::Collision.new) # TODO: takes in transform and checks it against map. Might be useful to store 'previous' values on Transform (that get auto updated) so in case of collision Transform could be reverted to that?
