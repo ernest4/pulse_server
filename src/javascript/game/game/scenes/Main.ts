@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Scene } from "phaser";
 import FpsCounter from "../utils/FpsCounter";
 import { Engine } from "../../ecs";
